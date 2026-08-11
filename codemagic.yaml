@@ -1,12 +1,25 @@
 workflows:
-  android-build:
-    name: Android APK Build
+  android-apk:
+    name: Android APK
+    max_build_duration: 60
+    instance_type: linux_x2
+
     environment:
       node: 20
+
     scripts:
       - name: Install dependencies
-        script: npm install
-      - name: Build Android APK
-        script: npx expo export --platform android
+        script: |
+          npm install
+
+      - name: Generate Android project
+        script: |
+          npx expo prebuild --platform android
+
+      - name: Build APK
+        script: |
+          cd android
+          ./gradlew assembleRelease
+
     artifacts:
-      - dist/**
+      - android/app/build/outputs/apk/release/*.apk
