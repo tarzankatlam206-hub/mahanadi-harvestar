@@ -1,33 +1,27 @@
-name: Android APK Build
-
+name: Build Mahanadi APK - Local Free
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
-
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 18, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: android-actions/setup-android@v3
+      - run: npm ci || npm install
+      - run: npx expo prebuild --platform android --clean
+      - run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+          cd ..
+      - run: cp android/app/build/outputs/apk/release/app-release.apk mahanadi-harvester-sangh.apk
+      - uses: actions/upload-artifact@v4
         with:
-          node-version: 20
-
-      - name: Install packages
-        run: npm install
-
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: Configure EAS Project
-        run: eas init --force --non-interactive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Build Android APK
-        run: eas build --platform android --profile preview --non-interactive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          name: mahanadi-harvester-sangh-apk
+          path: mahanadi-harvester-sangh.apk
