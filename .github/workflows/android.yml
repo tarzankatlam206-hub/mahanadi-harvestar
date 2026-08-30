@@ -19,10 +19,11 @@ jobs:
       - run: npm install
       - run: npx expo install expo-asset
       - run: npx expo prebuild --platform android --clean
-      - run: |
+      - name: Fix Kotlin version to 1.9.25
+        run: |
           cd android
-          sed -i "s/kotlinVersion = .*/kotlinVersion = '1.9.25'/" build.gradle
-          sed -i "s/id(\"org.jetbrains.kotlin.android\") version .*/id(\"org.jetbrains.kotlin.android\") version \"1.9.25\" apply false/" build.gradle || true
+          find . -type f \( -name "*.gradle" -o -name "*.toml" -o -name "*.properties" \) -exec sed -i "s/1\.9\.24/1.9.25/g" {} +
+          cat build.gradle | grep -n kotlin || true
           cd ..
       - run: |
           cd android
