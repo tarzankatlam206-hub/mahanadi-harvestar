@@ -21,6 +21,11 @@ jobs:
       - run: npx expo prebuild --platform android --clean
       - run: |
           cd android
+          sed -i "s/kotlinVersion = .*/kotlinVersion = '1.9.25'/" build.gradle
+          sed -i "s/id(\"org.jetbrains.kotlin.android\") version .*/id(\"org.jetbrains.kotlin.android\") version \"1.9.25\" apply false/" build.gradle || true
+          cd ..
+      - run: |
+          cd android
           chmod +x gradlew
           ./gradlew assembleRelease
           cd ..
