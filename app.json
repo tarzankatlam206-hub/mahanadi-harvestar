@@ -4,6 +4,11 @@
     "slug": "mahanadi-home-app",
     "version": "1.0.0",
     "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/icon.png",
+      "backgroundColor": "#ffffff",
+      "resizeMode": "contain"
+    },
     "android": {
       "package": "com.mahanadi.harvester",
       "adaptiveIcon": {
