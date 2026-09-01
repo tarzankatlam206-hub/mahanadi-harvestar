@@ -1,20 +1,32 @@
 {
   "expo": {
-    "name": "Mahanadi Harvester",
+    "name": "महानदी हार्वेस्टर मालिक कल्याण संघ",
     "slug": "mahanadi-home-app",
-    "version": "1.0.0",
-    "icon": "./assets/icon.png",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
     "splash": {
-      "image": "./assets/icon.png",
-      "backgroundColor": "#ffffff",
-      "resizeMode": "contain"
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f4d1c"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
     },
     "android": {
-      "package": "com.mahanadi.harvester",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#0f4d1c"
+      },
+      "package": "com.mahanadi.harvester",
+      "versionCode": 2
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
     }
   }
 }
