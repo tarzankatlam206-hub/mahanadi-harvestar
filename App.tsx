@@ -1,197 +1,101 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Linking, Alert, Modal, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, Modal, SafeAreaView, ScrollView, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MASTER_CODE = "122202678489";
-const KEYS = { PWD: "@pwd", MEMBERS: "@m", FARMERS: "@f", OPERATORS: "@o", AGENTS: "@a", DEALERS: "@d", PARTS: "@p", HINT: "@h" };
+const MASTER="122202678489";
+const K={PWD:"@pwd",H:"@h",M:"@m",F:"@f",O:"@o",A:"@a",D:"@d",P:"@p"};
+
+const FIELDS={
+ members:[
+  {k:"name",p:"नाम *"}, {k:"village",p:"गांव"}, {k:"mobile",p:"मोबाइल *"},
+  {k:"block",p:"ब्लॉक"}, {k:"harvesterNo",p:"हार्वेस्टर नम्बर"}, {k:"harvesterCount",p:"हार्वेस्टर संख्या"},
+  {k:"amount",p:"राशि"}, {k:"payMode",p:"भुगतान माध्यम"}, {k:"payDate",p:"भुगतान की तारीख"},
+  {k:"receiver",p:"राशि प्राप्तकर्ता"}, {k:"post",p:"संगठन में पद"}
+ ],
+ farmers:[
+  {k:"name",p:"किसान नाम *"}, {k:"village",p:"गांव"}, {k:"block",p:"ब्लॉक"}, {k:"district",p:"जिला"}, {k:"state",p:"राज्य"},
+  {k:"mobile",p:"मोबाइल"}, {k:"dateTime",p:"तारीख समय"}, {k:"advance",p:"एडवांस पेमेंट"}, {k:"fullPay",p:"पूरा पेमेंट"}, {k:"complaint",p:"शिकायत"}
+ ],
+ operators:[
+  {k:"name",p:"ऑपरेटर नाम *"}, {k:"village",p:"गांव"}, {k:"block",p:"ब्लॉक"}, {k:"district",p:"जिला"}, {k:"state",p:"राज्य"},
+  {k:"mobile",p:"मोबाइल"}, {k:"advance",p:"एडवांस पेमेंट"}, {k:"fullPay",p:"पूरा पेमेंट"}, {k:"attendance",p:"टोटल उपस्थिति"}, {k:"complaint",p:"शिकायत"}
+ ],
+ agents:[
+  {k:"name",p:"एजेंट नाम *"}, {k:"village",p:"गांव"}, {k:"block",p:"ब्लॉक"}, {k:"district",p:"जिला"}, {k:"state",p:"राज्य"},
+  {k:"mobile",p:"मोबाइल"}, {k:"advance",p:"एडवांस पेमेंट"}, {k:"fullPay",p:"पूरा पेमेंट"}, {k:"workDays",p:"टोटल कार्य दिवस"}, {k:"complaint",p:"शिकायत"}
+ ],
+ dealers:[
+  {k:"shop",p:"डीलर नाम *"}, {k:"block",p:"ब्लॉक"}, {k:"district",p:"जिला"}, {k:"state",p:"राज्य"},
+  {k:"mobile",p:"मोबाइल"}, {k:"advance",p:"एडवांस पेमेंट"}, {k:"fullPay",p:"पूरा पेमेंट"}, {k:"complaint",p:"शिकायत"}
+ ],
+ parts:[
+  {k:"shop",p:"दुकान का नाम *"}, {k:"owner",p:"मालिक का नाम"}, {k:"address",p:"पता"}, {k:"block",p:"ब्लॉक"}, {k:"district",p:"जिला"}, {k:"state",p:"राज्य"},
+  {k:"mobile",p:"मोबाइल"}, {k:"advance",p:"एडवांस पेमेंट"}, {k:"fullPay",p:"पूरा पेमेंट"}, {k:"complaint",p:"शिकायत"}
+ ]
+};
 
 export default function App(){
-  const [isFirstTime,setIsFirstTime]=useState(null);
-  const [storedPwd,setStoredPwd]=useState(""); const [storedHint,setStoredHint]=useState("");
-  const [loggedIn,setLoggedIn]=useState(false); const [inputPwd,setInputPwd]=useState("");
-  const [newPwd,setNewPwd]=useState(""); const [confirmPwd,setConfirmPwd]=useState(""); const [newHint,setNewHint]=useState("");
-  const [activeTab,setActiveTab]=useState("members"); const [search,setSearch]=useState("");
-  const [members,setMembers]=useState([]); const [farmers,setFarmers]=useState([]); const [operators,setOperators]=useState([]); const [agents,setAgents]=useState([]); const [dealers,setDealers]=useState([]); const [parts,setParts]=useState([]);
-  const [showAddModal,setShowAddModal]=useState(false); const [form,setForm]=useState({}); const [detailItem,setDetailItem]=useState(null);
+  const [first,setFirst]=useState(null); const [pwd,setPwd]=useState(""); const [hint,setHint]=useState("");
+  const [logged,setLogged]=useState(false); const [inPwd,setInPwd]=useState(""); const [np,setNp]=useState(""); const [cp,setCp]=useState(""); const [nh,setNh]=useState("");
+  const [tab,setTab]=useState("members"); const [search,setSearch]=useState(""); const [list,setList]=useState({members:[],farmers:[],operators:[],agents:[],dealers:[],parts:[]});
+  const [form,setForm]=useState({}); const [show,setShow]=useState(false); const [detail,setDetail]=useState(null);
 
-  useEffect(()=>{ (async()=>{
-    const pwd=await AsyncStorage.getItem(KEYS.PWD); const hint=await AsyncStorage.getItem(KEYS.HINT);
-    if(!pwd) setIsFirstTime(true); else { setIsFirstTime(false); setStoredPwd(pwd); if(hint) setStoredHint(hint); }
-    const load=async(k,set)=>{ const v=await AsyncStorage.getItem(k); if(v) set(JSON.parse(v)); };
-    load(KEYS.MEMBERS,setMembers); load(KEYS.FARMERS,setFarmers); load(KEYS.OPERATORS,setOperators); load(KEYS.AGENTS,setAgents); load(KEYS.DEALERS,setDealers); load(KEYS.PARTS,setParts);
-  })(); },[]);
+  useEffect(()=>{(async()=>{
+    const p=await AsyncStorage.getItem(K.PWD); const h=await AsyncStorage.getItem(K.H);
+    if(!p) setFirst(true); else{ setFirst(false); setPwd(p); if(h) setHint(h); }
+    const keys={members:K.M,farmers:K.F,operators:K.O,agents:K.A,dealers:K.D,parts:K.P};
+    const n={}; for(let k in keys){ const v=await AsyncStorage.getItem(keys[k]); n[k]=v? JSON.parse(v):[]; } setList(n);
+  })();},[]);
 
-  const updateForm=(key,val)=>{ const copy={}; for(let k in form){ copy[k]=form[k]; } copy[key]=val; setForm(copy); };
-
-  const saveList=async(tab,list)=>{
-    const map={members:KEYS.MEMBERS,farmers:KEYS.FARMERS,operators:KEYS.OPERATORS,agents:KEYS.AGENTS,dealers:KEYS.DEALERS,parts:KEYS.PARTS};
-    await AsyncStorage.setItem(map[tab],JSON.stringify(list));
-  };
-
+  const upd=(k,v)=>{ const c={}; for(let x in form) c[x]=form[x]; c[k]=v; setForm(c); };
+  const saveAll=async(newLists)=>{ const keys={members:K.M,farmers:K.F,operators:K.O,agents:K.A,dealers:K.D,parts:K.P}; for(let k in keys) await AsyncStorage.setItem(keys[k], JSON.stringify(newLists[k])); setList(newLists); };
   const handleSave=async()=>{
-    const id=form.id? form.id : Date.now().toString();
-    const item={}; for(let k in form){ item[k]=form[k]; } item.id=id;
-    if(!item.name &&!item.shop){ Alert.alert("नाम जरूरी"); return; }
-    let list=[]; let setF=null;
-    if(activeTab==="members"){ list=members; setF=setMembers; }
-    if(activeTab==="farmers"){ list=farmers; setF=setFarmers; }
-    if(activeTab==="operators"){ list=operators; setF=setOperators; }
-    if(activeTab==="agents"){ list=agents; setF=setAgents; }
-    if(activeTab==="dealers"){ list=dealers; setF=setDealers; }
-    if(activeTab==="parts"){ list=parts; setF=setParts; }
-    let idx=-1; for(let i=0;i<list.length;i++){ if(list[i].id===id) idx=i; }
-    let newList; if(idx>=0){ newList=list.slice(); newList[idx]=item; } else { newList=[item].concat(list); }
-    setF(newList); await saveList(activeTab,newList); setForm({}); setShowAddModal(false); setDetailItem(null);
+    const id=form.id? form.id : Date.now().toString(); const obj={}; for(let k in form) obj[k]=form[k]; obj.id=id;
+    if(!obj.name &&!obj.shop){ Alert.alert("नाम लिखें"); return; }
+    const nl={}; for(let k in list) nl[k]=list[k].slice(); const arr=nl[tab]; let idx=-1; for(let i=0;i<arr.length;i++) if(arr[i].id===id) idx=i;
+    if(idx>=0) arr[idx]=obj; else arr.unshift(obj); await saveAll(nl); setForm({}); setShow(false); setDetail(null);
   };
+  const doDel=async(t,id)=>{ const nl={}; for(let k in list) nl[k]=list[k].slice(); const arr=nl[t]; const na=[]; for(let i=0;i<arr.length;i++) if(arr[i].id!==id) na.push(arr[i]); nl[t]=na; await saveAll(nl); setDetail(null); };
 
-  const getData=()=>{
-    const s=search.toLowerCase();
-    const filter=(arr)=>{
-      const res=[]; for(let i=0;i<arr.length;i++){ const m=arr[i];
-        const a=m.name? m.name.toLowerCase() : (m.shop? m.shop.toLowerCase() : "");
-        const b=m.mobile? m.mobile : "";
-        const c=m.address? m.address.toLowerCase() : (m.village? m.village.toLowerCase() : "");
-        const d=m.harvesterNo? m.harvesterNo.toLowerCase() : "";
-        if(a.indexOf(s)>=0 || b.indexOf(s)>=0 || c.indexOf(s)>=0 || d.indexOf(s)>=0) res.push(m);
-      } return res;
-    };
-    if(activeTab==="members") return filter(members);
-    if(activeTab==="farmers") return filter(farmers);
-    if(activeTab==="operators") return filter(operators);
-    if(activeTab==="agents") return filter(agents);
-    if(activeTab==="dealers") return filter(dealers);
-    if(activeTab==="parts") return filter(parts);
-    return [];
-  };
+  const filtered=()=>{ const s=search.toLowerCase(); const arr=list[tab]||[]; const r=[]; for(let i=0;i<arr.length;i++){ const m=arr[i]; const a=(m.name? m.name : (m.shop? m.shop : "")).toLowerCase(); const b=m.mobile? m.mobile : ""; const c=m.address? m.address.toLowerCase() : (m.village? m.village.toLowerCase() : ""); const d=m.harvesterNo? m.harvesterNo.toLowerCase() : ""; if(a.indexOf(s)>=0||b.indexOf(s)>=0||c.indexOf(s)>=0||d.indexOf(s)>=0) r.push(m); } return r; };
 
-  const doDelete=async(tab,id)=>{
-    let list=[]; let setF=null; let key="";
-    if(tab==="members"){ list=members; setF=setMembers; key=KEYS.MEMBERS; }
-    if(tab==="farmers"){ list=farmers; setF=setFarmers; key=KEYS.FARMERS; }
-    if(tab==="operators"){ list=operators; setF=setOperators; key=KEYS.OPERATORS; }
-    if(tab==="agents"){ list=agents; setF=setAgents; key=KEYS.AGENTS; }
-    if(tab==="dealers"){ list=dealers; setF=setDealers; key=KEYS.DEALERS; }
-    if(tab==="parts"){ list=parts; setF=setParts; key=KEYS.PARTS; }
-    const nl=[]; for(let i=0;i<list.length;i++){ if(list[i].id!==id) nl.push(list[i]); }
-    setF(nl); await AsyncStorage.setItem(key,JSON.stringify(nl)); setDetailItem(null);
-  };
+  if(first===null) return <View style={st.c}><Text>लोड...</Text></View>;
+  if(first) return (<SafeAreaView style={st.container}><ScrollView contentContainerStyle={st.auth}><Text style={st.logo}>🌾</Text><Text style={st.t1}>महानदी हार्वेस्टर मालिक कल्याण संघ जिला कांकेर छत्तीसगढ़</Text><Text style={st.t2}>महानदी हार्वेस्टर मालिक कल्याण संघ में आपका स्वागत है</Text><Text style={st.t3}>हार्वेस्टर मालिकों का सहकारी मंच, शासकीय मान्यता प्राप्त सहकारी संस्था</Text><TextInput style={st.inp} placeholder="नया पासवर्ड" secureTextEntry value={np} onChangeText={setNp}/><TextInput style={st.inp} placeholder="फिर से" secureTextEntry value={cp} onChangeText={setCp}/><TextInput style={st.inp} placeholder="हिंट" value={nh} onChangeText={setNh}/><TouchableOpacity style={st.btn} onPress={async()=>{ if(np.length<4||np!==cp){Alert.alert("गलत"); return;} await AsyncStorage.setItem(K.PWD,np); await AsyncStorage.setItem(K.H,nh); setFirst(false); setLogged(true);}}><Text style={st.btnT}>शुरू करें</Text></TouchableOpacity></ScrollView></SafeAreaView>);
+  if(!logged) return (<SafeAreaView style={st.container}><View style={st.auth}><Text style={st.logo}>🌾</Text><Text style={st.t1}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text><Text style={st.t2}>स्वागत है</Text><TextInput style={st.inp} placeholder="पासवर्ड" secureTextEntry value={inPwd} onChangeText={setInPwd}/><TouchableOpacity style={st.btn} onPress={()=>{ if(inPwd===pwd||inPwd===MASTER) setLogged(true); else Alert.alert("गलत","हिंट:"+hint); }}><Text style={st.btnT}>लॉगिन</Text></TouchableOpacity></View></SafeAreaView>);
 
-  if(isFirstTime===null) return <View style={st.center}><Text>लोड...</Text></View>;
+  return (<SafeAreaView style={st.container}>
+    <View style={st.head}><Text style={st.headT}>महानदी हार्वेस्टर मालिक कल्याण संघ - कांकेर</Text></View>
+    <View style={st.tabBar}><ScrollView horizontal showsHorizontalScrollIndicator={false}>{["members","farmers","operators","agents","dealers","parts"].map(function(t){return <TouchableOpacity key={t} style={[st.tab, tab===t && st.tabA]} onPress={function(){setTab(t)}}><Text style={[st.tabTx, tab===t && st.tabTxA]}>{t}</Text></TouchableOpacity>})}</ScrollView></View>
+    <TextInput style={st.search} placeholder="खोजें: नाम, मोबाइल, पता, हार्वेस्टर नम्बर" value={search} onChangeText={setSearch}/>
+    <FlatList data={filtered()} keyExtractor={function(i){return i.id}} contentContainerStyle={{paddingBottom:90}} renderItem={function(o){ const item=o.item; return <TouchableOpacity style={st.card} onPress={function(){setDetail(item)}}><Text style={st.cardT}>{item.name? item.name : item.shop}</Text><Text style={st.cardS}>{item.village? item.village : ""} {item.block? item.block : ""} {item.district? item.district : ""}</Text><Text style={st.cardS}>मो: {item.mobile? item.mobile : ""} {item.harvesterNo? " | "+item.harvesterNo : ""}</Text><Text style={{color:'#0f4d1c',fontSize:11,marginTop:4}}>टैप = पूरी जानकारी + अपडेट + डिलीट</Text></TouchableOpacity>}}/>
+    <TouchableOpacity style={st.fab} onPress={function(){setForm({}); setShow(true)}}><Text style={{color:'#fff',fontSize:30}}>+</Text></TouchableOpacity>
 
-  if(isFirstTime){
-    return (<SafeAreaView style={st.container}><ScrollView contentContainerStyle={st.authWrap}>
-      <Text style={st.logo}>🌾</Text><Text style={st.authTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ जिला कांकेर छत्तीसगढ़</Text>
-      <Text style={st.welcome}>महानदी हार्वेस्टर मालिक कल्याण संघ में आपका स्वागत है</Text><Text style={st.welcomeSmall}>हार्वेस्टर मालिकों का सहकारी मंच, शासकीय मान्यता प्राप्त सहकारी संस्था</Text>
-      <TextInput style={st.input} placeholder="नया पासवर्ड" secureTextEntry value={newPwd} onChangeText={setNewPwd}/><TextInput style={st.input} placeholder="फिर से" secureTextEntry value={confirmPwd} onChangeText={setConfirmPwd}/><TextInput style={st.input} placeholder="हिंट" value={newHint} onChangeText={setNewHint}/>
-      <TouchableOpacity style={st.greenBtn} onPress={async()=>{ if(newPwd.length<4||newPwd!==confirmPwd){Alert.alert("गलत"); return;} await AsyncStorage.setItem(KEYS.PWD,newPwd); await AsyncStorage.setItem(KEYS.HINT,newHint); setIsFirstTime(false); setLoggedIn(true);}}><Text style={st.greenBtnText}>शुरू करें</Text></TouchableOpacity>
-    </ScrollView></SafeAreaView>);
-  }
-  if(!loggedIn){
-    return (<SafeAreaView style={st.container}><View style={st.authWrap}>
-      <Text style={st.logo}>🌾</Text><Text style={st.authTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text><Text style={st.welcome}>स्वागत है</Text><Text style={st.welcomeSmall}>सहकारी मंच, शासकीय मान्यता प्राप्त</Text>
-      <TextInput style={st.input} placeholder="पासवर्ड" secureTextEntry value={inputPwd} onChangeText={setInputPwd}/>
-      <TouchableOpacity style={st.greenBtn} onPress={()=>{ if(inputPwd===storedPwd||inputPwd===MASTER_CODE) setLoggedIn(true); else Alert.alert("गलत","हिंट: "+storedHint); }}><Text style={st.greenBtnText}>लॉगिन</Text></TouchableOpacity>
-    </View></SafeAreaView>);
-  }
+    <Modal visible={show} transparent animationType="slide"><View style={st.mW}><View style={st.mB}><ScrollView>
+      <Text style={{fontWeight:'bold',textAlign:'center',fontSize:16,marginBottom:10}}>{form.id? "अपडेट" : "नया"} - {tab}</Text>
+      {FIELDS[tab].map(function(f){return <TextInput key={f.k} style={st.inp} placeholder={f.p} value={form[f.k]? form[f.k] : ""} onChangeText={function(v){upd(f.k,v)}}/>})}
+      <View style={{flexDirection:'row',gap:10,marginTop:10}}><TouchableOpacity style={[st.btn,{flex:1}]} onPress={handleSave}><Text style={st.btnT}>सेव</Text></TouchableOpacity><TouchableOpacity style={[st.btn,{flex:1,backgroundColor:'#888'}]} onPress={function(){setShow(false)}}><Text style={st.btnT}>बंद</Text></TouchableOpacity></View>
+    </ScrollView></View></View></Modal>
 
-  return (
-    <SafeAreaView style={st.container}>
-      <View style={st.header}><Text style={st.headerTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ - कांकेर</Text></View>
-      <View style={st.tabBar}><ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {["members","farmers","operators","agents","dealers","parts"].map(function(t){ return (
-          <TouchableOpacity key={t} style={[st.tab, activeTab===t && st.tabActive]} onPress={function(){setActiveTab(t)}}><Text style={[st.tabText, activeTab===t && st.tabTextActive]}>{t.toUpperCase()}</Text></TouchableOpacity>
-        );})}
-      </ScrollView></View>
-      <TextInput style={st.searchInput} placeholder="खोजें: नाम, मोबाइल, पता, हार्वेस्टर नम्बर" value={search} onChangeText={setSearch}/>
-      <FlatList data={getData()} keyExtractor={function(i){return i.id}} contentContainerStyle={{paddingBottom:90}} renderItem={function({item}){ return (
-        <TouchableOpacity onPress={function(){setDetailItem(item)}} style={st.card}>
-          <Text style={st.cardTitle}>{item.name? item.name : item.shop}</Text>
-          <Text style={st.cardSub}>{item.village? item.village : ""} {item.block? item.block : ""}</Text>
-          <Text style={st.cardSub}>मोबाइल: {item.mobile? item.mobile : ""} {item.harvesterNo? " H.No: "+item.harvesterNo : ""}</Text>
-          <Text style={{color:'#0f4d1c',fontSize:12,marginTop:4}}>टैप करें - पूरी जानकारी + अपडेट + डिलीट</Text>
-        </TouchableOpacity>
-      );}}/>
-      <TouchableOpacity style={st.fab} onPress={function(){setForm({}); setShowAddModal(true);}}><Text style={{color:'#fff',fontSize:30}}>+</Text></TouchableOpacity>
-
-      <Modal visible={showAddModal} animationType="slide" transparent><View style={st.modalWrap}><View style={st.modalBox}><ScrollView>
-        <Text style={{fontWeight:'bold',fontSize:18,textAlign:'center',marginBottom:10}}>{form.id? "अपडेट" : "नया जोड़ें"} - {activeTab}</Text>
-        {activeTab==="members" && <View>
-          <TextInput style={st.input} placeholder="नाम *" value={form.name? form.name : ""} onChangeText={function(v){updateForm("name",v)}}/>
-          <TextInput style={st.input} placeholder="गांव" value={form.village? form.village : ""} onChangeText={function(v){updateForm("village",v)}}/>
-          <TextInput style={st.input} placeholder="मोबाइल *" value={form.mobile? form.mobile : ""} onChangeText={function(v){updateForm("mobile",v)}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="हार्वेस्टर नम्बर" value={form.harvesterNo? form.harvesterNo : ""} onChangeText={function(v){updateForm("harvesterNo",v)}}/>
-          <TextInput style={st.input} placeholder="हार्वेस्टर संख्या" value={form.harvesterCount? form.harvesterCount : ""} onChangeText={function(v){updateForm("harvesterCount",v)}}/>
-          <TextInput style={st.input} placeholder="राशि" value={form.amount? form.amount : ""} onChangeText={function(v){updateForm("amount",v)}}/>
-          <TextInput style={st.input} placeholder="भुगतान माध्यम" value={form.payMode? form.payMode : ""} onChangeText={function(v){updateForm("payMode",v)}}/>
-          <TextInput style={st.input} placeholder="भुगतान तारीख" value={form.payDate? form.payDate : ""} onChangeText={function(v){updateForm("payDate",v)}}/>
-          <TextInput style={st.input} placeholder="राशि प्राप्तकर्ता" value={form.receiver? form.receiver : ""} onChangeText={function(v){updateForm("receiver",v)}}/>
-          <TextInput style={st.input} placeholder="संगठन में पद" value={form.post? form.post : ""} onChangeText={function(v){updateForm("post",v)}}/>
-        </View>}
-        {activeTab==="farmers" && <View>
-          <TextInput style={st.input} placeholder="किसान नाम" value={form.name? form.name : ""} onChangeText={function(v){updateForm("name",v)}}/>
-          <TextInput style={st.input} placeholder="गांव" value={form.village? form.village : ""} onChangeText={function(v){updateForm("village",v)}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="जिला" value={form.district? form.district : ""} onChangeText={function(v){updateForm("district",v)}}/>
-          <TextInput style={st.input} placeholder="राज्य" value={form.state? form.state : ""} onChangeText={function(v){updateForm("state",v)}}/>
-          <TextInput style={st.input} placeholder="तारीख समय" value={form.dateTime? form.dateTime : ""} onChangeText={function(v){updateForm("dateTime",v)}}/>
-          <TextInput style={st.input} placeholder="एडवांस पेमेंट" value={form.advance? form.advance : ""} onChangeText={function(v){updateForm("advance",v)}}/>
-          <TextInput style={st.input} placeholder="पूरा पेमेंट" value={form.fullPay? form.fullPay : ""} onChangeText={function(v){updateForm("fullPay",v)}}/>
-          <TextInput style={st.input} placeholder="शिकायत" value={form.complaint? form.complaint : ""} onChangeText={function(v){updateForm("complaint",v)}}/>
-          <TextInput style={st.input} placeholder="मोबाइल" value={form.mobile? form.mobile : ""} onChangeText={function(v){updateForm("mobile",v)}}/>
-        </View>}
-        {activeTab==="operators" && <View>
-          <TextInput style={st.input} placeholder="नाम" value={form.name? form.name : ""} onChangeText={function(v){updateForm("name",v)}}/>
-          <TextInput style={st.input} placeholder="गांव" value={form.village? form.village : ""} onChangeText={function(v){updateForm("village",v)}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="जिला" value={form.district? form.district : ""} onChangeText={function(v){updateForm("district",v)}}/>
-          <TextInput style={st.input} placeholder="राज्य" value={form.state? form.state : ""} onChangeText={function(v){updateForm("state",v)}}/>
-          <TextInput style={st.input} placeholder="एडवांस" value={form.advance? form.advance : ""} onChangeText={function(v){updateForm("advance",v)}}/>
-          <TextInput style={st.input} placeholder="पूरा पेमेंट" value={form.fullPay? form.fullPay : ""} onChangeText={function(v){updateForm("fullPay",v)}}/>
-          <TextInput style={st.input} placeholder="टोटल उपस्थिति" value={form.attendance? form.attendance : ""} onChangeText={function(v){updateForm("attendance",v)}}/>
-          <TextInput style={st.input} placeholder="शिकायत" value={form.complaint? form.complaint : ""} onChangeText={function(v){updateForm("complaint",v)}}/>
-          <TextInput style={st.input} placeholder="मोबाइल" value={form.mobile? form.mobile : ""} onChangeText={function(v){updateForm("mobile",v)}}/>
-        </View>}
-        {activeTab==="agents" && <View>
-          <TextInput style={st.input} placeholder="नाम" value={form.name? form.name : ""} onChangeText={function(v){updateForm("name",v)}}/>
-          <TextInput style={st.input} placeholder="गांव" value={form.village? form.village : ""} onChangeText={function(v){updateForm("village",v)}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="जिला" value={form.district? form.district : ""} onChangeText={function(v){updateForm("district",v)}}/>
-          <TextInput style={st.input} placeholder="राज्य" value={form.state? form.state : ""} onChangeText={function(v){updateForm("state",v)}}/>
-          <TextInput style={st.input} placeholder="एडवांस" value={form.advance? form.advance : ""} onChangeText={function(v){updateForm("advance",v)}}/>
-          <TextInput style={st.input} placeholder="पूरा पेमेंट" value={form.fullPay? form.fullPay : ""} onChangeText={function(v){updateForm("fullPay",v)}}/>
-          <TextInput style={st.input} placeholder="कार्य दिवस" value={form.workDays? form.workDays : ""} onChangeText={function(v){updateForm("workDays",v)}}/>
-          <TextInput style={st.input} placeholder="शिकायत" value={form.complaint? form.complaint : ""} onChangeText={function(v){updateForm("complaint",v)}}/>
-          <TextInput style={st.input} placeholder="मोबाइल" value={form.mobile? form.mobile : ""} onChangeText={function(v){updateForm("mobile",v)}}/>
-        </View>}
-        {activeTab==="dealers" && <View>
-          <TextInput style={st.input} placeholder="नाम" value={form.shop? form.shop : ""} onChangeText={function(v){updateForm("shop",v); updateForm("name",v);}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="जिला" value={form.district? form.district : ""} onChangeText={function(v){updateForm("district",v)}}/>
-          <TextInput style={st.input} placeholder="राज्य" value={form.state? form.state : ""} onChangeText={function(v){updateForm("state",v)}}/>
-          <TextInput style={st.input} placeholder="एडवांस" value={form.advance? form.advance : ""} onChangeText={function(v){updateForm("advance",v)}}/>
-          <TextInput style={st.input} placeholder="पूरा पेमेंट" value={form.fullPay? form.fullPay : ""} onChangeText={function(v){updateForm("fullPay",v)}}/>
-          <TextInput style={st.input} placeholder="शिकायत" value={form.complaint? form.complaint : ""} onChangeText={function(v){updateForm("complaint",v)}}/>
-        </View>}
-        {activeTab==="parts" && <View>
-          <TextInput style={st.input} placeholder="दुकान नाम" value={form.shop? form.shop : ""} onChangeText={function(v){updateForm("shop",v)}}/>
-          <TextInput style={st.input} placeholder="मालिक नाम" value={form.owner? form.owner : ""} onChangeText={function(v){updateForm("owner",v)}}/>
-          <TextInput style={st.input} placeholder="पता" value={form.address? form.address : ""} onChangeText={function(v){updateForm("address",v)}}/>
-          <TextInput style={st.input} placeholder="ब्लॉक" value={form.block? form.block : ""} onChangeText={function(v){updateForm("block",v)}}/>
-          <TextInput style={st.input} placeholder="जिला" value={form.district? form.district : ""} onChangeText={function(v){updateForm("district",v)}}/>
-          <TextInput style={st.input} placeholder="राज्य" value={form.state? form.state : ""} onChangeText={function(v){updateForm("state",v)}}/>
-          <TextInput style={st.input} placeholder="एडवांस" value={form.advance? form.advance : ""} onChangeText={function(v){updateForm("advance",v)}}/>
-          <TextInput style={st.input} placeholder="पूरा पेमेंट" value={form.fullPay? form.fullPay : ""} onChangeText={function(v){updateForm("fullPay",v)}}/>
-          <TextInput style={st.input} placeholder="शिकायत" value={form.complaint? form.complaint : ""} onChangeText={function(v){updateForm("complaint",v)}}/>
-          <TextInput style={st.input} placeholder="मोबाइल" value={form.mobile? form.mobile : ""} onChangeText={function(v){updateForm("mobile",v)}}/>
-        </View>}
-        <View style={{flexDirection:'row',gap:10,marginTop:10}}><TouchableOpacity style={[st.greenBtn,{flex:1}]} onPress={handleSave}><Text style={st.greenBtnText}>सेव</Text></TouchableOpacity><TouchableOpacity style={[st.greenBtn,{flex:1,backgroundColor:'#888'}]} onPress={function(){setShowAddModal(false)}}><Text style={st.greenBtnText}>बंद</Text></TouchableOpacity></View>
-      </ScrollView></View></View></Modal>
-
-      <Modal visible={detailItem? true : false} animationType="slide" transparent><View style={st.modalWrap}><View style={st.modalBox}><ScrollView>
-        <Text style={{fontWeight:'bold',fontSize:18,textAlign:'center',color:'#0f4d1c'}}>{detailItem? (detailItem.name? detailItem.name : detailItem.shop) : ""}</Text>
-        {detailItem && <View style={{marginTop:10}}>
-          <Text>गांव: {detailItem.village? detailItem.village : ""}</Text><Text>ब्लॉक: {detailItem.block? detailItem.block : ""}</Text><Text>जिला: {detailItem.district? detailItem.district : ""}</Text><Text>राज्य: {detailItem.state? detailItem.state : ""}</Text><Text>मोबाइल: {detailItem.mobile? detailItem.mobile : ""}</Text><Text>हार्वेस्टर नम्बर: {detailItem.harvesterNo? detailItem.harvesterNo : ""}</Text><Text>संख्या: {detailItem.harvesterCount? detailItem.harvesterCount : ""}</Text><Text>राशि: {detailItem.amount? detailItem.amount : ""}</Text><Text>माध्यम: {detailItem.payMode? detailItem.payMode : ""}</Text><Text>तारीख: {detailItem.payDate? detailItem.payDate : (detailItem.dateTime? detailItem.dateTime : "")}</Text><Text>प्राप्तकर्ता: {detailItem.receiver? detailItem.receiver : ""}</Text><Text>पद: {detailItem.post? detailItem.post : ""}</Text><Text>एडवांस: {detailItem.advance? detailItem.advance : ""}</Text><Text>पूरा: {detailItem.fullPay? detailItem.fullPay : ""}</Text><Text>उपस्थिति: {detailItem.attendance? detailItem.attendance : (detailItem.workDays? detailItem.workDays : "")}</Text><Text>शिकायत: {detailItem.complaint? detailItem.complaint : ""}</Text><Text>पता: {detailItem.address? detailItem.address : ""}</Text>
-        </View>}
-        <View style={{flexDirection:'row',gap:10,margin
+    <Modal visible={detail? true : false} transparent animationType="slide"><View style={st.mW}><View style={st.mB}><ScrollView>
+      <Text style={{fontWeight:'bold',textAlign:'center',fontSize:18,color:'#0f4d1c'}}>{detail? (detail.name? detail.name : detail.shop) : ""}</Text>
+      {detail && <View style={{marginTop:10}}>{FIELDS[tab].map(function(f){return <View key={f.k} style={{flexDirection:'row',paddingVertical:3,borderBottomWidth:0.5,borderColor:'#eee'}}><Text style={{fontWeight:'bold',width:120}}>{f.p}:</Text><Text style={{flex:1}}>{detail[f.k]? detail[f.k] : ""}</Text></View>})}</View>}
+      <View style={{flexDirection:'row',gap:8,marginTop:12}}><TouchableOpacity style={[st.btn,{flex:1}]} onPress={function(){ if(detail){ setForm(detail); setShow(true);} }}><Text style={st.btnT}>अपडेट</Text></TouchableOpacity><TouchableOpacity style={[st.btn,{flex:1,backgroundColor:'#d32f2f'}]} onPress={function(){ if(detail) doDel(tab, detail.id); }}><Text style={st.btnT}>डिलीट</Text></TouchableOpacity></View>
+      <TouchableOpacity style={[st.btn,{backgroundColor:'#888',marginTop:10}]} onPress={function(){setDetail(null)}}><Text style={st.btnT}>बंद</Text></TouchableOpacity>
+      {detail && detail.mobile? <View style={{flexDirection:'row',gap:8,marginTop:10}}><TouchableOpacity style={st.call} onPress={function(){Linking.openURL("tel:"+detail.mobile)}}><Text style={{color:'#fff'}}>कॉल</Text></TouchableOpacity><TouchableOpacity style={st.wa} onPress={function(){Linking.openURL("https://wa.me/91"+detail.mobile)}}><Text style={{color:'#fff'}}>WhatsApp</Text></TouchableOpacity></View> : null}
+    </ScrollView></View></View></Modal>
+  </SafeAreaView>);
+}
+const st=StyleSheet.create({
+  container:{flex:1,backgroundColor:'#f5f5f5'}, c:{flex:1,justifyContent:'center',alignItems:'center'}, auth:{flexGrow:1,justifyContent:'center',padding:20}, logo:{fontSize:60,textAlign:'center'},
+  t1:{fontSize:15,fontWeight:'bold',textAlign:'center',color:'#0f4d1c'}, t2:{textAlign:'center',marginTop:8,fontWeight:'bold',color:'#0f4d1c',fontSize:12}, t3:{textAlign:'center',color:'#666',fontSize:10,marginTop:4,marginBottom:10},
+  inp:{borderWidth:1,borderColor:'#ccc',borderRadius:8,padding:12,marginBottom:8,backgroundColor:'#fff'},
+  btn:{backgroundColor:'#0f4d1c',padding:14,borderRadius:8,alignItems:'center'}, btnT:{color:'#fff',fontWeight:'bold'},
+  head:{backgroundColor:'#0f4d1c',padding:10}, headT:{color:'#fff',textAlign:'center',fontWeight:'bold',fontSize:11},
+  tabBar:{backgroundColor:'#fff',paddingVertical:6,borderBottomWidth:1,borderColor:'#ddd'}, tab:{paddingHorizontal:10,paddingVertical:6,borderRadius:15,backgroundColor:'#e0e0e0',marginHorizontal:3}, tabA:{backgroundColor:'#0f4d1c'}, tabTx:{fontSize:10}, tabTxA:{color:'#fff'},
+  search:{margin:10,backgroundColor:'#fff',borderRadius:8,padding:10,borderWidth:1,borderColor:'#ccc'},
+  card:{backgroundColor:'#fff',marginHorizontal:10,marginBottom:6,padding:10,borderRadius:8}, cardT:{fontWeight:'bold',color:'#0f4d1c'}, cardS:{fontSize:12,color:'#555',marginTop:2},
+  fab:{position:'absolute',bottom:20,right:20,width:55,height:55,borderRadius:27,backgroundColor:'#0f4d1c',justifyContent:'center',alignItems:'center'},
+  mW:{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center',padding:15}, mB:{backgroundColor:'#fff',borderRadius:10,padding:12,maxHeight:'90%'},
+  call:{backgroundColor:'#0f4d1c',padding:10,borderRadius:6,marginRight:8}, wa:{backgroundColor:'#25D366',padding:10,borderRadius:6}
+});
