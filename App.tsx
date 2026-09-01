@@ -1,115 +1,367 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, FlatList, Alert, Linking } from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity, ScrollView,
+  FlatList, StyleSheet, Linking, Alert, Modal, SafeAreaView
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// --- SPLASH SCREEN ---
-const SplashScreen = () => (
-  <View style={sStyles.container}>
-    <View style={sStyles.logoBox}><Text style={{fontSize: 80}}>🚜</Text></View>
-    <Text style={sStyles.title}>महानदी हार्वेस्टर</Text>
-    <Text style={sStyles.title2}>मालिक कल्याण संघ</Text>
-    <Text style={sStyles.dist}>जिला कांकेर (छत्तीसगढ़)</Text>
-    <View style={sStyles.panji}><Text style={sStyles.panjiText}>पंजीयन क्रमांक: 122202678489</Text></View>
-    <Text style={sStyles.slogan}>एकता • सेवा • सहयोग</Text>
-  </View>
-);
-
-// --- HOME SCREEN - Screenshot जैसा ---
-const HomeScreen = ({ setScreen }) => {
-  const btns = [
-    { id: 'member', title: 'सदस्य पंजीकरण', color: '#4CAF50', icon: '👥' },
-    { id: 'harvester', title: 'हार्वेस्टर सूची', color: '#1565C0', icon: '🚜' },
-    { id: 'booking', title: 'किसान बुकिंग', color: '#FB8C00', icon: '🌾' },
-    { id: 'notice', title: 'सूचना / नोटिस', color: '#7B1FA2', icon: '📢' },
-    { id: 'gallery', title: 'गैलरी', color: '#00897B', icon: '🖼️' },
-    { id: 'contact', title: 'संपर्क करें', color: '#E53935', icon: '📞' },
-  ];
-  return (
-    <View style={styles.main}>
-      <View style={styles.header}><Text style={styles.headerText}>महानदी हार्वेस्टर</Text></View>
-      <ScrollView contentContainerStyle={{padding:12}}>
-        <View style={styles.logoCard}>
-          <View style={styles.logoCircle}><Text style={{fontSize:60}}>🚜</Text><Text style={styles.circleTxt}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text><Text style={styles.sloganTxt}>एकता • सेवा • सहयोग</Text></View>
-          <Text style={styles.orgTitle}>महानदी हार्वेस्टर</Text><Text style={styles.orgSub}>मालिक कल्याण संघ</Text><Text style={styles.dist}>जिला कांकेर (छत्तीसगढ़)</Text>
-          <View style={styles.panjiBox}><Text style={styles.panjiText2}>पंजीयन क्रमांक: 122202678489</Text></View>
-        </View>
-        {btns.map(b => (
-          <TouchableOpacity key={b.id} style={[styles.btn, {backgroundColor: b.color}]} onPress={() => setScreen(b.id)}>
-            <Text style={styles.btnIcon}>{b.icon}</Text><Text style={styles.btnText}>{b.title}</Text><Text style={styles.arrow}>❯</Text>
-          </TouchableOpacity>
-        ))}
-        <View style={styles.footer}>
-          <Text style={styles.fTxt}>📍 जिला कार्यालय - ग्राम लखनपुरी, तहसील- चारामा, जिला कांकेर (छत्तीसगढ़)</Text>
-          <Text style={styles.fTxt}>📞 मोबाईल: 7000520873</Text>
-          <Text style={styles.fTxt}>💬 WhatsApp: 9479025929</Text>
-          <Text style={styles.fTxt}>✉️ Email: tarzankatlam206@gmail.com</Text>
-        </View>
-      </ScrollView>
-    </View>
-  );
+const MASTER_CODE = "122202678489";
+const STORAGE_KEYS = {
+  PASSWORD: "@mahanadi_pwd",
+  HINT: "@mahanadi_hint",
+  MEMBERS: "@mahanadi_members",
+  FARMERS: "@mahanadi_farmers",
+  OPERATORS: "@mahanadi_operators",
+  AGENTS: "@mahanadi_agents",
+  DEALERS: "@mahanadi_dealers",
+  PARTS: "@mahanadi_parts",
 };
 
-// --- REUSABLE CRUD TEMPLATE ---
-const CrudScreen = ({ title, color, fields, storageKey, setScreen }) => {
-  const [form, setForm] = useState({}); const [list, setList] = useState([]); const [editId, setEditId] = useState(null);
-  useEffect(() => { load(); }, []);
-  const load = async () => { const d = await AsyncStorage.getItem(storageKey); if(d) setList(JSON.parse(d)); };
-  const saveAll = async (data) => { await AsyncStorage.setItem(storageKey, JSON.stringify(data)); setList(data); };
-  const onSave = async () => {
-    if(!form[fields[0].key]) return Alert.alert('पहला field भरना जरूरी है');
-    if(editId){ const u = list.map(i => i.id===editId? {...i,...form} : i); await saveAll(u); setEditId(null); }
-    else { const n = {id: Date.now().toString(),...form}; await saveAll([...list, n]); }
-    setForm({});
-  };
-  const onEdit = (item) => { setForm(item); setEditId(item.id); };
-  const onDelete = async (id) => { const f = list.filter(i=>i.id!==id); await saveAll(f); };
+type Member = { id: string; name: string; village: string; mobile: string; tractor: string; date: string; };
+type Farmer = { id: string; name: string; village: string; mobile: string; crop: string; acre: string; date: string; };
+type Operator = { id: string; name: string; mobile: string; license: string; exp: string; date: string; };
+type Agent = { id: string; name: string; mobile: string; area: string; commission: string; date: string; };
+type Dealer = { id: string; shop: string; name: string; mobile: string; city: string; date: string; };
+type Part = { id: string; name: string; number: string; price: string; stock: string; date: string; };
 
-  return (
-    <View style={{flex:1, backgroundColor:'#fff'}}>
-      <View style={[styles.header, {backgroundColor: color}]}><TouchableOpacity onPress={()=>setScreen('home')}><Text style={styles.backBtn}>‹ Back</Text></TouchableOpacity><Text style={styles.headerText}>{title}</Text></View>
-      <View style={{padding:12}}>
-        {fields.map(f => (<TextInput key={f.key} placeholder={f.placeholder} value={form[f.key]||''} onChangeText={v=>setForm({...form, [f.key]: v})} style={styles.input}/>))}
-        <TouchableOpacity style={[styles.saveBtn, {backgroundColor: color}]} onPress={onSave}><Text style={styles.saveTxt}>{editId?'Update करें':'Save करें'}</Text></TouchableOpacity>
-      </View>
-      <FlatList data={list} keyExtractor={i=>i.id} renderItem={({item})=>(
-        <View style={styles.card}><View style={{flex:1}}>{fields.map(f=><Text key={f.key} style={{fontSize:14}}><Text style={{fontWeight:'bold'}}>{f.placeholder}: </Text>{item[f.key]}</Text>)}</View>
-        <View style={{flexDirection:'row'}}><TouchableOpacity onPress={()=>onEdit(item)} style={styles.eBtn}><Text>✏️</Text></TouchableOpacity><TouchableOpacity onPress={()=>onDelete(item.id)} style={styles.dBtn}><Text>🗑️</Text></TouchableOpacity></View></View>
-      )}/>
-    </View>
-  );
-};
+type TabType = "members" | "farmers" | "operators" | "agents" | "dealers" | "parts";
 
-// --- MAIN APP ---
 export default function App() {
-  const [splash, setSplash] = useState(true);
-  const [screen, setScreen] = useState('home');
-  useEffect(()=>{ setTimeout(()=>setSplash(false), 2500); }, []);
+  const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
+  const [storedPwd, setStoredPwd] = useState<string>("");
+  const [storedHint, setStoredHint] = useState<string>("");
+  const [inputPwd, setInputPwd] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [newHint, setNewHint] = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("members");
+  const [search, setSearch] = useState("");
 
-  if(splash) return <SplashScreen />;
+  const [members, setMembers] = useState<Member[]>([]);
+  const [farmers, setFarmers] = useState<Farmer[]>([]);
+  const [operators, setOperators] = useState<Operator[]>([]);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [dealers, setDealers] = useState<Dealer[]>([]);
+  const [parts, setParts] = useState<Part[]>([]);
 
-  if(screen==='home') return <HomeScreen setScreen={setScreen} />;
-  if(screen==='member') return <CrudScreen title="सदस्य पंजीकरण" color="#4CAF50" storageKey="MEMBERS" setScreen={setScreen} fields={[{key:'name', placeholder:'सदस्य का नाम'}, {key:'mobile', placeholder:'मोबाइल नंबर'}, {key:'village', placeholder:'गांव / तहसील'}]} />;
-  if(screen==='harvester') return <CrudScreen title="हार्वेस्टर सूची" color="#1565C0" storageKey="HARVESTERS" setScreen={setScreen} fields={[{key:'owner', placeholder:'मालिक का नाम'}, {key:'number', placeholder:'हार्वेस्टर नंबर'}, {key:'model', placeholder:'मॉडल'}]} />;
-  if(screen==='booking') return <CrudScreen title="किसान बुकिंग" color="#FB8C00" storageKey="BOOKINGS" setScreen={setScreen} fields={[{key:'kisan', placeholder:'किसान का नाम'}, {key:'acres', placeholder:'एकड़'}, {key:'date', placeholder:'तारीख'}, {key:'village', placeholder:'गांव'}]} />;
-  if(screen==='notice') return <CrudScreen title="सूचना / नोटिस" color="#7B1FA2" storageKey="NOTICES" setScreen={setScreen} fields={[{key:'title', placeholder:'शीर्षक'}, {key:'desc', placeholder:'विवरण'}]} />;
-  if(screen==='gallery') return <CrudScreen title="गैलरी" color="#00897B" storageKey="GALLERY" setScreen={setScreen} fields={[{key:'photo', placeholder:'फोटो का नाम / विवरण'}]} />;
-  if(screen==='contact') return (
-    <View style={{flex:1, backgroundColor:'#fff'}}><View style={[styles.header, {backgroundColor:'#E53935'}]}><TouchableOpacity onPress={()=>setScreen('home')}><Text style={styles.backBtn}>‹ Back</Text></TouchableOpacity><Text style={styles.headerText}>संपर्क करें</Text></View>
-      <View style={{padding:16}}><View style={styles.footer}><Text style={styles.fTxt}>📍 लखनपुरी, चारामा, कांकेर</Text><Text style={styles.fTxt}>📞 7000520873</Text><Text style={styles.fTxt}>💬 9479025929</Text><Text style={styles.fTxt}>✉️ tarzankatlam206@gmail.com</Text></View>
-      <TouchableOpacity style={[styles.saveBtn, {backgroundColor:'#25D366', marginTop:20}]} onPress={()=>Linking.openURL('https://wa.me/919479025929')}><Text style={styles.saveTxt}>WhatsApp करें</Text></TouchableOpacity>
-      <TouchableOpacity style={[styles.saveBtn, {backgroundColor:'#1976D2'}]} onPress={()=>Linking.openURL('tel:7000520873')}><Text style={styles.saveTxt}>कॉल करें</Text></TouchableOpacity></View></View>
-  );
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [form, setForm] = useState<any>({});
+
+  useEffect(() => {
+    loadAll();
+  }, []);
+
+  const loadAll = async () => {
+    try {
+      const pwd = await AsyncStorage.getItem(STORAGE_KEYS.PASSWORD);
+      const hint = await AsyncStorage.getItem(STORAGE_KEYS.HINT);
+      if (!pwd) {
+        setIsFirstTime(true);
+      } else {
+        setIsFirstTime(false);
+        setStoredPwd(pwd);
+        if (hint) setStoredHint(hint);
+      }
+      const m = await AsyncStorage.getItem(STORAGE_KEYS.MEMBERS);
+      const f = await AsyncStorage.getItem(STORAGE_KEYS.FARMERS);
+      const o = await AsyncStorage.getItem(STORAGE_KEYS.OPERATORS);
+      const a = await AsyncStorage.getItem(STORAGE_KEYS.AGENTS);
+      const d = await AsyncStorage.getItem(STORAGE_KEYS.DEALERS);
+      const p = await AsyncStorage.getItem(STORAGE_KEYS.PARTS);
+      if (m) setMembers(JSON.parse(m));
+      if (f) setFarmers(JSON.parse(f));
+      if (o) setOperators(JSON.parse(o));
+      if (a) setAgents(JSON.parse(a));
+      if (d) setDealers(JSON.parse(d));
+      if (p) setParts(JSON.parse(p));
+      if (!m) {
+        const sample: Member[] = [
+          { id: "1", name: "रामेश्वर साहू", village: "भाटापारा", mobile: "9827123456", tractor: "CG04 AB 1234", date: new Date().toLocaleDateString() },
+          { id: "2", name: "दिलीप वर्मा", village: "बलौदाबाजार", mobile: "9827987654", tractor: "CG04 CD 5678", date: new Date().toLocaleDateString() },
+        ];
+        setMembers(sample);
+        await AsyncStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(sample));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const savePassword = async () => {
+    if (!newPwd || newPwd.length < 4) {
+      Alert.alert("त्रुटि", "पासवर्ड कम से कम 4 अक्षर का होना चाहिए");
+      return;
+    }
+    if (newPwd !== confirmPwd) {
+      Alert.alert("त्रुटि", "पासवर्ड मेल नहीं खाता");
+      return;
+    }
+    await AsyncStorage.setItem(STORAGE_KEYS.PASSWORD, newPwd);
+    await AsyncStorage.setItem(STORAGE_KEYS.HINT, newHint || "कोई हिंट नहीं");
+    setStoredPwd(newPwd);
+    setStoredHint(newHint);
+    setIsFirstTime(false);
+    setNewPwd("");
+    setConfirmPwd("");
+    setNewHint("");
+    Alert.alert("सफल", "पासवर्ड बना दिया गया!");
+  };
+
+  const handleLogin = () => {
+    if (inputPwd === storedPwd || inputPwd === MASTER_CODE) {
+      setIsFirstTime(false);
+      setInputPwd("");
+    } else {
+      Alert.alert("गलत पासवर्ड", "हिंट: " + storedHint + "\nभूल गए? मास्टर कोड 122202678489 डालें");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsFirstTime(false);
+    setInputPwd("");
+    setActiveTab("members");
+  };
+
+  const callNumber = (num: string) => {
+    Linking.openURL("tel:" + num);
+  };
+
+  const whatsappNumber = (num: string) => {
+    Linking.openURL("https://wa.me/91" + num + "?text=" + encodeURIComponent("नमस्ते, महानदी हार्वेस्टर संघ से बात करनी है।"));
+  };
+
+  const generateId = () => Date.now().toString() + Math.random().toString().slice(2, 5);
+
+  const saveData = async (tab: TabType, list: any[]) => {
+    const keyMap: any = {
+      members: STORAGE_KEYS.MEMBERS,
+      farmers: STORAGE_KEYS.FARMERS,
+      operators: STORAGE_KEYS.OPERATORS,
+      agents: STORAGE_KEYS.AGENTS,
+      dealers: STORAGE_KEYS.DEALERS,
+      parts: STORAGE_KEYS.PARTS,
+    };
+    await AsyncStorage.setItem(keyMap[tab], JSON.stringify(list));
+  };
+
+  const handleAdd = async () => {
+    const id = generateId();
+    const date = new Date().toLocaleDateString();
+    if (activeTab === "members") {
+      if (!form.name || !form.mobile) { Alert.alert("नाम और मोबाइल जरूरी है"); return; }
+      const newList = [{ id, name: form.name, village: form.village || "", mobile: form.mobile, tractor: form.tractor || "", date }, ...members];
+      setMembers(newList); await saveData("members", newList);
+    } else if (activeTab === "farmers") {
+      if (!form.name || !form.mobile) { Alert.alert("नाम और मोबाइल जरूरी है"); return; }
+      const newList = [{ id, name: form.name, village: form.village || "", mobile: form.mobile, crop: form.crop || "", acre: form.acre || "", date }, ...farmers];
+      setFarmers(newList); await saveData("farmers", newList);
+    } else if (activeTab === "operators") {
+      if (!form.name || !form.mobile) { Alert.alert("नाम और मोबाइल जरूरी है"); return; }
+      const newList = [{ id, name: form.name, mobile: form.mobile, license: form.license || "", exp: form.exp || "", date }, ...operators];
+      setOperators(newList); await saveData("operators", newList);
+    } else if (activeTab === "agents") {
+      if (!form.name || !form.mobile) { Alert.alert("नाम और मोबाइल जरूरी है"); return; }
+      const newList = [{ id, name: form.name, mobile: form.mobile, area: form.area || "", commission: form.commission || "", date }, ...agents];
+      setAgents(newList); await saveData("agents", newList);
+    } else if (activeTab === "dealers") {
+      if (!form.shop || !form.mobile) { Alert.alert("दुकान और मोबाइल जरूरी है"); return; }
+      const newList = [{ id, shop: form.shop, name: form.name || "", mobile: form.mobile, city: form.city || "", date }, ...dealers];
+      setDealers(newList); await saveData("dealers", newList);
+    } else if (activeTab === "parts") {
+      if (!form.name || !form.price) { Alert.alert("पार्ट नाम और कीमत जरूरी है"); return; }
+      const newList = [{ id, name: form.name, number: form.number || "", price: form.price, stock: form.stock || "", date }, ...parts];
+      setParts(newList); await saveData("parts", newList);
+    }
+    setForm({}); setShowAddModal(false);
+  };
+
+  const handleDelete = async (tab: TabType, id: string) => {
+    Alert.alert("डिलीट करें?", "क्या आप पक्का डिलीट करना चाहते हैं?", [
+      { text: "नहीं", style: "cancel" },
+      {
+        text: "हाँ", style: "destructive", onPress: async () => {
+          if (tab === "members") { const l = members.filter(x => x.id !== id); setMembers(l); await saveData(tab, l); }
+          if (tab === "farmers") { const l = farmers.filter(x => x.id !== id); setFarmers(l); await saveData(tab, l); }
+          if (tab === "operators") { const l = operators.filter(x => x.id !== id); setOperators(l); await saveData(tab, l); }
+          if (tab === "agents") { const l = agents.filter(x => x.id !== id); setAgents(l); await saveData(tab, l); }
+          if (tab === "dealers") { const l = dealers.filter(x => x.id !== id); setDealers(l); await saveData(tab, l); }
+          if (tab === "parts") { const l = parts.filter(x => x.id !== id); setParts(l); await saveData(tab, l); }
+        }
+      }
+    ]);
+  };
+
+  const getFilteredData = () => {
+    const s = search.toLowerCase();
+    if (activeTab === "members") return members.filter(m => m.name.toLowerCase().includes(s) || m.village.toLowerCase().includes(s) || m.mobile.includes(s));
+    if (activeTab === "farmers") return farmers.filter(m => m.name.toLowerCase().includes(s) || m.village.toLowerCase().includes(s) || m.mobile.includes(s));
+    if (activeTab === "operators") return operators.filter(m => m.name.toLowerCase().includes(s) || m.mobile.includes(s));
+    if (activeTab === "agents") return agents.filter(m => m.name.toLowerCase().includes(s) || m.area.toLowerCase().includes(s));
+    if (activeTab === "dealers") return dealers.filter(m => m.shop.toLowerCase().includes(s) || m.city.toLowerCase().includes(s));
+    if (activeTab === "parts") return parts.filter(m => m.name.toLowerCase().includes(s) || m.number.toLowerCase().includes(s));
+    return [];
+  };
+
+  const renderAddForm = () => {
+    if (activeTab === "members") {
+      return (<>
+        <TextInput style={styles.input} placeholder="नाम *" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="गांव" value={form.village || ""} onChangeText={v => setForm({ ...form, village: v })} />
+        <TextInput style={styles.input} placeholder="मोबाइल *" keyboardType="phone-pad" value={form.mobile || ""} onChangeText={v => setForm({ ...form, mobile: v })} />
+        <TextInput style={styles.input} placeholder="ट्रैक्टर नंबर" value={form.tractor || ""} onChangeText={v => setForm({ ...form, tractor: v })} />
+      </>);
+    }
+    if (activeTab === "farmers") {
+      return (<>
+        <TextInput style={styles.input} placeholder="किसान नाम *" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="गांव" value={form.village || ""} onChangeText={v => setForm({ ...form, village: v })} />
+        <TextInput style={styles.input} placeholder="मोबाइल *" keyboardType="phone-pad" value={form.mobile || ""} onChangeText={v => setForm({ ...form, mobile: v })} />
+        <TextInput style={styles.input} placeholder="फसल (धान, गेहूं)" value={form.crop || ""} onChangeText={v => setForm({ ...form, crop: v })} />
+        <TextInput style={styles.input} placeholder="एकड़" value={form.acre || ""} onChangeText={v => setForm({ ...form, acre: v })} />
+      </>);
+    }
+    if (activeTab === "operators") {
+      return (<>
+        <TextInput style={styles.input} placeholder="ऑपरेटर नाम *" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="मोबाइल *" keyboardType="phone-pad" value={form.mobile || ""} onChangeText={v => setForm({ ...form, mobile: v })} />
+        <TextInput style={styles.input} placeholder="लाइसेंस नंबर" value={form.license || ""} onChangeText={v => setForm({ ...form, license: v })} />
+        <TextInput style={styles.input} placeholder="अनुभव (साल)" value={form.exp || ""} onChangeText={v => setForm({ ...form, exp: v })} />
+      </>);
+    }
+    if (activeTab === "agents") {
+      return (<>
+        <TextInput style={styles.input} placeholder="एजेंट नाम *" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="मोबाइल *" keyboardType="phone-pad" value={form.mobile || ""} onChangeText={v => setForm({ ...form, mobile: v })} />
+        <TextInput style={styles.input} placeholder="क्षेत्र" value={form.area || ""} onChangeText={v => setForm({ ...form, area: v })} />
+        <TextInput style={styles.input} placeholder="कमीशन %" value={form.commission || ""} onChangeText={v => setForm({ ...form, commission: v })} />
+      </>);
+    }
+    if (activeTab === "dealers") {
+      return (<>
+        <TextInput style={styles.input} placeholder="दुकान नाम *" value={form.shop || ""} onChangeText={v => setForm({ ...form, shop: v })} />
+        <TextInput style={styles.input} placeholder="मालिक नाम" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="मोबाइल *" keyboardType="phone-pad" value={form.mobile || ""} onChangeText={v => setForm({ ...form, mobile: v })} />
+        <TextInput style={styles.input} placeholder="शहर" value={form.city || ""} onChangeText={v => setForm({ ...form, city: v })} />
+      </>);
+    }
+    if (activeTab === "parts") {
+      return (<>
+        <TextInput style={styles.input} placeholder="पार्ट नाम *" value={form.name || ""} onChangeText={v => setForm({ ...form, name: v })} />
+        <TextInput style={styles.input} placeholder="पार्ट नंबर" value={form.number || ""} onChangeText={v => setForm({ ...form, number: v })} />
+        <TextInput style={styles.input} placeholder="कीमत *" keyboardType="numeric" value={form.price || ""} onChangeText={v => setForm({ ...form, price: v })} />
+        <TextInput style={styles.input} placeholder="स्टॉक" value={form.stock || ""} onChangeText={v => setForm({ ...form, stock: v })} />
+      </>);
+    }
+    return null;
+  };
+
+  const renderCard = ({ item }: any) => {
+    return (
+      <View style={styles.card}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={styles.cardTitle}>
+            {activeTab === "dealers" ? item.shop : activeTab === "parts" ? item.name : item.name}
+          </Text>
+          <TouchableOpacity onPress={() => handleDelete(activeTab, item.id)}><Text style={{ color: "red" }}>✕</Text></TouchableOpacity>
+        </View>
+        {activeTab === "members" && <><Text style={styles.cardSub}>गांव: {item.village} | ट्रैक्टर: {item.tractor}</Text><Text style={styles.cardSub}>📱 {item.mobile}</Text></>}
+        {activeTab === "farmers" && <><Text style={styles.cardSub}>गांव: {item.village} | फसल: {item.crop} | {item.acre} एकड़</Text><Text style={styles.cardSub}>📱 {item.mobile}</Text></>}
+        {activeTab === "operators" && <><Text style={styles.cardSub}>लाइसेंस: {item.license} | अनुभव: {item.exp} साल</Text><Text style={styles.cardSub}>📱 {item.mobile}</Text></>}
+        {activeTab === "agents" && <><Text style={styles.cardSub}>क्षेत्र: {item.area} | कमीशन: {item.commission}%</Text><Text style={styles.cardSub}>📱 {item.mobile}</Text></>}
+        {activeTab === "dealers" && <><Text style={styles.cardSub}>मालिक: {item.name} | शहर: {item.city}</Text><Text style={styles.cardSub}>📱 {item.mobile}</Text></>}
+        {activeTab === "parts" && <><Text style={styles.cardSub}>नंबर: {item.number} | स्टॉक: {item.stock}</Text><Text style={styles.cardSub}>₹ {item.price}</Text></>}
+        <View style={{ flexDirection: "row", marginTop: 8, gap: 8 }}>
+          {item.mobile && activeTab !== "parts" && <>
+            <TouchableOpacity style={styles.callBtn} onPress={() => callNumber(item.mobile)}><Text style={styles.callText}>📞 कॉल</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.waBtn} onPress={() => whatsappNumber(item.mobile)}><Text style={styles.waText}>💬 WhatsApp</Text></TouchableOpacity>
+          </>}
+          <Text style={{ marginLeft: "auto", fontSize: 10, color: "#888" }}>{item.date}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  if (isFirstTime === null) {
+    return <View style={[styles.center, { backgroundColor: "#0f4d1c" }]}><Text style={{ color: "white", fontSize: 18 }}>लोड हो रहा है...</Text></View>;
+  }
+
+  if (isFirstTime) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.authWrap}>
+          <Text style={styles.logo}>🌾</Text>
+          <Text style={styles.authTitle}>महानदी हार्वेस्टर</Text>
+          <Text style={styles.authSub}>पहली बार? अपना पासवर्ड बनाएं</Text>
+          <TextInput style={styles.input} placeholder="नया पासवर्ड (4+ अक्षर)" secureTextEntry={!showPwd} value={newPwd} onChangeText={setNewPwd} />
+          <TextInput style={styles.input} placeholder="पासवर्ड फिर से लिखें" secureTextEntry={!showPwd} value={confirmPwd} onChangeText={setConfirmPwd} />
+          <TextInput style={styles.input} placeholder="पासवर्ड हिंट (जैसे: मेरा गांव)" value={newHint} onChangeText={setNewHint} />
+          <TouchableOpacity onPress={() => setShowPwd(!showPwd)}><Text style={{ color: "#0f4d1c", marginBottom: 12 }}>{showPwd ? "🙈 छुपाएं" : "👁️ दिखाएं"}</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.greenBtn} onPress={savePassword}><Text style={styles.greenBtnText}>पासवर्ड बनाएं और शुरू करें</Text></TouchableOpacity>
+          <Text style={{ marginTop: 16, color: "#666", fontSize: 12, textAlign: "center" }}>मास्टर कोड: 122202678489 (भूलने पर काम आएगा)</Text>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  if (storedPwd && isFirstTime === false && inputPwd !== undefined && storedPwd !== "" && false === false) {
+    // placeholder to avoid ts confusion
+  }
+
+  // Login check - if user not logged in yet (we use a simple flag via empty input and a state)
+  const [loggedIn, setLoggedIn] = useState(false);
+  // We need to re-evaluate loggedIn persistence using effect - simpler: use separate component logic
+  // To keep within single file, we manage via local state and AsyncStorage for session
+  // This duplicate logic is handled below
+
+  return <MainApp
+    storedPwd={storedPwd}
+    storedHint={storedHint}
+    activeTab={activeTab}
+    setActiveTab={setActiveTab}
+    search={search}
+    setSearch={setSearch}
+    members={members}
+    farmers={farmers}
+    operators={operators}
+    agents={agents}
+    dealers={dealers}
+    parts={parts}
+    showAddModal={showAddModal}
+    setShowAddModal={setShowAddModal}
+    form={form}
+    setForm={setForm}
+    renderAddForm={renderAddForm}
+    handleAdd={handleAdd}
+    getFilteredData={getFilteredData}
+    renderCard={renderCard}
+    callNumber={callNumber}
+    whatsappNumber={whatsappNumber}
+    handleLogout={() => { setIsFirstTime(null); setTimeout(() => { setIsFirstTime(false); }, 100); }}
+  />;
 }
 
-const styles = StyleSheet.create({
-  main:{flex:1, backgroundColor:'#FFFEF7'}, header:{backgroundColor:'#1B5E20', paddingTop:50, paddingBottom:12, paddingHorizontal:12, flexDirection:'row', alignItems:'center'}, headerText:{color:'#fff', fontSize:19, fontWeight:'bold', marginLeft:10}, backBtn:{color:'#fff', fontSize:18},
-  logoCard:{alignItems:'center', backgroundColor:'#fff', borderRadius:16, padding:15, elevation:4, marginBottom:15}, logoCircle:{width:180, height:180, borderRadius:90, borderWidth:6, borderColor:'#2E7D32', justifyContent:'center', alignItems:'center', backgroundColor:'#FFF8E1'}, circleTxt:{fontSize:10, fontWeight:'bold', textAlign:'center', color:'#1B5E20', marginTop:5}, sloganTxt:{fontSize:9, backgroundColor:'#1B5E20', color:'#fff', paddingHorizontal:8, marginTop:6, borderRadius:8},
-  orgTitle:{fontSize:26, fontWeight:'bold', color:'#1B5E20', marginTop:12}, orgSub:{fontSize:20, fontWeight:'bold', color:'#C62828'}, dist:{fontSize:16, fontWeight:'600', marginTop:4}, panjiBox:{backgroundColor:'#1B5E20', borderRadius:10, paddingHorizontal:18, paddingVertical:7, marginTop:10}, panjiText2:{color:'#fff', fontWeight:'bold'},
-  btn:{flexDirection:'row', alignItems:'center', paddingVertical:14, paddingHorizontal:16, borderRadius:14, marginVertical:5, elevation:3}, btnIcon:{fontSize:22, width:35}, btnText:{flex:1, color:'#fff', fontSize:18, fontWeight:'bold', textAlign:'center'}, arrow:{color:'#fff', fontSize:20, fontWeight:'bold'},
-  footer:{backgroundColor:'#E8F5E9', borderRadius:12, padding:14, marginTop:16, borderWidth:1, borderColor:'#A5D6A7'}, fTxt:{fontSize:14, marginVertical:3, color:'#212121'},
-  input:{borderWidth:1, borderColor:'#ccc', borderRadius:10, padding:12, marginVertical:6}, saveBtn:{padding:14, borderRadius:10, alignItems:'center', marginTop:8}, saveTxt:{color:'#fff', fontWeight:'bold', fontSize:16}, card:{flexDirection:'row', justifyContent:'space-between', backgroundColor:'#F1F8E9', margin:8, padding:12, borderRadius:10, elevation:2}, eBtn:{padding:8, marginRight:6, backgroundColor:'#FFF9C4', borderRadius:6}, dBtn:{padding:8, backgroundColor:'#FFCDD2', borderRadius:6}
-});
-const sStyles = StyleSheet.create({
-  container:{flex:1, backgroundColor:'#FFFEF7', justifyContent:'center', alignItems:'center'}, logoBox:{width:180, height:180, borderRadius:90, backgroundColor:'#fff', borderWidth:8, borderColor:'#2E7D32', justifyContent:'center', alignItems:'center', elevation:10},
-  title:{fontSize:28, fontWeight:'bold', color:'#1B5E20', marginTop:20}, title2:{fontSize:22, fontWeight:'bold', color:'#B71C1C'}, dist:{fontSize:16, marginTop:8, fontWeight:'600'}, panji:{marginTop:15, backgroundColor:'#1B5E20', paddingHorizontal:20, paddingVertical:8, borderRadius:20}, panjiText:{color:'#fff', fontWeight:'bold'}, slogan:{marginTop:15, color:'#2E7D32', fontWeight:'bold'}
-});
+function MainApp(props: any) {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [inputPwd, setInputPwd] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+
+  const handleLogin = () => {
+    if (inputPwd === props.storedPwd || inputPwd === MASTER_CODE) {
+      setLoggedIn(true);
+    } else {
+      Alert.alert("गलत पासवर्ड", "हिंट: " + props.storedHint + "\nमास्टर कोड 122202678489 ट्राई करें");
+    }
+  };
+
+  if (!loggedIn) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.authWrap}>
+          <Text style={styles.logo}>🌾</Text>
+          <Text style={styles.authTitle}>महानदी में स्वागत है</Text>
+          <Text style={styles.authSub}>पासवर्ड डालें</Text>
+          <TextInput style={styles.input} placeholder="पासवर्ड लिखें" secureTextEntry={!showPwd} value={inputPwd} onChangeText={setInputPwd} />
+          <TouchableOpacity onPress={() => setShowPwd(!showPwd)}><Text style={{ color: "#0f4d1c", marginBottom: 12 }}>{showPwd ? "🙈 छुपाएं" : "👁️ दिखाएं"}</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.greenBtn} onPress={handleLogin}><Text style={styles.greenBtnText}>लॉगिन करें</Text></TouchableOpacity>
+ 
