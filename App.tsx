@@ -56,45 +56,62 @@ export default function App() {
           React.createElement(Text, {style: styles.addrEmail}, 'MahanadiHarvestar2026@gmail.com')
         ),
         React.createElement(View, {style: styles.passBox},
-          React.createElement(TextInput, {placeholder:'पासवर्ड डालें', value:password, onChangeText:setPassword, secureTextEntry:!showPass, keyboardType:'number-pad', style:styles.passInput}),
+          React.createElement(TextInput, {placeholder:'पासवर्ड डालें', value:password, onChangeText:setPassword, secureTextEntry:showPass===false, keyboardType:'number-pad', style:styles.passInput}),
           React.createElement(TouchableOpacity, {onPress:function(){ setShowPass(!showPass); }}, React.createElement(Text, null, '👁️'))
         ),
-        React.createElement(TouchableOpacity, {style: styles.loginBtn, onPress:function(){ if(password===MY_PASSWORD){ setIsLoggedIn(true); } else Alert.alert('गलत','2022 डालें'); }},
-          React.createElement(Text, {style: styles.loginText}, 'लॉगिन करें')
-        )
+        React.createElement(TouchableOpacity, {style: styles.loginBtn, onPress:function(){
+          if(password===MY_PASSWORD){ setIsLoggedIn(true); } else { Alert.alert('गलत','2022 डालें'); }
+        }}, React.createElement(Text, {style: styles.loginText}, 'लॉगिन करें'))
       )
     );
   }
 
   if (showAddForm) {
-    var isKisan = selectedCat === 'किसान';
-    return React.createElement(ScrollView, {style: styles.container},
-      React.createElement(View, {style: styles.listHeader},
-        React.createElement(TouchableOpacity, {style: styles.bigBackBtn, onPress:function(){ setShowAddForm(false); }}, React.createElement(Text, null, '← वापस')),
-        React.createElement(Text, {style: styles.listTitle}, selectedCat + ' पंजीकरण')
-      ),
-      React.createElement(View, {style: styles.formBox},
-        React.createElement(Text, {style: styles.labelTitle}, 'किसान नाम:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.name || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {name:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'गांव:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.village || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {village:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'ब्लॉक:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.block || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {block:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'जिला:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.district || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {district:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'राज्य:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.state || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {state:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'मोबाइल:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.mobile || '', keyboardType:'phone-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {mobile:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'तारीख:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.tareekh || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {tareekh:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'समय:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.samay || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {samay:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'एडवांस:'), React.createElement(TextInput, {style: styles.inputBox, value:newForm.advance || '', keyboardType:'number-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {advance:v})); }}),
-        React.createElement(Text, {style: styles.labelTitle}, 'पूरा पेमेंट:'), React.createElement(TextInput, {style: [styles.inputBox, {backgroundColor:'#E8F5E9'}], value:newForm.fullPayment || '', keyboardType:'number-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {fullPayment:v})); }}),
-        isKisan? React.createElement(View, null, React.createElement(Text, {style: styles.labelTitle}, 'एकड़:'), React.createElement(TextInput, {style: [styles.inputBox, {backgroundColor:'#E3F2FD'}], value:newForm.ekad || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {ekad:v})); }})) : null,
-        React.createElement(Text, {style: styles.labelTitle}, 'अन्य जानकारी:'), React.createElement(TextInput, {style: [styles.inputBox, {height:60}], value:newForm.anyaJankari || '', multiline:true, onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {anyaJankari:v})); }}),
-        React.createElement(TouchableOpacity, {style: styles.saveBtnBig, onPress:function(){
-          if(!newForm.name){ Alert.alert('नाम लिखें'); return; }
-          var item = Object.assign({id: Date.now(), district:'कांकेर', state:'छत्तीसगढ़', block:'चारामा'}, newForm);
-          var copy = Object.assign({}, allData);
-          copy[selectedCat] = [item].concat(allData[selectedCat]);
-          setAllData(copy); setShowAddForm(false); setNewForm({});
-        }}, React.createElement(Text, {style: styles.btnText}, 'सेव करें'))
-      )
-    );
+    var children = [];
+    children.push(React.createElement(View, {style: styles.listHeader},
+      React.createElement(TouchableOpacity, {style: styles.bigBackBtn, onPress:function(){ setShowAddForm(false); }}, React.createElement(Text, null, '← वापस')),
+      React.createElement(Text, {style: styles.listTitle}, selectedCat + ' पंजीकरण')
+    ));
+
+    var formChildren = [];
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'किसान नाम:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.name || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {name:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'गांव:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.village || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {village:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'ब्लॉक:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.block || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {block:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'जिला:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.district || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {district:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'राज्य:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.state || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {state:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'मोबाइल:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.mobile || '', keyboardType:'phone-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {mobile:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'तारीख:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.tareekh || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {tareekh:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'समय:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.samay || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {samay:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'एडवांस:'));
+    formChildren.push(React.createElement(TextInput, {style: styles.inputBox, value:newForm.advance || '', keyboardType:'number-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {advance:v})); }}));
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'पूरा पेमेंट:'));
+    formChildren.push(React.createElement(TextInput, {style: [styles.inputBox, {backgroundColor:'#E8F5E9'}], value:newForm.fullPayment || '', keyboardType:'number-pad', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {fullPayment:v})); }}));
+
+    if(selectedCat === 'किसान'){
+      formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'एकड़:'));
+      formChildren.push(React.createElement(TextInput, {style: [styles.inputBox, {backgroundColor:'#E3F2FD'}], value:newForm.ekad || '', onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {ekad:v})); }}));
+    }
+
+    formChildren.push(React.createElement(Text, {style: styles.labelTitle}, 'अन्य जानकारी:'));
+    formChildren.push(React.createElement(TextInput, {style: [styles.inputBox, {height:60}], value:newForm.anyaJankari || '', multiline:true, onChangeText:function(v){ setNewForm(Object.assign({}, newForm, {anyaJankari:v})); }}));
+    formChildren.push(React.createElement(TouchableOpacity, {style: styles.saveBtnBig, onPress:function(){
+      if(!newForm.name){ Alert.alert('नाम लिखें'); return; }
+      var item = Object.assign({id: Date.now(), district:'कांकेर', state:'छत्तीसगढ़', block:'चारामा'}, newForm);
+      var copy = Object.assign({}, allData);
+      copy[selectedCat] = [item].concat(allData[selectedCat]);
+      setAllData(copy); setShowAddForm(false); setNewForm({});
+    }}, React.createElement(Text, {style: styles.btnText}, 'सेव करें')));
+
+    children.push(React.createElement(View, {style: styles.formBox},...formChildren));
+    return React.createElement(ScrollView, {style: styles.container},...children);
   }
 
   if (selectedCat === 'सूचना / नोटिस') {
@@ -106,41 +123,44 @@ export default function App() {
       React.createElement(View, {style: styles.suchnaWriteBox},
         React.createElement(TextInput, {placeholder:'यहाँ सूचना लिखें...', value:suchnaText, onChangeText:setSuchnaText, multiline:true, style:styles.suchnaInput}),
         React.createElement(View, {style:{flexDirection:'row', marginTop:10}},
-          React.createElement(TouchableOpacity, {style:[styles.smsShareBtn, {marginRight:8}], onPress:function(){ if(!suchnaText.trim()){ Alert.alert('लिखें'); return; } Linking.openURL('sms:?body=' + suchnaText); }}, React.createElement(Text, {style: styles.shareText}, 'मैसेज')),
-          React.createElement(TouchableOpacity, {style:styles.waShareBtn, onPress:function(){ if(!suchnaText.trim()){ Alert.alert('लिखें'); return; } Linking.openURL('https://wa.me/?text=' + suchnaText); }}, React.createElement(Text, {style: styles.shareText}, 'व्हाट्सएप'))
+          React.createElement(TouchableOpacity, {style:[styles.smsShareBtn, {marginRight:8}], onPress:function(){ if(suchnaText.trim()===''){ Alert.alert('लिखें'); return; } Linking.openURL('sms:' + suchnaText); }}, React.createElement(Text, {style: styles.shareText}, 'मैसेज')),
+          React.createElement(TouchableOpacity, {style:styles.waShareBtn, onPress:function(){ if(suchnaText.trim()===''){ Alert.alert('लिखें'); return; } Linking.openURL('https://wa.me/' + suchnaText); }}, React.createElement(Text, {style: styles.shareText}, 'व्हाट्सएप'))
         )
       )
     );
   }
 
   if (detailItem) {
-    return React.createElement(ScrollView, {style: styles.container},
-      React.createElement(View, {style: styles.detailMainCard},
-        React.createElement(Text, {style: styles.detailHeadName}, detailItem.name),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'किसान नाम:'), React.createElement(Text, {style: styles.detailValue}, detailItem.name)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'गांव:'), React.createElement(Text, {style: styles.detailValue}, detailItem.village)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'ब्लॉक:'), React.createElement(Text, {style: styles.detailValue}, detailItem.block)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'जिला:'), React.createElement(Text, {style: styles.detailValue}, detailItem.district)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'राज्य:'), React.createElement(Text, {style: styles.detailValue}, detailItem.state)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'मोबाइल:'), React.createElement(Text, {style: styles.detailValue}, detailItem.mobile)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'तारीख:'), React.createElement(View, {style: styles.dateBox}, React.createElement(Text, null, '📅 ' + detailItem.tareekh))),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'समय:'), React.createElement(View, {style: styles.timeBox}, React.createElement(Text, null, '⏰ ' + detailItem.samay))),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'एडवांस:'), React.createElement(Text, {style: styles.detailValue}, detailItem.advance)),
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'पूरा पेमेंट:'), React.createElement(View, {style: styles.payBox}, React.createElement(Text, null, '💰 ' + detailItem.fullPayment))),
-        detailItem.ekad? React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'एकड़:'), React.createElement(View, {style: [styles.payBox, {backgroundColor:'#E3F2FD'}]}, React.createElement(Text, null, '🌾 ' + detailItem.ekad))) : null,
-        React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'अन्य जानकारी:'), React.createElement(View, {style: styles.anyaBox}, React.createElement(Text, null, detailItem.anyaJankari))),
-        React.createElement(View, {style: {flexDirection:'row', marginTop:16}},
-          React.createElement(TouchableOpacity, {style: [styles.updateBtn, {marginRight:10}], onPress:function(){ setEditForm(Object.assign({}, detailItem)); setIsEditing(true); }}, React.createElement(Text, {style: styles.btnText}, 'अपडेट')),
-          React.createElement(TouchableOpacity, {style: styles.deleteBtn, onPress:function(){ var c=Object.assign({}, allData); c[selectedCat]=allData[selectedCat].filter(function(i){ return i.id!==detailItem.id; }); setAllData(c); setDetailItem(null); }}, React.createElement(Text, {style: styles.btnText}, 'डिलीट'))
-        ),
-        React.createElement(View, {style: {flexDirection:'row', marginTop:10}},
-          React.createElement(TouchableOpacity, {style: [styles.callBtn, {marginRight:8}], onPress:function(){ Linking.openURL('tel:' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'कॉल')),
-          React.createElement(TouchableOpacity, {style: [styles.waBtn, {marginRight:8}], onPress:function(){ Linking.openURL('https://wa.me/91' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'व्हाट्सएप')),
-          React.createElement(TouchableOpacity, {style: styles.smsBtn, onPress:function(){ Linking.openURL('sms:' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'एसएमएस'))
-        ),
-        React.createElement(TouchableOpacity, {style: styles.wapasBtn, onPress:function(){ setDetailItem(null); setIsEditing(false); }}, React.createElement(Text, {style: styles.wapasText}, '← वापस जाएं'))
-      )
-    );
+    var detailChildren = [];
+    detailChildren.push(React.createElement(Text, {style: styles.detailHeadName}, detailItem.name));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'किसान नाम:'), React.createElement(Text, {style: styles.detailValue}, detailItem.name)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'गांव:'), React.createElement(Text, {style: styles.detailValue}, detailItem.village)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'ब्लॉक:'), React.createElement(Text, {style: styles.detailValue}, detailItem.block)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'जिला:'), React.createElement(Text, {style: styles.detailValue}, detailItem.district)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'राज्य:'), React.createElement(Text, {style: styles.detailValue}, detailItem.state)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'मोबाइल:'), React.createElement(Text, {style: styles.detailValue}, detailItem.mobile)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'तारीख:'), React.createElement(View, {style: styles.dateBox}, React.createElement(Text, null, '📅 ' + detailItem.tareekh))));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'समय:'), React.createElement(View, {style: styles.timeBox}, React.createElement(Text, null, '⏰ ' + detailItem.samay))));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'एडवांस:'), React.createElement(Text, {style: styles.detailValue}, detailItem.advance)));
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'पूरा पेमेंट:'), React.createElement(View, {style: styles.payBox}, React.createElement(Text, null, '💰 ' + detailItem.fullPayment))));
+
+    if(detailItem.ekad && detailItem.ekad!== ''){
+      detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'एकड़:'), React.createElement(View, {style: [styles.payBox, {backgroundColor:'#E3F2FD'}]}, React.createElement(Text, null, '🌾 ' + detailItem.ekad))));
+    }
+
+    detailChildren.push(React.createElement(View, {style: styles.detailRow}, React.createElement(Text, {style: styles.detailLabel}, 'अन्य जानकारी:'), React.createElement(View, {style: styles.anyaBox}, React.createElement(Text, null, detailItem.anyaJankari))));
+    detailChildren.push(React.createElement(View, {style: {flexDirection:'row', marginTop:16}},
+      React.createElement(TouchableOpacity, {style: [styles.updateBtn, {marginRight:10}], onPress:function(){ setEditForm(Object.assign({}, detailItem)); setIsEditing(true); }}, React.createElement(Text, {style: styles.btnText}, 'अपडेट')),
+      React.createElement(TouchableOpacity, {style: styles.deleteBtn, onPress:function(){ var c=Object.assign({}, allData); c[selectedCat]=allData[selectedCat].filter(function(i){ return i.id!==detailItem.id; }); setAllData(c); setDetailItem(null); }}, React.createElement(Text, {style: styles.btnText}, 'डिलीट'))
+    ));
+    detailChildren.push(React.createElement(View, {style: {flexDirection:'row', marginTop:10}},
+      React.createElement(TouchableOpacity, {style: [styles.callBtn, {marginRight:8}], onPress:function(){ Linking.openURL('tel:' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'कॉल')),
+      React.createElement(TouchableOpacity, {style: [styles.waBtn, {marginRight:8}], onPress:function(){ Linking.openURL('https://wa.me/91' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'व्हाट्सएप')),
+      React.createElement(TouchableOpacity, {style: styles.smsBtn, onPress:function(){ Linking.openURL('sms:' + detailItem.mobile); }}, React.createElement(Text, {style: styles.smallBtnText}, 'एसएमएस'))
+    ));
+    detailChildren.push(React.createElement(TouchableOpacity, {style: styles.wapasBtn, onPress:function(){ setDetailItem(null); }}, React.createElement(Text, {style: styles.wapasText}, '← वापस जाएं')));
+
+    return React.createElement(ScrollView, {style: styles.container}, React.createElement(View, {style: styles.detailMainCard},...detailChildren));
   }
 
   if (selectedCat) {
@@ -150,7 +170,7 @@ export default function App() {
         React.createElement(Text, {style: styles.listTitle}, selectedCat + ' सूची')
       ),
       React.createElement(View, {style: {margin:12}}, React.createElement(TextInput, {placeholder:'खोजें', value:search, onChangeText:setSearch, style:styles.searchBar})),
-      React.createElement(FlatList, {data: allData[selectedCat].filter(function(i){ return (i.name||'').toLowerCase().indexOf(search.toLowerCase())!== -1; }), keyExtractor:function(i){ return String(i.id); }, renderItem:function(p){ return React.createElement(TouchableOpacity, {style: styles.listItem, onPress:function(){ setDetailItem(p.item); }}, React.createElement(Text, {style: styles.listItemName}, p.item.name), React.createElement(Text, {style: styles.listItemSub}, p.item.village + ' • ' + p.item.mobile)); }, contentContainerStyle:{paddingBottom:90}}),
+      React.createElement(FlatList, {data: allData[selectedCat].filter(function(i){ return (i.name||'').toLowerCase().indexOf(search.toLowerCase())!==-1; }), keyExtractor:function(i){ return String(i.id); }, renderItem:function(p){ return React.createElement(TouchableOpacity, {style: styles.listItem, onPress:function(){ setDetailItem(p.item); }}, React.createElement(Text, {style: styles.listItemName}, p.item.name), React.createElement(Text, {style: styles.listItemSub}, p.item.village + ' • ' + p.item.mobile)); }, contentContainerStyle:{paddingBottom:90}}),
       React.createElement(TouchableOpacity, {style: styles.fabPlus, onPress:function(){ setNewForm({}); setShowAddForm(true); }}, React.createElement(Text, {style: styles.fabText}, '+'))
     );
   }
@@ -188,12 +208,4 @@ const styles = StyleSheet.create({
   splashTitle: { fontSize: 18, fontWeight: 'bold', color: '#fff', marginTop: 15 },
   loginWrap: { flex: 1, backgroundColor: '#1a5c1a', justifyContent: 'center', alignItems: 'center', padding: 20 },
   loginCenter: { width: '100%', alignItems: 'center' },
-  mainLogo: { width: 150, height: 150, borderRadius: 75, borderWidth: 3, borderColor: '#fff', backgroundColor: '#fff' },
-  loginTitle: { color: '#fff', fontSize: 15, fontWeight: 'bold', textAlign: 'center', marginTop: 10, marginBottom: 14 },
-  addressBox: { backgroundColor: '#2e7d32', borderRadius: 14, padding: 12, width: '100%', marginBottom: 16, borderWidth: 1, borderColor: '#a5d6a7' },
-  addrHead: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
-  addrText: { color: '#e8f5e9', fontSize: 11, lineHeight: 16 },
-  addrEmail: { color: '#c8e6c9', fontSize: 10 },
-  passBox: { flexDirection: 'row', backgroundColor: '#fff', borderRadius: 12, width: '100%', alignItems: 'center', paddingHorizontal: 14, marginBottom: 12, height: 50 },
-  passInput: { flex: 1, fontSize: 14, color: '#000' },
-  loginB
+  mainLogo: { width: 
