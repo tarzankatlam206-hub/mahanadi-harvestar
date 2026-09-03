@@ -1,137 +1,178 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Linking, Platform, StatusBar, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, StatusBar, SafeAreaView } from 'react-native';
+
+type MenuItem = {
+  id: string;
+  title: string;
+  color: string;
+  icon: string;
+};
+
+const MENU_DATA: MenuItem[] = [
+  { id: '1', title: 'सदस्य', color: '#6ABF69', icon: '👥' },
+  { id: '2', title: 'किसान', color: '#F5A623', icon: '🌾' },
+  { id: '3', title: 'एजेंट', color: '#5AC8FA', icon: '🤝' },
+  { id: '4', title: 'ऑपरेटर', color: '#9B7ED8', icon: '🧑‍🌾' },
+  { id: '5', title: 'हेल्पर', color: '#E94E6B', icon: '🙋' },
+  { id: '6', title: 'डीलर', color: '#A07C6D', icon: '🏢' },
+  { id: '7', title: 'पार्ट्स विक्रेता', color: '#4DB6AC', icon: '⚙️' },
+];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [name, setName] = useState('');
-  const [village, setVillage] = useState('');
-  const [mobile, setMobile] = useState('');
-
-  const members = [
-    { id: 1, name: 'रमेश साहू', village: 'आरंग', harvesters: 2, phone: '98271XXXXX' },
-    { id: 2, name: 'संतोष वर्मा', village: 'महासमुंद', harvesters: 1, phone: '98271XXXXX' },
-    { id: 3, name: 'दिनेश यादव', village: 'रायपुर', harvesters: 3, phone: '98271XXXXX' },
-  ];
-
-  const rates = [
-    { work: 'धान कटाई + थ्रेसिंग', rate: '₹ 2200 / घंटा' },
-    { work: 'गेहूं कटाई', rate: '₹ 2000 / घंटा' },
-    { work: 'पुआल बंडल', rate: '₹ 300 / घंटा अतिरिक्त' },
-  ];
-
-  const handleRegister = () => {
-    if (!name || !village || !mobile) {
-      Alert.alert('जानकारी अधूरी है', 'कृपया नाम, गांव और मोबाइल भरें');
-      return;
-    }
-    Alert.alert('सफल!', `${name} जी, आपका पंजीकरण सफल रहा।`);
-    setName(''); setVillage(''); setMobile('');
+  const handlePress = (item: MenuItem) => {
+    alert(`${item.title} पेज जल्द खुलेगा!`);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>🌾 TARZAN KATLAM</Text>
-        <Text style={styles.headerSubtitle}>मालिक कल्याण संघ - छत्तीसगढ़</Text>
-        <Text style={styles.headerVersion}>App v2.0 | रायपुर, छत्तीसगढ़</Text>
-      </View>
-
-      <View style={styles.tabBar}>
-        {[{ id: 'home', label: 'होम' },{ id: 'members', label: 'सदस्य' },{ id: 'booking', label: 'बुकिंग' },{ id: 'rates', label: 'दर' }].map(tab => (
-          <TouchableOpacity key={tab.id} style={[styles.tab, activeTab === tab.id && styles.activeTab]} onPress={() => setActiveTab(tab.id)}>
-            <Text style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>{tab.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <ScrollView style={styles.content}>
-        {activeTab === 'home' && (
-          <View>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>🙏 जय जोहार किसान साथियों!</Text>
-              <Text style={styles.cardText}>महानदी हार्वेस्टर मालिक कल्याण संघ में आपका स्वागत है। यह ऐप रायपुर, महासमुंद, धमतरी, आरंग क्षेत्र के सभी हार्वेस्टर मालिकों के लिए बनाया गया है।</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        
+        {/* Header Card */}
+        <View style={styles.headerCard}>
+          <View style={styles.headerTop}>
+            <View style={styles.logoCircle}>
+              <Text style={styles.logoText}>MH</Text>
             </View>
-            <View style={styles.cardHighlight}>
-              <Text style={styles.highlightTitle}>📞 हेल्पलाइन - अध्यक्ष: 98271-12345</Text>
-              <TouchableOpacity style={styles.callBtn} onPress={() => Linking.openURL('tel:9827112345')}>
-                <Text style={styles.callBtnText}>कॉल करें</Text>
-              </TouchableOpacity>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerTitle}>महानदी हार्वेस्टर</Text>
+              <Text style={styles.headerSubtitle}>मालिक कल्याण संघ</Text>
+              <Text style={styles.headerDistrict}>जिला कांकेर छत्तीसगढ़</Text>
             </View>
           </View>
-        )}
-
-        {activeTab === 'members' && (
-          <View>
-            <Text style={styles.sectionTitle}>हमारे सदस्य</Text>
-            {members.map(m => (
-              <View key={m.id} style={styles.memberCard}>
-                <Text style={styles.memberName}>{m.name}</Text>
-                <Text style={styles.memberVillage}>📍 {m.village} | 🚜 {m.harvesters} हार्वेस्टर</Text>
-              </View>
-            ))}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>नया सदस्य पंजीकरण</Text>
-              <TextInput style={styles.input} placeholder="आपका नाम" value={name} onChangeText={setName} />
-              <TextInput style={styles.input} placeholder="गांव / शहर" value={village} onChangeText={setVillage} />
-              <TextInput style={styles.input} placeholder="मोबाइल नंबर" value={mobile} onChangeText={setMobile} keyboardType="phone-pad" />
-              <TouchableOpacity style={styles.primaryBtn} onPress={handleRegister}>
-                <Text style={styles.primaryBtnText}>पंजीकरण करें</Text>
-              </TouchableOpacity>
-            </View>
+          
+          <View style={styles.registrationPill}>
+            <Text style={styles.registrationText}>पंजीयन क्रमांक:</Text>
           </View>
-        )}
+        </View>
 
-        {activeTab === 'booking' && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>🚜 हार्वेस्टर बुकिंग</Text>
-            <TouchableOpacity style={styles.primaryBtn} onPress={() => Linking.openURL('https://wa.me/919827112345?text=नमस्ते, मुझे हार्वेस्टर बुक करना है')}>
-              <Text style={styles.primaryBtnText}>WhatsApp पर बुक करें</Text>
+        {/* Menu Buttons */}
+        <View style={styles.menuContainer}>
+          {MENU_DATA.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[styles.menuButton, { backgroundColor: item.color }]}
+              onPress={() => handlePress(item)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.menuIcon}>{item.icon}</Text>
+              <Text style={styles.menuTitle}>{item.title}</Text>
+              <Text style={styles.arrow}>›</Text>
             </TouchableOpacity>
-          </View>
-        )}
+          ))}
+        </View>
 
-        {activeTab === 'rates' && (
-          <View>
-            {rates.map((r, i) => (
-              <View key={i} style={styles.rateCard}>
-                <Text style={styles.rateWork}>{r.work}</Text>
-                <Text style={styles.ratePrice}>{r.rate}</Text>
-              </View>
-            ))}
-          </View>
-        )}
+        <View style={{ height: 40 }} />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f7f0' },
-  header: { backgroundColor: '#2e7d32', padding: 20, paddingTop: 40, alignItems: 'center' },
-  headerTitle: { color: 'white', fontSize: 26, fontWeight: 'bold' },
-  headerSubtitle: { color: '#c8e6c9', fontSize: 16, marginTop: 2, fontWeight: '600' },
-  headerVersion: { color: '#a5d6a7', fontSize: 12, marginTop: 6 },
-  tabBar: { flexDirection: 'row', backgroundColor: 'white', elevation: 2 },
-  tab: { flex: 1, paddingVertical: 14, alignItems: 'center' },
-  activeTab: { borderBottomWidth: 3, borderBottomColor: '#2e7d32' },
-  tabText: { fontSize: 15, color: '#666' },
-  activeTabText: { color: '#2e7d32', fontWeight: 'bold' },
-  content: { flex: 1, padding: 12 },
-  card: { backgroundColor: 'white', borderRadius: 12, padding: 16, marginBottom: 12 },
-  cardHighlight: { backgroundColor: '#fff8e1', borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#ffe082' },
-  cardTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
-  cardText: { fontSize: 14, color: '#444', lineHeight: 21 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginVertical: 8, color: '#2e7d32' },
-  memberCard: { backgroundColor: 'white', borderRadius: 10, padding: 14, marginBottom: 8, borderLeftWidth: 4, borderLeftColor: '#66bb6a' },
-  memberName: { fontSize: 16, fontWeight: 'bold', color: '#1b5e20' },
-  memberVillage: { fontSize: 13, color: '#555', marginTop: 3 },
-  input: { backgroundColor: '#f9f9f9', borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginTop: 10 },
-  primaryBtn: { backgroundColor: '#2e7d32', borderRadius: 8, padding: 14, alignItems: 'center', marginTop: 14 },
-  primaryBtnText: { color: 'white', fontWeight: 'bold' },
-  highlightTitle: { fontSize: 16, fontWeight: 'bold', color: '#f57f17' },
-  callBtn: { backgroundColor: '#ff8f00', borderRadius: 6, padding: 10, alignItems: 'center', marginTop: 10 },
-  callBtnText: { color: 'white', fontWeight: 'bold' },
-  rateCard: { backgroundColor: 'white', borderRadius: 10, padding: 14, marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between' },
-  rateWork: { fontSize: 14, fontWeight: '600', flex: 1 },
-  ratePrice: { fontSize: 14, fontWeight: 'bold', color: '#2e7d32' },
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F0F2F5',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#F0F2F5',
+  },
+  headerCard: {
+    backgroundColor: '#FFFFFF',
+    margin: 15,
+    marginTop: 10,
+    borderRadius: 20,
+    padding: 18,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#E8F5E9',
+    borderWidth: 2,
+    borderColor: '#2E7D32',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  logoText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  headerSubtitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#444',
+    marginTop: 2,
+  },
+  headerDistrict: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 2,
+  },
+  registrationPill: {
+    backgroundColor: '#5D6D5E',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginTop: 15,
+    alignSelf: 'flex-start',
+    minWidth: 180,
+  },
+  registrationText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  menuContainer: {
+    paddingHorizontal: 15,
+    paddingTop: 5,
+  },
+  menuButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 18,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  menuIcon: {
+    fontSize: 22,
+    width: 35,
+  },
+  menuTitle: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+  arrow: {
+    fontSize: 26,
+    color: 'white',
+    fontWeight: '300',
+  },
 });
