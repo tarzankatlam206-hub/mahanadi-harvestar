@@ -31,7 +31,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🌾 महानदी हार्वेस्टर</Text>
+        <Text style={styles.headerTitle}>🌾 TARZAN KATLAM</Text>
         <Text style={styles.headerSubtitle}>मालिक कल्याण संघ - छत्तीसगढ़</Text>
         <Text style={styles.headerVersion}>App v2.0 | रायपुर, छत्तीसगढ़</Text>
       </View>
