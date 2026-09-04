@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, BackHandler } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, BackHandler, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MENU = [
@@ -21,7 +21,7 @@ const HINDI = {
  helper: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',totalKaryadivas:'टोटल कार्यदिवस',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',advanceRashi:'एडवांस राशि',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि',dailyMajduri:'प्रतिदिन मजदूरी राशि',upasthiti:'उपस्थिति तिथियां',anyaJankari:'अन्य जानकारी'},
  dealer: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',company:'कंपनी',showroomPata:'शोरूम पता',serviceCenter:'सर्विस सेंटर',anyaJankari:'अन्य जानकारी'},
  parts: {name:'नाम *',dukaanNaam:'दुकान का नाम',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',partsPrakar:'पार्ट्स प्रकार',anyaJankari:'अन्य जानकारी'},
- notice: {vishay:'विषय *',tarikh:'तारीख',vivaran:'विवरण',anyaJankari:'अन्य जानकारी'}
+ notice: {vishay:'विषय *',tarikh:'तारीख',vivaran:'विवरण',mobile:'मोबाइल नंबर',anyaJankari:'अन्य जानकारी'}
 };
 const FULL = {
  members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'सदस्य',harvesterNumber:'',sadasyataShulk:'500',bhugtanTarikh:'',bhugtanMadhyam:'नकद',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
@@ -31,7 +31,7 @@ const FULL = {
  helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',totalKaryadivas:'',karyPrarambhTithi:'',karySamaptiTithi:'',advanceRashi:'',bachatRashi:'',totalRashi:'',dailyMajduri:'',upasthiti:'',anyaJankari:''},
  dealer: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',company:'',showroomPata:'',serviceCenter:'',anyaJankari:''},
  parts: {name:'',dukaanNaam:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',partsPrakar:'',anyaJankari:''},
- notice: {vishay:'',tarikh:'',vivaran:'',anyaJankari:''}
+ notice: {vishay:'',tarikh:'',vivaran:'',mobile:'',anyaJankari:''}
 };
 
 export default function App(){
@@ -67,22 +67,11 @@ export default function App(){
   useEffect(()=>{ AsyncStorage.setItem('parts',JSON.stringify(parts)); },[parts]);
   useEffect(()=>{ AsyncStorage.setItem('notices',JSON.stringify(notices)); },[notices]);
 
-  // फोन के नीचे राइट साइड वाले बैक बटन का कोड - लॉगिन पेज तक लाएगा
   useEffect(()=>{
     const onBackPress = () => {
-      if (show) {
-        setShow(false);
-        return true;
-      }
-      if (view!== 'home') {
-        setView('home');
-        return true;
-      }
-      if (isLogin && view === 'home') {
-        AsyncStorage.setItem('isLogin','no');
-        setIsLogin(false);
-        return true;
-      }
+      if (show) { setShow(false); return true; }
+      if (view!== 'home') { setView('home'); return true; }
+      if (isLogin && view === 'home') { AsyncStorage.setItem('isLogin','no'); setIsLogin(false); return true; }
       return false;
     };
     const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
@@ -122,7 +111,15 @@ export default function App(){
         </View>
       </View>
       {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
-      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=><View key={it.id} style={s.card}><Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text><Text>{it.mobile||''} {it.pata||''}</Text><View style={{flexDirection:'row',marginTop:6}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>हटाएं</Text></TouchableOpacity></View></View>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
+      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=><View key={it.id} style={s.card}><Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text><Text>{it.mobile||''} {it.pata||''}</Text>
+      {it.mobile? (
+        <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}>
+          <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.sm,{backgroundColor:'#25D366'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>💬 व्हाट्सएप</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity>
+        </View>
+      ) : null}
+      <View style={{flexDirection:'row',marginTop:6}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>हटाएं</Text></TouchableOpacity></View></View>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
       {view==='logout' && <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><View style={[s.card,{width:'90%',alignItems:'center',padding:25}]}><Text style={{fontSize:20,fontWeight:'bold'}}>लॉग आउट करें?</Text><Text style={{color:'#666',marginTop:6,textAlign:'center'}}>डाटा डिलीट नहीं होगा</Text><TouchableOpacity style={[s.mBtn,{backgroundColor:'#212121',width:'100%',marginTop:15}]} onPress={doLogout}><Text style={s.mBtnT}>हाँ, लॉग आउट</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',width:'100%',marginTop:10}]} onPress={()=>setView('home')}><Text style={s.mBtnT}>नहीं</Text></TouchableOpacity></View></View>}
       <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>{Object.keys(form).filter(k=>k!=='id').map(k=><View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>)}<View style={{flexDirection:'row',marginTop:15}}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></ScrollView></View></Modal>
     </SafeAreaView>
@@ -139,7 +136,7 @@ const s=StyleSheet.create({
   sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff'},
   search:{flexDirection:'row',backgroundColor:'#fff',margin:8,paddingHorizontal:10,borderRadius:8,alignItems:'center',borderWidth:1,borderColor:'#FF9800'},
   card:{backgroundColor:'#fff',margin:8,padding:12,borderRadius:8},
-  sm:{paddingHorizontal:10,paddingVertical:5,borderRadius:6,marginRight:8}, smT:{color:'#fff',fontSize:12},
+  sm:{paddingHorizontal:10,paddingVertical:5,borderRadius:6,marginRight:8,marginBottom:4}, smT:{color:'#fff',fontSize:12},
   fab:{position:'absolute',right:16,bottom:16,width:56,height:56,borderRadius:28,backgroundColor:'#2E7D32',justifyContent:'center',alignItems:'center'}, fabT:{color:'#fff',fontSize:28},
   inp:{backgroundColor:'#fff',borderWidth:1,borderColor:'#ccc',borderRadius:6,padding:8,marginTop:4},
   mBtn:{flex:1,padding:12,borderRadius:8,alignItems:'center',marginRight:6}, mBtnT:{color:'#fff',fontWeight:'bold'},
