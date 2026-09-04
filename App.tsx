@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, Linking } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, Linking, BackHandler } from 'react-native';
 
 const MENU = [
   {title:'सदस्य',color:'#6ABF69',key:'members'},
@@ -40,6 +40,18 @@ export default function App(){
   const [members,setMembers]=useState([]); const [kisans,setKisans]=useState([]); const [agents,setAgents]=useState([]); const [operators,setOperators]=useState([]); const [helpers,setHelpers]=useState([]); const [dealers,setDealers]=useState([]); const [parts,setParts]=useState([]); const [notices,setNotices]=useState([]);
   const [form,setForm]=useState({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState(null);
   const [sel,setSel]=useState(null); const [selType,setSelType]=useState('operator'); const [attShow,setAttShow]=useState(false); const [newDate,setNewDate]=useState('');
+  const [search,setSearch]=useState('');
+
+  useEffect(()=>{
+    const onBack = ()=>{
+      if(show){ setShow(false); return true; }
+      if(attShow){ setAttShow(false); return true; }
+      if(view!=='home'){ setSearch(''); setView('home'); return true; }
+      return false;
+    };
+    const sub = BackHandler.addEventListener('hardwareBackPress', onBack);
+    return ()=> sub.remove();
+  },[view, show, attShow]);
 
   const call=(n)=>{ if(n) Linking.openURL('tel:'+n); };
   const wa=(n)=>{ if(n) Linking.openURL('https://wa.me/91'+n); };
@@ -68,9 +80,15 @@ export default function App(){
   };
 
   const getList=()=>{
-    if(type==='members') return members; if(type==='kisan') return kisans; if(type==='agent') return agents;
-    if(type==='operator') return operators; if(type==='helper') return helpers;
-    if(type==='dealer') return dealers; if(type==='parts') return parts; return notices;
+    let list=[];
+    if(type==='members') list=members; else if(type==='kisan') list=kisans; else if(type==='agent') list=agents;
+    else if(type==='operator') list=operators; else if(type==='helper') list=helpers;
+    else if(type==='dealer') list=dealers; else if(type==='parts') list=parts; else list=notices;
+    if(search.trim()){
+      const q=search.toLowerCase();
+      return list.filter(it=> (Object.values(it).join(' ')+'').toLowerCase().includes(q));
+    }
+    return list;
   };
 
   const openAtt=(p,t)=>{ setSel(p); setSelType(t); setNewDate(''); setAttShow(true); };
@@ -88,21 +106,28 @@ export default function App(){
   return(
     <SafeAreaView style={s.safe}>
       <View style={s.headColorful}>
-        <Text style={s.headTitle1}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
-        <Text style={s.headTitle2}>जिला कांकेर (छत्तीसगढ़)</Text>
-        <Text style={s.headTitle3}>पंजीयन क्रमांक 122202678489</Text>
+        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'100%'}}>
+          <Text style={{fontSize:45}}>🌾</Text>
+          <View style={{flex:1,alignItems:'center'}}>
+            <Text style={s.headTitle1}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
+            <Text style={s.headTitle2}>जिला कांकेर (छत्तीसगढ़)</Text>
+            <Text style={s.headTitle3}>पंजीयन क्रमांक 122202678489</Text>
+          </View>
+          <Text style={{fontSize:45}}>🚜</Text>
+        </View>
       </View>
-      {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout'){ setView('logout'); } else { setType(i.key); setView(i.key); } }}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
-      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title || type} ({getList().length})</Text><Text></Text></View>
+
+      {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout'){ setView('logout'); } else { setType(i.key); setView(i.key); setSearch(''); } }}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
+
+      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>{ setSearch(''); setView('home'); }}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title || type} ({getList().length})</Text><Text></Text></View>
+        <View style={{backgroundColor:'#fff',marginHorizontal:8,marginTop:8,borderRadius:8,flexDirection:'row',alignItems:'center',paddingHorizontal:10,borderWidth:1,borderColor:'#FF9800'}}><Text style={{fontSize:16}}>🔍</Text><TextInput style={{flex:1,padding:10}} value={search} onChangeText={setSearch} placeholder='सर्च करें - नाम, मोबाइल, गांव...' placeholderTextColor='#999' /><TouchableOpacity onPress={()=>setSearch('')}><Text style={{color:'#999',padding:5}}>✕</Text></TouchableOpacity></View>
         <ScrollView contentContainerStyle={{paddingBottom:80}}>{getList().map(item=><View key={item.id} style={s.card}>
-          <Text style={s.cName}>{item.name? item.name : item.vishay} {item.company? '| ' + item.company : ''} {item.model? item.model : ''}</Text>
-          <Text>{item.mobile? '📱 ' + item.mobile : ''} {item.pata? '| ' + item.pata : ''} {item.block? ', ' + item.block : ''} {item.harvesterNumber? '| हार्वेस्टर ' + item.harvesterNumber : ''} {item.fasal? '| ' + item.fasal + ' ' + item.ekad + ' एकड़' : ''} {item.karyadivas? '| ' + item.karyadivas + ' दिन' : ''}</Text>
-          {item.upasthiti? <Text>📆 {item.upasthiti} | हाजिरी {item.upasthiti.split(',').filter(x=>x.trim()).length} दिन</Text> : null}
-          {item.sadasyataShulk? <Text>शुल्क ₹{item.sadasyataShulk} | {item.bhugtanTarikh} {item.bhugtanMadhyam} | गाड़ी {item.gadiSankhya}</Text> : null}
+          <Text style={s.cName}>{item.name? item.name : item.vishay}</Text>
+          <Text>{item.mobile? '📱 ' + item.mobile : ''} {item.pata? '| ' + item.pata : ''}</Text>
+          {item.upasthiti? <Text>📆 {item.upasthiti}</Text> : null}
           {item.vivaran? <Text>{item.vivaran}</Text> : null}
           <View style={s.row}>
             {item.mobile? <><TouchableOpacity style={[s.b,{backgroundColor:'#4CAF50'}]} onPress={()=>call(item.mobile)}><Text style={s.bt}>कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.b,{backgroundColor:'#25D366'}]} onPress={()=>wa(item.mobile)}><Text style={s.bt}>व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.b,{backgroundColor:'#2196F3'}]} onPress={()=>sms(item.mobile)}><Text style={s.bt}>मैसेज</Text></TouchableOpacity></> : null}
-            {type==='notice'? <><TouchableOpacity style={[s.b,{backgroundColor:'#25D366'}]} onPress={()=>{ const msg = (item.vishay||'') + ' - ' + (item.vivaran||''); Linking.openURL('https://wa.me/?text=' + encodeURIComponent(msg)); }}><Text style={s.bt}>व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.b,{backgroundColor:'#2196F3'}]} onPress={()=>{ const msg = (item.vishay||'') + ' - ' + (item.vivaran||''); Linking.openURL('sms:?body=' + encodeURIComponent(msg)); }}><Text style={s.bt}>मैसेज</Text></TouchableOpacity></> : null}
             {(type==='operator' || type==='helper')? <TouchableOpacity style={[s.b,{backgroundColor:'#607D8B'}]} onPress={()=>openAtt(item,type)}><Text style={s.bt}>📅 उपस्थिति</Text></TouchableOpacity> : null}
             <TouchableOpacity style={[s.b,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,item)}><Text style={s.bt}>एडिट</Text></TouchableOpacity>
             <TouchableOpacity style={[s.b,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==item.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==item.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==item.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==item.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==item.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==item.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==item.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==item.id)); }}><Text style={s.bt}>🗑️ डिलीट</Text></TouchableOpacity>
@@ -111,11 +136,11 @@ export default function App(){
         <TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity>
       </View>}
 
-      {view==='logout' && <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:20}}><View style={[s.card,{width:'90%',alignItems:'center',padding:25,borderRadius:15}]}><Text style={{fontSize:40}}>👋</Text><Text style={{fontSize:20,fontWeight:'bold',marginTop:10}}>लॉग आउट</Text><Text style={{textAlign:'center',color:'#666',marginVertical:15}}>क्या आप वाकई लॉग आउट करना चाहते हैं?{'\n'}महानदी हार्वेस्टर मालिक कल्याण संघ</Text><TouchableOpacity style={[s.mBtn,{backgroundColor:'#212121',width:'100%',marginTop:10}]} onPress={()=>{ setMembers([]); setKisans([]); setAgents([]); setOperators([]); setHelpers([]); setDealers([]); setParts([]); setNotices([]); setView('home'); }}><Text style={s.mBtnT}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',width:'100%',marginTop:10}]} onPress={()=>setView('home')}><Text style={s.mBtnT}>नहीं, होम पर रहें</Text></TouchableOpacity></View></View>}
+      {view==='logout' && <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:20}}><View style={[s.card,{width:'90%',alignItems:'center',padding:25,borderRadius:15}]}><Text style={{fontSize:40}}>👋</Text><Text style={{fontSize:20,fontWeight:'bold',marginTop:10}}>लॉग आउट</Text><TouchableOpacity style={[s.mBtn,{backgroundColor:'#212121',width:'100%',marginTop:10}]} onPress={()=>{ setMembers([]); setKisans([]); setAgents([]); setOperators([]); setHelpers([]); setDealers([]); setParts([]); setNotices([]); setView('home'); }}><Text style={s.mBtnT}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',width:'100%',marginTop:10}]} onPress={()=>setView('home')}><Text style={s.mBtnT}>नहीं, होम पर रहें</Text></TouchableOpacity></View></View>}
 
-      <Modal visible={attShow} animationType="slide"><View style={s.modalWrap}><View style={{padding:12}}><Text style={s.mTitle}>उपस्थिति - {sel? sel.name : ''}</Text><View style={{flexDirection:'row',marginTop:10}}><TextInput style={[s.in,{flex:1}]} value={newDate} onChangeText={setNewDate} placeholder="13/05/2026 या खाली=आज" /><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',marginLeft:8}]} onPress={addDate}><Text style={s.mBtnT}>+ जोड़ें</Text></TouchableOpacity></View><ScrollView style={{marginTop:15}}>{sel && sel.upasthiti? sel.upasthiti.split(',').map(x=>x.trim()).filter(Boolean).map((d,i)=><View key={i} style={{flexDirection:'row',justifyContent:'space-between',padding:12,borderBottomWidth:1,borderColor:'#eee'}}><Text>✅ {d}</Text><TouchableOpacity onPress={()=>{ const arr=(sel.upasthiti||'').split(',').map(x=>x.trim()).filter(Boolean); arr.splice(i,1); const neu=arr.join(', '); const upd=Object.assign({}, sel, {upasthiti:neu}); setSel(upd); if(selType==='operator') setOperators(a=>a.map(x=>x.id===sel.id?upd:x)); else setHelpers(a=>a.map(x=>x.id===sel.id?upd:x)); }}><Text style={{color:'red'}}>हटाएं</Text></TouchableOpacity></View>) : null}</ScrollView><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888',marginTop:20}]} onPress={()=>setAttShow(false)}><Text style={s.mBtnT}>बंद करें</Text></TouchableOpacity></View></View></Modal>
+      <Modal visible={attShow} animationType="slide"><View style={s.modalWrap}><View style={{padding:12}}><Text style={s.mTitle}>उपस्थिति - {sel? sel.name : ''}</Text><View style={{flexDirection:'row',marginTop:10}}><TextInput style={[s.in,{flex:1}]} value={newDate} onChangeText={setNewDate} placeholder="तारीख" /><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',marginLeft:8}]} onPress={addDate}><Text style={s.mBtnT}>+ जोड़ें</Text></TouchableOpacity></View><ScrollView style={{marginTop:15}}>{sel && sel.upasthiti? sel.upasthiti.split(',').map(x=>x.trim()).filter(Boolean).map((d,i)=><View key={i} style={{flexDirection:'row',justifyContent:'space-between',padding:12,borderBottomWidth:1,borderColor:'#eee'}}><Text>✅ {d}</Text><TouchableOpacity onPress={()=>{ const arr=(sel.upasthiti||'').split(',').map(x=>x.trim()).filter(Boolean); arr.splice(i,1); const neu=arr.join(', '); const upd=Object.assign({}, sel, {upasthiti:neu}); setSel(upd); if(selType==='operator') setOperators(a=>a.map(x=>x.id===sel.id?upd:x)); else setHelpers(a=>a.map(x=>x.id===sel.id?upd:x)); }}><Text style={{color:'red'}}>हटाएं</Text></TouchableOpacity></View>) : null}</ScrollView><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888',marginTop:20}]} onPress={()=>setAttShow(false)}><Text style={s.mBtnT}>बंद करें</Text></TouchableOpacity></View></View></Modal>
 
-      <Modal visible={show} animationType="slide"><View style={s.modalWrap}><ScrollView style={{padding:12}}><Text style={s.mTitle}>{MENU.find(m=>m.key===type)?.title || type} फॉर्म - पूरा डाटा</Text>
+      <Modal visible={show} animationType="slide"><View style={s.modalWrap}><ScrollView style={{padding:12}}><Text style={s.mTitle}>{MENU.find(m=>m.key===type)?.title || type} फॉर्म</Text>
         {Object.keys(form).filter(k=>k!=='id').map(k=><View key={k}><Text style={s.l}>{(HINDI[type] && HINDI[type][k])? HINDI[type][k] : k}</Text><TextInput style={s.in} value={form[k]} onChangeText={t=>setForm(Object.assign({}, form, {[k]:t}))} /></View>)}
         <View style={s.mRow}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सेव</Text></TouchableOpacity></View>
       </ScrollView></View></Modal>
@@ -124,9 +149,7 @@ export default function App(){
 }
 const s=StyleSheet.create({
   safe:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
-  head:{backgroundColor:'#fff',margin:12,padding:12,borderRadius:12,alignItems:'center'},
-  headColorful:{backgroundColor:'#FFF3E0',margin:12,padding:15,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800',elevation:3},
-  headTitle:{fontWeight:'900',fontSize:15,color:'#1B5E20'},
+  headColorful:{backgroundColor:'#FFF3E0',margin:12,padding:15,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
   headTitle1:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center'},
   headTitle2:{fontWeight:'bold',fontSize:14,color:'#0D47A1',marginTop:4,textAlign:'center'},
   headTitle3:{fontWeight:'bold',fontSize:12,color:'#1B5E20',marginTop:4,textAlign:'center'},
