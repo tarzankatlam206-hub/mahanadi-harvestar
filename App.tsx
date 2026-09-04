@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, BackHandler } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MENU = [
@@ -67,6 +67,28 @@ export default function App(){
   useEffect(()=>{ AsyncStorage.setItem('parts',JSON.stringify(parts)); },[parts]);
   useEffect(()=>{ AsyncStorage.setItem('notices',JSON.stringify(notices)); },[notices]);
 
+  // फोन के नीचे राइट साइड वाले बैक बटन का कोड - लॉगिन पेज तक लाएगा
+  useEffect(()=>{
+    const onBackPress = () => {
+      if (show) {
+        setShow(false);
+        return true;
+      }
+      if (view!== 'home') {
+        setView('home');
+        return true;
+      }
+      if (isLogin && view === 'home') {
+        AsyncStorage.setItem('isLogin','no');
+        setIsLogin(false);
+        return true;
+      }
+      return false;
+    };
+    const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => sub.remove();
+  },[view, show, isLogin]);
+
   const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
   const openForm=(t,item)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
@@ -102,7 +124,6 @@ export default function App(){
       {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
       {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=><View key={it.id} style={s.card}><Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text><Text>{it.mobile||''} {it.pata||''}</Text><View style={{flexDirection:'row',marginTop:6}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>हटाएं</Text></TouchableOpacity></View></View>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
       {view==='logout' && <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><View style={[s.card,{width:'90%',alignItems:'center',padding:25}]}><Text style={{fontSize:20,fontWeight:'bold'}}>लॉग आउट करें?</Text><Text style={{color:'#666',marginTop:6,textAlign:'center'}}>डाटा डिलीट नहीं होगा</Text><TouchableOpacity style={[s.mBtn,{backgroundColor:'#212121',width:'100%',marginTop:15}]} onPress={doLogout}><Text style={s.mBtnT}>हाँ, लॉग आउट</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'#4CAF50',width:'100%',marginTop:10}]} onPress={()=>setView('home')}><Text style={s.mBtnT}>नहीं</Text></TouchableOpacity></View></View>}
-      {/* यहाँ ठीक किया - अब हिंदी में दिखेगा */}
       <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>{Object.keys(form).filter(k=>k!=='id').map(k=><View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>)}<View style={{flexDirection:'row',marginTop:15}}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></ScrollView></View></Modal>
     </SafeAreaView>
   );
