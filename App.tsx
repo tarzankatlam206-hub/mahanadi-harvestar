@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, BackHandler, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, TextInput, Modal, BackHandler, Linking, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MENU = [
@@ -13,7 +13,7 @@ const MENU = [
   {title:'सूचना / नोटिस',color:'#B07BE6',key:'notice'},
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
-const HINDI = {
+const HINDI: any = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
  kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
  agent: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',agreement:'एग्रीमेंट',check:'चेक',karyadivas:'कार्यदिवस',totalGhanta:'टोटल घंटा/समय',advanceRashi:'एडवांस राशि प्राप्त',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि प्राप्त',anyaJankari:'अन्य जानकारी'},
@@ -23,7 +23,7 @@ const HINDI = {
  parts: {name:'नाम *',dukaanNaam:'दुकान का नाम',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',partsPrakar:'पार्ट्स प्रकार',anyaJankari:'अन्य जानकारी'},
  notice: {vishay:'विषय *',tarikh:'तारीख',vivaran:'विवरण',mobile:'मोबाइल नंबर',anyaJankari:'अन्य जानकारी'}
 };
-const FULL = {
+const FULL: any = {
  members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'सदस्य',harvesterNumber:'',sadasyataShulk:'500',bhugtanTarikh:'',bhugtanMadhyam:'नकद',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
  kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
  agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
@@ -36,8 +36,8 @@ const FULL = {
 
 export default function App(){
   const [view,setView]=useState('home');
-  const [members,setMembers]=useState([]); const [kisans,setKisans]=useState([]); const [agents,setAgents]=useState([]); const [operators,setOperators]=useState([]); const [helpers,setHelpers]=useState([]); const [dealers,setDealers]=useState([]); const [parts,setParts]=useState([]); const [notices,setNotices]=useState([]);
-  const [form,setForm]=useState({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState(null);
+  const [members,setMembers]=useState<any[]>([]); const [kisans,setKisans]=useState<any[]>([]); const [agents,setAgents]=useState<any[]>([]); const [operators,setOperators]=useState<any[]>([]); const [helpers,setHelpers]=useState<any[]>([]); const [dealers,setDealers]=useState<any[]>([]); const [parts,setParts]=useState<any[]>([]); const [notices,setNotices]=useState<any[]>([]);
+  const [form,setForm]=useState<any>({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState<string|null>(null);
   const [search,setSearch]=useState(''); const [splash,setSplash]=useState(true);
   const [isLogin,setIsLogin]=useState(false); const [pass,setPass]=useState('');
 
@@ -80,11 +80,21 @@ export default function App(){
 
   const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
-  const openForm=(t,item)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
+  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
   const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
-  const getList=()=>{ let l=[]; if(type==='members') l=members; else if(type==='kisan') l=kisans; else if(type==='agent') l=agents; else if(type==='operator') l=operators; else if(type==='helper') l=helpers; else if(type==='dealer') l=dealers; else if(type==='parts') l=parts; else l=notices; if(search){ const q=search.toLowerCase(); return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q)); } return l; };
+  const getList=()=>{ let l:any[]=[]; if(type==='members') l=members; else if(type==='kisan') l=kisans; else if(type==='agent') l=agents; else if(type==='operator') l=operators; else if(type==='helper') l=helpers; else if(type==='dealer') l=dealers; else if(type==='parts') l=parts; else l=notices; if(search){ const q=search.toLowerCase(); return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q)); } return l; };
 
-  if(splash){ return(<View style={s.splash}><Text style={{fontSize:60}}>🚜</Text><Text style={s.splashT}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text><Text style={{color:'#fff',marginTop:10}}>लोड हो रहा है...</Text></View>); }
+  if(splash){
+    return(
+      <View style={s.splash}>
+        <Image
+          source={require('./assets/splash.png')}
+          style={s.splashImage}
+          resizeMode="cover"
+        />
+      </View>
+    );
+  }
   if(!isLogin){
     return(
       <SafeAreaView style={s.loginSafe}>
@@ -157,7 +167,8 @@ const s=StyleSheet.create({
   mBtn:{flex:1,padding:12,borderRadius:8,alignItems:'center',marginRight:6}, mBtnT:{color:'#fff',fontWeight:'bold'},
   modal:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
-  splash:{flex:1,backgroundColor:'#2E7D32',justifyContent:'center',alignItems:'center'}, splashT:{color:'#fff',fontWeight:'900',fontSize:18,marginTop:10,textAlign:'center'},
+  splash:{flex:1,backgroundColor:'#000'},
+  splashImage:{width:'100%',height:'100%'},
   loginSafe:{flex:1,backgroundColor:'#FFF3E0',justifyContent:'center',alignItems:'center'},
   loginBox:{width:'85%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
   loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
