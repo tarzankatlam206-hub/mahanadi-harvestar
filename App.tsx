@@ -40,6 +40,8 @@ export default function App(){
   const [form,setForm]=useState<any>({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState<string|null>(null);
   const [search,setSearch]=useState(''); const [splash,setSplash]=useState(true);
   const [isLogin,setIsLogin]=useState(false); const [pass,setPass]=useState('');
+  const [loaded,setLoaded]=useState(false);
+
   useEffect(()=>{
     (async()=>{
       try{
@@ -53,17 +55,20 @@ export default function App(){
         const n=await AsyncStorage.getItem('notices'); if(n) setNotices(JSON.parse(n));
         const lg=await AsyncStorage.getItem('isLogin'); if(lg==='yes') setIsLogin(true);
       }catch(e){}
+      setLoaded(true);
     })();
     const t=setTimeout(()=>setSplash(false),2500); return ()=>clearTimeout(t);
   },[]);
-  useEffect(()=>{ AsyncStorage.setItem('members',JSON.stringify(members)); },[members]);
-  useEffect(()=>{ AsyncStorage.setItem('kisans',JSON.stringify(kisans)); },[kisans]);
-  useEffect(()=>{ AsyncStorage.setItem('agents',JSON.stringify(agents)); },[agents]);
-  useEffect(()=>{ AsyncStorage.setItem('operators',JSON.stringify(operators)); },[operators]);
-  useEffect(()=>{ AsyncStorage.setItem('helpers',JSON.stringify(helpers)); },[helpers]);
-  useEffect(()=>{ AsyncStorage.setItem('dealers',JSON.stringify(dealers)); },[dealers]);
-  useEffect(()=>{ AsyncStorage.setItem('parts',JSON.stringify(parts)); },[parts]);
-  useEffect(()=>{ AsyncStorage.setItem('notices',JSON.stringify(notices)); },[notices]);
+
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('members',JSON.stringify(members)); },[members,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('kisans',JSON.stringify(kisans)); },[kisans,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('agents',JSON.stringify(agents)); },[agents,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('operators',JSON.stringify(operators)); },[operators,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('helpers',JSON.stringify(helpers)); },[helpers,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('dealers',JSON.stringify(dealers)); },[dealers,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('parts',JSON.stringify(parts)); },[parts,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('notices',JSON.stringify(notices)); },[notices,loaded]);
+
   useEffect(()=>{
     const onBackPress = () => {
       if (show) { setShow(false); return true; }
@@ -74,11 +79,13 @@ export default function App(){
     const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => sub.remove();
   },[view, show, isLogin]);
+
   const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
   const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
   const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
   const getList=()=>{ let l:any[]=[]; if(type==='members') l=members; else if(type==='kisan') l=kisans; else if(type==='agent') l=agents; else if(type==='operator') l=operators; else if(type==='helper') l=helpers; else if(type==='dealer') l=dealers; else if(type==='parts') l=parts; else l=notices; if(search){ const q=search.toLowerCase(); return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q)); } return l; };
+
   if(splash){
     return(<View style={s.splash}><Image source={require('./assets/splash.png')} style={s.splashImage} resizeMode="cover" /></View>);
   }
