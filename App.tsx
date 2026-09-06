@@ -92,7 +92,7 @@ export default function App(){
           </View>
           <View style={s.loginBox}>
             <Image source={require('./assets/login_logo.png')} style={s.loginLogo} resizeMode="contain" />
-            <Text style={s.loginTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
+            <Text style={s.sloganText}>एकता हमारी-शक्ति हमारी-विकास हमारा</Text>
             <TextInput style={s.loginInput} value={pass} onChangeText={setPass} placeholder="पासवर्ड" secureTextEntry={true} keyboardType="number-pad" />
             <TouchableOpacity style={s.loginBtn} onPress={doLogin}><Text style={s.loginBtnT}>लॉगिन करें</Text></TouchableOpacity>
           </View>
@@ -158,6 +158,7 @@ const s=StyleSheet.create({
   welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
   loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
   loginLogo:{width:120,height:120,marginBottom:10},
+  sloganText:{fontWeight:'900',fontSize:14,color:'#1B5E20',textAlign:'center',marginTop:6,marginBottom:4},
   loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
   loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
   loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
