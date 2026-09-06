@@ -109,7 +109,7 @@ export default function App(){
             <Text style={s.addressTitle}>जिला कार्यालय</Text>
             <Text style={s.addressText}>पता- लखनपुरी, मेन रोड़, N.H.30,{'\n'}जिला सहकारी बैंक के सामने,{'\n'}ब्लॉक-चारामा, जिला-कांकेर (छत्तीसगढ़)</Text>
             <Text style={s.phoneText}>फोन नम्बर- 9479025929</Text>
-            <Text style={s.addressText}>ईमेल- mahanadiharvestar2026@gmail.com</Text>
+            <Text style={s.emailText}>ईमेल- mahanadiharvestar2026@gmail.com</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -181,15 +181,4 @@ const s=StyleSheet.create({
   loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
   welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
   welcomeTitle:{fontWeight:'900',fontSize:15,color:'#B71C1C',textAlign:'center',lineHeight:22},
-  welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
-  loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
-  loginLogo:{width:120,height:120,marginBottom:10},
-  loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
-  loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
-  loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
-  loginBtnT:{color:'#fff',fontWeight:'bold',fontSize:16},
-  addressBox:{width:'90%',marginTop:15,marginBottom:30,backgroundColor:'#fff',borderRadius:12,padding:15,alignItems:'center',borderWidth:1,borderColor:'#FFB300'},
-  addressTitle:{fontWeight:'900',fontSize:14,color:'#B71C1C',marginBottom:6},
-  addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
-  phoneText:{fontSize:13,color:'#000',textAlign:'center',fontWeight:'900',marginTop:6,lineHeight:20},
-});
+  welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign
