@@ -95,6 +95,10 @@ export default function App(){
     return(
       <SafeAreaView style={s.loginSafe}>
         <ScrollView contentContainerStyle={s.loginScroll} showsVerticalScrollIndicator={false}>
+          <View style={s.welcomeHeader}>
+            <Text style={s.welcomeTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ{'\n'}जिला कांकेर (छत्तीसगढ़) में आपका स्वागत है</Text>
+            <Text style={s.welcomeSub}>हार्वेस्टर मालिकों का विश्वसनीय सहकारी मंच,{'\n'}शासकीय मान्यता प्राप्त सहकारी संस्था</Text>
+          </View>
           <View style={s.loginBox}>
             <Image source={require('./assets/login_logo.png')} style={s.loginLogo} resizeMode="contain" />
             <Text style={s.loginTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
@@ -174,7 +178,10 @@ const s=StyleSheet.create({
   splash:{flex:1,backgroundColor:'#000'},
   splashImage:{width:'100%',height:'100%'},
   loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
-  loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:30,paddingHorizontal:10,paddingBottom:50},
+  loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
+  welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
+  welcomeTitle:{fontWeight:'900',fontSize:15,color:'#B71C1C',textAlign:'center',lineHeight:22},
+  welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
   loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
   loginLogo:{width:120,height:120,marginBottom:10},
   loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
