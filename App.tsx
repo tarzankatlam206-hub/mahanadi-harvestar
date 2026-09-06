@@ -98,12 +98,24 @@ export default function App(){
   if(!isLogin){
     return(
       <SafeAreaView style={s.loginSafe}>
-        <View style={s.loginBox}>
-          <Text style={{fontSize:50}}>🚜</Text>
-          <Text style={s.loginTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
-          <TextInput style={s.loginInput} value={pass} onChangeText={setPass} placeholder="पासवर्ड" secureTextEntry={true} keyboardType="number-pad" />
-          <TouchableOpacity style={s.loginBtn} onPress={doLogin}><Text style={s.loginBtnT}>लॉगिन करें</Text></TouchableOpacity>
-        </View>
+        <ScrollView contentContainerStyle={s.loginScroll} showsVerticalScrollIndicator={false}>
+          <View style={s.loginBox}>
+            <Image
+              source={require('./assets/login_logo.png')}
+              style={s.loginLogo}
+              resizeMode="contain"
+            />
+            <Text style={s.loginTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text>
+            <TextInput style={s.loginInput} value={pass} onChangeText={setPass} placeholder="पासवर्ड" secureTextEntry={true} keyboardType="number-pad" />
+            <TouchableOpacity style={s.loginBtn} onPress={doLogin}><Text style={s.loginBtnT}>लॉगिन करें</Text></TouchableOpacity>
+          </View>
+          <View style={s.addressBox}>
+            <Text style={s.addressTitle}>जिला कार्यालय</Text>
+            <Text style={s.addressText}>पता- लखनपुरी, मेन रोड़, N.H.30,{'\n'}जिला सहकारी बैंक के सामने,{'\n'}ब्लॉक-चारामा, जिला-कांकेर (छत्तीसगढ़)</Text>
+            <Text style={s.addressText}>फोन नम्बर- 9479025929</Text>
+            <Text style={s.addressText}>ईमेल- mahanadiharvestar2026@gmail.com</Text>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -169,10 +181,15 @@ const s=StyleSheet.create({
   modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
   splash:{flex:1,backgroundColor:'#000'},
   splashImage:{width:'100%',height:'100%'},
-  loginSafe:{flex:1,backgroundColor:'#FFF3E0',justifyContent:'center',alignItems:'center'},
+  loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
+  loginScroll:{flexGrow:1,justifyContent:'center',alignItems:'center',paddingVertical:20},
   loginBox:{width:'85%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
+  loginLogo:{width:120,height:120,marginBottom:10},
   loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
   loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
   loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
   loginBtnT:{color:'#fff',fontWeight:'bold',fontSize:16},
+  addressBox:{width:'85%',marginTop:15,backgroundColor:'#fff',borderRadius:12,padding:15,alignItems:'center',borderWidth:1,borderColor:'#FFB300'},
+  addressTitle:{fontWeight:'900',fontSize:14,color:'#B71C1C',marginBottom:6},
+  addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
 });
