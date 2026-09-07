@@ -13,7 +13,7 @@ const MENU = [
   {title:'सूचना / नोटिस',color:'#B07BE6',key:'notice'},
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
-const HINDI = {
+const HINDI: any = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
  kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
  agent: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',agreement:'एग्रीमेंट',check:'चेक',karyadivas:'कार्यदिवस',totalGhanta:'टोटल घंटा/समय',advanceRashi:'एडवांस राशि प्राप्त',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि प्राप्त',anyaJankari:'अन्य जानकारी'},
@@ -23,7 +23,7 @@ const HINDI = {
  parts: {name:'नाम *',dukaanNaam:'दुकान का नाम',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',partsPrakar:'पार्ट्स प्रकार',anyaJankari:'अन्य जानकारी'},
  notice: {vishay:'विषय *',tarikh:'तारीख',vivaran:'विवरण',mobile:'मोबाइल नंबर',anyaJankari:'अन्य जानकारी'}
 };
-const FULL = {
+const FULL: any = {
  members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'सदस्य',harvesterNumber:'',sadasyataShulk:'500',bhugtanTarikh:'',bhugtanMadhyam:'नकद',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
  kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
  agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
@@ -36,23 +36,11 @@ const FULL = {
 
 export default function App(){
   const [view,setView]=useState('home');
-  const [members,setMembers]=useState([]);
-  const [kisans,setKisans]=useState([]);
-  const [agents,setAgents]=useState([]);
-  const [operators,setOperators]=useState([]);
-  const [helpers,setHelpers]=useState([]);
-  const [dealers,setDealers]=useState([]);
-  const [parts,setParts]=useState([]);
-  const [notices,setNotices]=useState([]);
-  const [form,setForm]=useState({});
-  const [show,setShow]=useState(false);
-  const [type,setType]=useState('members');
-  const [editId,setEditId]=useState(null);
-  const [search,setSearch]=useState('');
-  const [splash,setSplash]=useState(true);
-  const [progress,setProgress]=useState(1);
-  const [isLogin,setIsLogin]=useState(false);
-  const [pass,setPass]=useState('');
+  const [members,setMembers]=useState<any[]>([]); const [kisans,setKisans]=useState<any[]>([]); const [agents,setAgents]=useState<any[]>([]); const [operators,setOperators]=useState<any[]>([]); const [helpers,setHelpers]=useState<any[]>([]); const [dealers,setDealers]=useState<any[]>([]); const [parts,setParts]=useState<any[]>([]); const [notices,setNotices]=useState<any[]>([]);
+  const [form,setForm]=useState<any>({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState<string|null>(null);
+  const [search,setSearch]=useState(''); const [splash,setSplash]=useState(true);
+  const [progress,setProgress]=useState(0);
+  const [isLogin,setIsLogin]=useState(false); const [pass,setPass]=useState('');
   const [loaded,setLoaded]=useState(false);
 
   useEffect(()=>{
@@ -73,16 +61,14 @@ export default function App(){
   },[]);
 
   useEffect(()=>{
-    if(!splash) return;
-    setProgress(1);
-    const iv=setInterval(()=>{
-      setProgress(prev=>{
-        if(prev>=100){ clearInterval(iv); setTimeout(()=>setSplash(false),400); return 100; }
-        return prev+1;
-      });
-    },50);
-    return ()=>clearInterval(iv);
-  },[splash]);
+    let val=0;
+    const interval=setInterval(()=>{
+      val+=1;
+      if(val>=100){ val=100; clearInterval(interval); setTimeout(()=>setSplash(false),500); }
+      setProgress(val);
+    },100);
+    return ()=>clearInterval(interval);
+  },[]);
 
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('members',JSON.stringify(members)); },[members,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('kisans',JSON.stringify(kisans)); },[kisans,loaded]);
@@ -97,77 +83,33 @@ export default function App(){
     const onBackPress = () => {
       if (show) { setShow(false); return true; }
       if (view!== 'home') { setView('home'); return true; }
+      if (isLogin && view === 'home') { AsyncStorage.setItem('isLogin','no'); setIsLogin(false); return true; }
       return false;
     };
     const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => sub.remove();
-  },[view, show]);
+  },[view, show, isLogin]);
 
-  const doLogin=async()=>{
-    if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); }
-    else alert('गलत पासवर्ड!');
-  };
+  const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
-  const openForm=(t,item)=>{
-    setType(t); setEditId(item?item.id:null);
-    const base=FULL[t]||{};
-    setForm(item?Object.assign({},base,item):Object.assign({},base));
-    setShow(true);
-  };
-  const save=()=>{
-    const id=editId||Date.now().toString();
-    const data=Object.assign({},form,{id});
-    if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]);
-    setShow(false);
-  };
-  const delItem=(it)=>{
-    if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id));
-    if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id));
-    if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id));
-    if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id));
-    if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id));
-    if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id));
-    if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id));
-    if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id));
-  };
-  const getList=()=>{
-    let l=[];
-    if(type==='members') l=members;
-    else if(type==='kisan') l=kisans;
-    else if(type==='agent') l=agents;
-    else if(type==='operator') l=operators;
-    else if(type==='helper') l=helpers;
-    else if(type==='dealer') l=dealers;
-    else if(type==='parts') l=parts;
-    else l=notices;
-    if(search){
-      const q=search.toLowerCase();
-      return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q));
-    }
-    return l;
-  };
+  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
+  const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
+  const getList=()=>{ let l:any[]=[]; if(type==='members') l=members; else if(type==='kisan') l=kisans; else if(type==='agent') l=agents; else if(type==='operator') l=operators; else if(type==='helper') l=helpers; else if(type==='dealer') l=dealers; else if(type==='parts') l=parts; else l=notices; if(search){ const q=search.toLowerCase(); return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q)); } return l; };
 
   if(splash){
     return(
       <View style={s.splash}>
         <Image source={require('./assets/splash.png')} style={s.splashImage} resizeMode="cover" />
-        <View style={s.loadingWrap}>
-          <View style={s.loadingBarBg}>
-            <View style={[s.loadingBarFill,{width: progress + '%'}]} />
+        <View style={s.loadBox}>
+          <Text style={s.loadText}>लोड हो रहा है... {progress}%</Text>
+          <View style={s.barBg}>
+            <View style={[s.barFill,{width: progress + '%'}]} />
           </View>
-          <Text style={s.loadingText}>लोड हो रहा है... {progress}%</Text>
+          <Text style={s.loadSub}>{progress} / 100</Text>
         </View>
       </View>
     );
   }
-
   if(!isLogin){
     return(
       <SafeAreaView style={s.loginSafe}>
@@ -192,7 +134,6 @@ export default function App(){
       </SafeAreaView>
     );
   }
-
   return(
     <SafeAreaView style={s.safe}>
       <View style={s.headColorful}>
@@ -206,100 +147,15 @@ export default function App(){
           <Text style={{fontSize:32}}>🚜</Text>
         </View>
       </View>
-
-      {view==='home' && (
-        <ScrollView>
-          <View style={{padding:12}}>
-            {MENU.map(i=>(
-              <TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{
-                if(i.key==='logout') setView('logout');
-                else { setType(i.key); setView(i.key); setSearch(''); }
-              }}>
-                <Text style={s.btnTxt}>{i.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      )}
-
-      {view!=='home' && view!=='logout' && (
-        <View style={{flex:1}}>
-          <View style={s.sub}>
-            <TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity>
-            <Text>{(MENU.find(m=>m.key===type)||{}).title} ({getList().length})</Text>
-            <Text></Text>
-          </View>
-          <View style={s.search}>
-            <Text>🔍</Text>
-            <TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' />
-          </View>
-          <ScrollView>
-            {getList().map(it=>(
-              <View key={it.id} style={s.card}>
-                <Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text>
-                <Text>{it.mobile||''} {it.pata||''}</Text>
-                {it.mobile? (
-                  <View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}>
-                    <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL('tel:'+it.mobile)}>
-                      <Text style={s.smT}>📞 कॉल</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL('https://wa.me/91'+it.mobile.toString().replace(/\D/g,'').slice(-10))}>
-                      <Text style={s.smT}>🟢 व्हाट्सएप</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL('sms:'+it.mobile)}>
-                      <Text style={s.smT}>✉️ मैसेज</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
-                <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}>
-                  <TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}>
-                    <Text style={s.smT}>✏️ एडिट करें</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>delItem(it)}>
-                    <Text style={s.smT}>🗑️ डिलीट</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-          <TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity>
-        </View>
-      )}
-
-      {view==='logout' && (
-        <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}>
-          <View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}>
-            <TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}>
-              <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}>
-              <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      )}
-
-      <Modal visible={show} animationType="slide">
-        <View style={s.modal}>
-          <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
-            <Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{(MENU.find(m=>m.key===type)||{}).title} फॉर्म</Text>
-            {Object.keys(form).filter(k=>k!=='id').map(k=>(
-              <View key={k} style={{marginTop:8}}>
-                <Text style={{fontSize:12,fontWeight:'bold'}}>{(HINDI[type]||{})[k]||k}</Text>
-                <TextInput style={s.inp} value={String(form[k]||'')} onChangeText={t=>setForm({...form,[k]:t})} />
-              </View>
-            ))}
-          </ScrollView>
-          <View style={s.modalBottom}>
-            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
-            <TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
+      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=><View key={it.id} style={s.card}><Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text><Text>{it.mobile||''} {it.pata||''}</Text>
+      {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
+      <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View></View>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
+      {view==='logout' && <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}><View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}><TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text></TouchableOpacity></View></ScrollView>}
+      <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>{Object.keys(form).filter(k=>k!=='id').map(k=><View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>)}</ScrollView><View style={s.modalBottom}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></View></Modal>
     </SafeAreaView>
   );
 }
-
 const s=StyleSheet.create({
   safe:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   headColorful:{backgroundColor:'#FFF8E1',margin:10,padding:14,borderRadius:16,borderWidth:2,borderColor:'#FFB300',elevation:4},
@@ -308,22 +164,41 @@ const s=StyleSheet.create({
   regBox:{backgroundColor:'#1B5E20',paddingHorizontal:12,paddingVertical:3,borderRadius:20,marginTop:6},
   headTitle3:{fontWeight:'900',fontSize:11,color:'#FFEB3B',textAlign:'center'},
   btn:{padding:16,borderRadius:12,marginBottom:10,alignItems:'center'},
-  btnTxt:{color:'#fff',fontWeight:'bold',fontSize:16},
-  sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff',alignItems:'center'},
+  btnTxt:{color:'#fff',fontWeight:'bold'},
+  sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff'},
   search:{flexDirection:'row',backgroundColor:'#fff',margin:8,paddingHorizontal:10,borderRadius:8,alignItems:'center',borderWidth:1,borderColor:'#FF9800'},
-  card:{backgroundColor:'#fff',margin:8,padding:12,borderRadius:8,elevation:2},
+  card:{backgroundColor:'#fff',margin:8,padding:12,borderRadius:8},
   sm:{paddingHorizontal:14,paddingVertical:8,borderRadius:8,marginRight:8,marginBottom:6},
   smT:{color:'#fff',fontSize:13,fontWeight:'bold'},
-  fab:{position:'absolute',right:16,bottom:16,width:56,height:56,borderRadius:28,backgroundColor:'#2E7D32',justifyContent:'center',alignItems:'center',elevation:5},
+  fab:{position:'absolute',right:16,bottom:16,width:56,height:56,borderRadius:28,backgroundColor:'#2E7D32',justifyContent:'center',alignItems:'center'},
   fabT:{color:'#fff',fontSize:28},
   inp:{backgroundColor:'#fff',borderWidth:1,borderColor:'#ccc',borderRadius:6,padding:8,marginTop:4},
   mBtn:{flex:1,padding:12,borderRadius:8,alignItems:'center',marginRight:6},
   mBtnT:{color:'#fff',fontWeight:'bold'},
   modal:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
-  splash:{flex:1,backgroundColor:'#000',justifyContent:'center',alignItems:'center'},
-  splashImage:{width:'100%',height:'78%',position:'absolute',top:0},
-  loadingWrap:{position:'absolute',bottom:60,width:'85%',alignItems:'center'},
-  loadingBarBg:{width:'100%',height:14,backgroundColor:'#333',borderRadius:10,overflow:'hidden'},
-  loadingBarFill:{height:'100%',backgroundColor:'#4CAF50',borderRadius:10},
-  loadingText:{color:'#fff',marginTop:10,fontSize:14
+  splash:{flex:1,backgroundColor:'#000',justifyContent:'flex-end'},
+  splashImage:{position:'absolute',width:'100%',height:'100%'},
+  loadBox:{width:'100%',paddingHorizontal:30,paddingBottom:60,alignItems:'center',backgroundColor:'rgba(0,0,0,0.55)',paddingTop:18},
+  loadText:{color:'#fff',fontSize:18,fontWeight:'bold',marginBottom:10},
+  loadSub:{color:'#FFEB3B',fontSize:14,fontWeight:'bold',marginTop:8},
+  barBg:{width:'100%',height:12,backgroundColor:'rgba(255,255,255,0.3)',borderRadius:6,overflow:'hidden'},
+  barFill:{height:'100%',backgroundColor:'#4CAF50',borderRadius:6},
+  loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
+  loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
+  welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
+  welcomeTitle:{fontWeight:'900',fontSize:15,color:'#B71C1C',textAlign:'center',lineHeight:22},
+  welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
+  loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
+  loginLogo:{width:120,height:120,marginBottom:10},
+  sloganText:{fontWeight:'900',fontSize:14,color:'#1B5E20',textAlign:'center',marginTop:6,marginBottom:4},
+  loginTitle:{fontWeight:'900',fontSize:16,color:'#B71C1C',textAlign:'center',marginTop:10},
+  loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
+  loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
+  loginBtnT:{color:'#fff',fontWeight:'bold',fontSize:16},
+  addressBox:{width:'92%',marginTop:15,marginBottom:30,backgroundColor:'#fff',borderRadius:12,padding:12,alignItems:'center',borderWidth:1,borderColor:'#FFB300'},
+  addressTitle:{fontWeight:'900',fontSize:14,color:'#B71C1C',marginBottom:6},
+  addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
+  phoneText:{fontSize:13,color:'#000',textAlign:'center',fontWeight:'900',marginTop:6,lineHeight:20},
+  emailText:{fontSize:11,color:'#333',textAlign:'center',marginTop:4},
+});
