@@ -42,6 +42,7 @@ export default function App(){
   const [progress,setProgress]=useState(0);
   const [isLogin,setIsLogin]=useState(false); const [pass,setPass]=useState('');
   const [loaded,setLoaded]=useState(false);
+  const [detailItem,setDetailItem]=useState<any|null>(null);
 
   useEffect(()=>{
     (async()=>{
@@ -81,6 +82,7 @@ export default function App(){
 
   useEffect(()=>{
     const onBackPress = () => {
+      if (detailItem) { setDetailItem(null); return true; }
       if (show) { setShow(false); return true; }
       if (view!== 'home') { setView('home'); return true; }
       if (isLogin && view === 'home') { AsyncStorage.setItem('isLogin','no'); setIsLogin(false); return true; }
@@ -88,7 +90,7 @@ export default function App(){
     };
     const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => sub.remove();
-  },[view, show, isLogin]);
+  },[view, show, isLogin, detailItem]);
 
   const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
@@ -148,11 +150,42 @@ export default function App(){
         </View>
       </View>
       {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
-      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=><View key={it.id} style={s.card}><Text style={{fontWeight:'bold'}}>{it.name||it.vishay}</Text><Text>{it.mobile||''} {it.pata||''}</Text>
+      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=>
+      <TouchableOpacity key={it.id} activeOpacity={0.8} onPress={()=>setDetailItem(it)}>
+      <View style={s.card}><Text style={{fontWeight:'bold',fontSize:16,color:'#0D47A1'}}>{it.name||it.vishay} 👁️</Text><Text>{it.mobile||''} {it.pata||''}</Text>
+      <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
       {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
-      <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View></View>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
+      <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View></View>
+      </TouchableOpacity>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
       {view==='logout' && <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}><View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}><TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text></TouchableOpacity></View></ScrollView>}
       <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>{Object.keys(form).filter(k=>k!=='id').map(k=><View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>)}</ScrollView><View style={s.modalBottom}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></View></Modal>
+
+      <Modal visible={!!detailItem} animationType="slide" onRequestClose={()=>setDetailItem(null)}>
+        <SafeAreaView style={s.modal}>
+          <ScrollView style={{padding:14}} contentContainerStyle={{paddingBottom:120}}>
+            <Text style={{fontWeight:'900',textAlign:'center',fontSize:18,color:'#B71C1C',marginBottom:4}}>{MENU.find(m=>m.key===type)?.title} - पूरी जानकारी</Text>
+            <Text style={{textAlign:'center',fontSize:12,color:'#888',marginBottom:12}}>बायोडाटा डिटेल</Text>
+            {detailItem && Object.keys(FULL[type]||{}).filter(k=>k!=='id').map(k=>(
+              <View key={k} style={s.detailRow}>
+                <Text style={s.detailLabel}>{HINDI[type]?.[k]||k}</Text>
+                <Text style={s.detailValue}>{detailItem[k]||'-'}</Text>
+              </View>
+            ))}
+            {detailItem?.mobile? (
+              <View style={{flexDirection:'row',marginTop:14,flexWrap:'wrap',justifyContent:'center'}}>
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${detailItem.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity>
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${detailItem.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity>
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${detailItem.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity>
+              </View>
+            ) : null}
+          </ScrollView>
+          <View style={s.modalBottom}>
+            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#FF9800'}]} onPress={()=>{ const it=detailItem; setDetailItem(null); if(it) openForm(type,it); }}><Text style={s.mBtnT}>✏️ एडिट करें</Text></TouchableOpacity>
+            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setDetailItem(null)}><Text style={s.mBtnT}>वापस जाएं</Text></TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </Modal>
+
     </SafeAreaView>
   );
 }
@@ -184,6 +217,9 @@ const s=StyleSheet.create({
   loadSub:{color:'#FFEB3B',fontSize:14,fontWeight:'bold',marginTop:8},
   barBg:{width:'100%',height:12,backgroundColor:'rgba(255,255,255,0.3)',borderRadius:6,overflow:'hidden'},
   barFill:{height:'100%',backgroundColor:'#4CAF50',borderRadius:6},
+  detailRow:{backgroundColor:'#fff',borderRadius:8,padding:10,marginBottom:8,borderLeftWidth:4,borderLeftColor:'#FF9800'},
+  detailLabel:{fontSize:12,fontWeight:'bold',color:'#888'},
+  detailValue:{fontSize:15,fontWeight:'600',color:'#212121',marginTop:3},
   loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
   loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
   welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
