@@ -17,8 +17,8 @@ const HINDI: any = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
  kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
  agent: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',agreement:'एग्रीमेंट',check:'चेक',karyadivas:'कार्यदिवस',totalGhanta:'टोटल घंटा/समय',advanceRashi:'एडवांस राशि प्राप्त',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि प्राप्त',anyaJankari:'अन्य जानकारी'},
- operator: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',totalKaryadivas:'टोटल कार्यदिवस',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',advance:'एडवांस राशि',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि',dailyMajduri:'प्रतिदिन मजदूरी राशि',upasthiti:'उपस्थिति तिथियां',anyaJankari:'अन्य जानकारी'},
- helper: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',totalKaryadivas:'टोटल कार्यदिवस',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',advanceRashi:'एडवांस राशि',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि',dailyMajduri:'प्रतिदिन मजदूरी राशि',upasthiti:'उपस्थिति तिथियां',anyaJankari:'अन्य जानकारी'},
+ operator: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',totalKaryadivas:'टोटल कार्यदिवस (ऑटो)',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',advance:'एडवांस राशि',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि',dailyMajduri:'प्रतिदिन मजदूरी राशि',upasthiti:'उपस्थिति तिथियां',anyaJankari:'अन्य जानकारी'},
+ helper: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',totalKaryadivas:'टोटल कार्यदिवस (ऑटो)',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',advanceRashi:'एडवांस राशि',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि',dailyMajduri:'प्रतिदिन मजदूरी राशि',upasthiti:'उपस्थिति तिथियां',anyaJankari:'अन्य जानकारी'},
  dealer: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',company:'कंपनी',showroomPata:'शोरूम पता',serviceCenter:'सर्विस सेंटर',anyaJankari:'अन्य जानकारी'},
  parts: {name:'नाम *',dukaanNaam:'दुकान का नाम',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',partsPrakar:'पार्ट्स प्रकार',anyaJankari:'अन्य जानकारी'},
  notice: {vishay:'विषय *',tarikh:'तारीख',vivaran:'विवरण',mobile:'मोबाइल नंबर',anyaJankari:'अन्य जानकारी'}
@@ -27,12 +27,21 @@ const FULL: any = {
  members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'सदस्य',harvesterNumber:'',sadasyataShulk:'500',bhugtanTarikh:'',bhugtanMadhyam:'नकद',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
  kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
  agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
- operator: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',totalKaryadivas:'',karyPrarambhTithi:'',karySamaptiTithi:'',advance:'',bachatRashi:'',totalRashi:'',dailyMajduri:'',upasthiti:'',anyaJankari:''},
- helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',totalKaryadivas:'',karyPrarambhTithi:'',karySamaptiTithi:'',advanceRashi:'',bachatRashi:'',totalRashi:'',dailyMajduri:'',upasthiti:'',anyaJankari:''},
+ operator: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',totalKaryadivas:'',karyPrarambhTithi:'',karySamaptiTithi:'',advance:'',bachatRashi:'',totalRashi:'',dailyMajduri:'',upasthiti:'',upasthitiDates:[],anyaJankari:''},
+ helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',totalKaryadivas:'',karyPrarambhTithi:'',karySamaptiTithi:'',advanceRashi:'',bachatRashi:'',totalRashi:'',dailyMajduri:'',upasthiti:'',upasthitiDates:[],anyaJankari:''},
  dealer: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',company:'',showroomPata:'',serviceCenter:'',anyaJankari:''},
  parts: {name:'',dukaanNaam:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',partsPrakar:'',anyaJankari:''},
  notice: {vishay:'',tarikh:'',vivaran:'',mobile:'',anyaJankari:''}
 };
+
+function getUpasthitiDates(item:any): string[] {
+  if(!item) return [];
+  if(Array.isArray(item.upasthitiDates)) return item.upasthitiDates;
+  if(item.upasthiti && typeof item.upasthiti==='string' && item.upasthiti.trim()!==''){
+    return item.upasthiti.split(',').map((s:string)=>s.trim()).filter((s:string)=>s!=='');
+  }
+  return [];
+}
 
 export default function App(){
   const [view,setView]=useState('home');
@@ -43,6 +52,7 @@ export default function App(){
   const [isLogin,setIsLogin]=useState(false); const [pass,setPass]=useState('');
   const [loaded,setLoaded]=useState(false);
   const [detailItem,setDetailItem]=useState<any|null>(null);
+  const [newDate,setNewDate]=useState('');
 
   useEffect(()=>{
     (async()=>{
@@ -94,8 +104,24 @@ export default function App(){
 
   const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
-  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; setForm(item?Object.assign({},base,item):base); setShow(true); };
-  const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
+  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; const merged=item?Object.assign({},base,item):JSON.parse(JSON.stringify(base)); if((t==='operator'||t==='helper')){ merged.upasthitiDates=getUpasthitiDates(merged); } setForm(merged); setNewDate(''); setShow(true); };
+
+  const addUpasthitiDate=()=>{
+    const d=newDate.trim();
+    if(!d){ alert('पहले तारीख लिखें'); return; }
+    const cur:Array<string>=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[];
+    if(cur.includes(d)){ alert('यह तारीख पहले से जुड़ी है'); return; }
+    const updated=[...cur,d];
+    setForm({...form, upasthitiDates: updated, upasthiti: updated.join(', '), totalKaryadivas: String(updated.length)});
+    setNewDate('');
+  };
+  const removeUpasthitiDate=(d:string)=>{
+    const cur:Array<string>=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[];
+    const updated=cur.filter(x=>x!==d);
+    setForm({...form, upasthitiDates: updated, upasthiti: updated.join(', '), totalKaryadivas: String(updated.length)});
+  };
+
+  const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if((type==='operator'||type==='helper')){ const dates=getUpasthitiDates(data); data.upasthitiDates=dates; data.upasthiti=dates.join(', '); data.totalKaryadivas=String(dates.length); } if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
   const getList=()=>{ let l:any[]=[]; if(type==='members') l=members; else if(type==='kisan') l=kisans; else if(type==='agent') l=agents; else if(type==='operator') l=operators; else if(type==='helper') l=helpers; else if(type==='dealer') l=dealers; else if(type==='parts') l=parts; else l=notices; if(search){ const q=search.toLowerCase(); return l.filter(it=>Object.values(it).join(' ').toLowerCase().includes(q)); } return l; };
 
   if(splash){
@@ -150,25 +176,62 @@ export default function App(){
         </View>
       </View>
       {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
-      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=>
+      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({getList().length})</Text><Text></Text></View><View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें' /></View><ScrollView>{getList().map(it=>{
+        const dts=getUpasthitiDates(it);
+        return (
       <TouchableOpacity key={it.id} activeOpacity={0.8} onPress={()=>setDetailItem(it)}>
       <View style={s.card}><Text style={{fontWeight:'bold',fontSize:16,color:'#0D47A1'}}>{it.name||it.vishay} 👁️</Text><Text>{it.mobile||''} {it.pata||''}</Text>
+      {(type==='operator'||type==='helper')? <Text style={{fontSize:13,fontWeight:'bold',color:'#1B5E20',marginTop:4}}>✅ टोटल कार्यदिवस: {dts.length} दिन</Text> : null}
       <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
       {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
       <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>{ if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id)); if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id)); if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id)); if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id)); if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id)); if(type==='dealer') setDealers(p=>p.filter(x=>x.id!==it.id)); if(type==='parts') setParts(p=>p.filter(x=>x.id!==it.id)); if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id)); }}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View></View>
-      </TouchableOpacity>)}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
+      </TouchableOpacity>);})}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
       {view==='logout' && <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}><View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}><TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text></TouchableOpacity></View></ScrollView>}
-      <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>{Object.keys(form).filter(k=>k!=='id').map(k=><View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>)}</ScrollView><View style={s.modalBottom}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></View></Modal>
+      <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>
+      {Object.keys(form).filter(k=>k!=='id' && k!=='upasthitiDates').map(k=>{
+        if((type==='operator'||type==='helper') && k==='upasthiti'){
+          const dates=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[];
+          return (
+            <View key={k} style={{marginTop:12,backgroundColor:'#E8F5E9',padding:10,borderRadius:10,borderWidth:1,borderColor:'#2E7D32'}}>
+              <Text style={{fontSize:14,fontWeight:'900',color:'#1B5E20'}}>📅 उपस्थिति तिथियां - टोटल: {dates.length} दिन</Text>
+              <View style={{flexDirection:'row',marginTop:8}}>
+                <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={newDate} onChangeText={setNewDate} placeholder="तारीख लिखें जैसे 07/09/2026" />
+                <TouchableOpacity style={{backgroundColor:'#2E7D32',paddingHorizontal:14,justifyContent:'center',borderRadius:8,marginLeft:6}} onPress={addUpasthitiDate}><Text style={{color:'#fff',fontWeight:'bold'}}>जोड़ें</Text></TouchableOpacity>
+              </View>
+              {dates.map((d:string,idx:number)=>(
+                <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
+                  <Text style={{fontWeight:'bold'}}>{idx+1}. {d}</Text>
+                  <TouchableOpacity onPress={()=>removeUpasthitiDate(d)}><Text style={{color:'red',fontWeight:'bold'}}>हटाएं</Text></TouchableOpacity>
+                </View>
+              ))}
+              {dates.length===0? <Text style={{color:'#888',marginTop:6,fontSize:12}}>अभी कोई तारीख नहीं जुड़ी है</Text> : null}
+            </View>
+          );
+        }
+        if((type==='operator'||type==='helper') && k==='totalKaryadivas'){
+          return (<View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><View style={[s.inp,{backgroundColor:'#E8F5E9'}]}><Text style={{fontWeight:'900',color:'#1B5E20',fontSize:16}}>{form[k]||'0'} दिन (ऑटोमेटिक)</Text></View></View>);
+        }
+        return (<View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>);
+      })}
+      </ScrollView><View style={s.modalBottom}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setShow(false)}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity></View></View></Modal>
 
       <Modal visible={!!detailItem} animationType="slide" onRequestClose={()=>setDetailItem(null)}>
         <SafeAreaView style={s.modal}>
           <ScrollView style={{padding:14}} contentContainerStyle={{paddingBottom:120}}>
             <Text style={{fontWeight:'900',textAlign:'center',fontSize:18,color:'#B71C1C',marginBottom:4}}>{MENU.find(m=>m.key===type)?.title} - पूरी जानकारी</Text>
             <Text style={{textAlign:'center',fontSize:12,color:'#888',marginBottom:12}}>बायोडाटा डिटेल</Text>
-            {detailItem && Object.keys(FULL[type]||{}).filter(k=>k!=='id').map(k=>(
+            {(type==='operator'||type==='helper') && detailItem? (
+              <View style={{backgroundColor:'#E8F5E9',borderRadius:10,padding:12,marginBottom:10,borderWidth:1,borderColor:'#2E7D32'}}>
+                <Text style={{fontWeight:'900',fontSize:16,color:'#1B5E20',textAlign:'center'}}>✅ टोटल कार्यदिवस: {getUpasthitiDates(detailItem).length} दिन</Text>
+                {getUpasthitiDates(detailItem).map((d:string,i:number)=>(
+                  <Text key={i} style={{fontSize:14,marginTop:4,color:'#212121'}}>{i+1}. {d}</Text>
+                ))}
+              </View>
+            ) : null}
+            {detailItem && Object.keys(FULL[type]||{}).filter(k=>k!=='id' && k!=='upasthitiDates').map(k=>(
               <View key={k} style={s.detailRow}>
                 <Text style={s.detailLabel}>{HINDI[type]?.[k]||k}</Text>
-                <Text style={s.detailValue}>{detailItem[k]||'-'}</Text>
+                <Text style={s.detailValue}>{k==='totalKaryadivas' && (type==='operator'||type==='helper')? (getUpasthitiDates(detailItem).length+' दिन') : (detailItem[k]||'-')}</Text>
               </View>
             ))}
             {detailItem?.mobile? (
