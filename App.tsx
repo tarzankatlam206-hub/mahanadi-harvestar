@@ -102,7 +102,11 @@ const MECHANIC_BOTTOM = ['advanceRashi','bachatRashi','pooraRashi','advanceList'
 
 export default function App(){
   const [view,setView]=useState('home');
+  const [tab,setTab]=useState('home');
   const [members,setMembers]=useState<any[]>([]); const [kisans,setKisans]=useState<any[]>([]); const [agents,setAgents]=useState<any[]>([]); const [operators,setOperators]=useState<any[]>([]); const [helpers,setHelpers]=useState<any[]>([]); const [dealers,setDealers]=useState<any[]>([]); const [parts,setParts]=useState<any[]>([]); const [mechanics,setMechanics]=useState<any[]>([]); const [notices,setNotices]=useState<any[]>([]);
+  const [expenses,setExpenses]=useState<any[]>([]);
+  const [expVivaran,setExpVivaran]=useState(''); const [expRashi,setExpRashi]=useState(''); const [expTarikh,setExpTarikh]=useState('');
+  const [newPass,setNewPass]=useState(''); const [storedPass,setStoredPass]=useState('2022');
   const [form,setForm]=useState<any>({}); const [show,setShow]=useState(false); const [type,setType]=useState('members'); const [editId,setEditId]=useState<string|null>(null);
   const [search,setSearch]=useState(''); const [splash,setSplash]=useState(true);
   const [progress,setProgress]=useState(0);
@@ -143,6 +147,8 @@ export default function App(){
     const p=await AsyncStorage.getItem('parts'); if(p) setParts(JSON.parse(p));
     const mc=await AsyncStorage.getItem('mechanics'); if(mc) setMechanics(JSON.parse(mc));
     const n=await AsyncStorage.getItem('notices'); if(n) setNotices(JSON.parse(n));
+    const ex=await AsyncStorage.getItem('expenses'); if(ex) setExpenses(JSON.parse(ex));
+    const pw=await AsyncStorage.getItem('appPass'); if(pw) setStoredPass(pw);
     const lg=await AsyncStorage.getItem('isLogin'); if(lg==='yes') setIsLogin(true);
   }catch(e){} setLoaded(true); })(); },[]);
   useEffect(()=>{ let val=0; const interval=setInterval(()=>{ val+=1; if(val>=100){ val=100; clearInterval(interval); setTimeout(()=>setSplash(false),500); } setProgress(val); },100); return ()=>clearInterval(interval); },[]);
@@ -155,10 +161,11 @@ export default function App(){
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('parts',JSON.stringify(parts)); },[parts,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('mechanics',JSON.stringify(mechanics)); },[mechanics,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('notices',JSON.stringify(notices)); },[notices,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('expenses',JSON.stringify(expenses)); },[expenses,loaded]);
   useEffect(()=>{ const onBackPress=()=>{ if(deleteItem){setDeleteItem(null);return true;} if(detailItem){setDetailItem(null);return true;} if(show){setShow(false);return true;} if(view!=='home'){setView('home');return true;} if(isLogin&&view==='home'){AsyncStorage.setItem('isLogin','no');setIsLogin(false);return true;} return false; }; const sub=BackHandler.addEventListener('hardwareBackPress',onBackPress); return ()=>sub.remove(); },[view,show,isLogin,detailItem,deleteItem]);
 
-  const doLogin=async()=>{ if(pass==='2022'){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
-  const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); };
+  const doLogin=async()=>{ if(pass===storedPass){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
+  const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); setTab('home'); };
   const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; const merged=item?Object.assign({},JSON.parse(JSON.stringify(base)),item):JSON.parse(JSON.stringify(base)); if((t==='operator'||t==='helper')){ merged.upasthitiDates=getUpasthitiDates(merged); merged.advanceList=getAdvanceList(merged); merged.totalRashi=calcTotalRashi(merged,t); merged.totalKaryadivas=String(getUpasthitiDates(merged).length); } if(t==='kisan'){ merged.advanceList=getAdvanceList(merged); merged.fasalList=getFasalList(merged); merged.pooraRashi=calcKisanTotal(merged); } if(t==='mechanic'){ merged.advanceList=getAdvanceList(merged); merged.karyaList=getKaryaList(merged); merged.pooraRashi=calcMechanicTotal(merged); } setForm(merged); setNewDate(''); setAdvDate(''); setAdvAmt(''); setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta(''); setKaryaDate(''); setKaryaWork(''); setKaryaAmt(''); setShow(true); };
   const updateFormField=(k:string,t:string)=>{ const nf={...form,[k]:t}; if((type==='operator'||type==='helper')&&k==='bachatRashi'){ nf.totalRashi=calcTotalRashi(nf,type); } if(type==='kisan'&&k==='bachatRashi'){ nf.pooraRashi=calcKisanTotal(nf); } if(type==='mechanic'&&k==='bachatRashi'){ nf.pooraRashi=calcMechanicTotal(nf); } setForm(nf); };
   const addUpasthitiDate=()=>{ const d=newDate.trim(); if(!d){alert('पहले तारीख लिखें');return;} const cur:Array<string>=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[]; if(cur.includes(d)){alert('यह तारीख पहले से जुड़ी है');return;} const updated=[...cur,d]; setForm({...form,upasthitiDates:updated,upasthiti:updated.join(', '),totalKaryadivas:String(updated.length)}); setNewDate(''); };
@@ -216,6 +223,19 @@ export default function App(){
     if(type==='notice') setNotices(p=>p.filter(x=>x.id!==it.id));
     setDeleteItem(null);
   };
+
+  const addExpense=()=>{ if(!expVivaran.trim()){alert('विवरण लिखें');return;} if(!expRashi.trim()){alert('राशि लिखें');return;} const e={id:Date.now().toString(),vivaran:expVivaran,tarikh:expTarikh||new Date().toLocaleDateString('hi-IN'),rashi:expRashi}; setExpenses(p=>[e,...p]); setExpVivaran(''); setExpRashi(''); setExpTarikh(''); };
+  const totalExpense=expenses.reduce((s,e)=>s+(parseFloat(e.rashi)||0),0);
+  const getDueList=()=>{
+    const arr:any[]=[];
+    kisans.forEach(x=>{ const b=parseFloat(x.bachatRashi||'0')||0; if(b>0) arr.push({cat:'किसान',name:x.name,mobile:x.mobile,amt:b}); });
+    operators.forEach(x=>{ const b=parseFloat(x.bachatRashi||'0')||0; if(b>0) arr.push({cat:'ऑपरेटर',name:x.name,mobile:x.mobile,amt:b}); });
+    helpers.forEach(x=>{ const b=parseFloat(x.bachatRashi||'0')||0; if(b>0) arr.push({cat:'हेल्पर',name:x.name,mobile:x.mobile,amt:b}); });
+    mechanics.forEach(x=>{ const b=parseFloat(x.bachatRashi||'0')||0; if(b>0) arr.push({cat:'मैकेनिक',name:x.name,mobile:x.mobile,amt:b}); });
+    return arr;
+  };
+  const totalDue=getDueList().reduce((s,e)=>s+e.amt,0);
+  const changePassword=async()=>{ if(newPass.trim().length<4){alert('कम से कम 4 अंक का पासवर्ड रखें');return;} await AsyncStorage.setItem('appPass',newPass.trim()); setStoredPass(newPass.trim()); setNewPass(''); alert('पासवर्ड बदल गया'); };
 
   const renderKisanFasalSection=()=>{
     if(type!=='kisan') return null;
@@ -391,6 +411,15 @@ export default function App(){
     });
   };
 
+  const renderBottomNav=()=>(
+    <View style={s.navBar}>
+      <TouchableOpacity style={s.navBtn} onPress={()=>{setTab('home');setView('home');}}><Text style={[s.navTxt,{color:tab==='home'?'#2E7D32':'#666'}]}>🏠{'\n'}होम</Text></TouchableOpacity>
+      <TouchableOpacity style={s.navBtn} onPress={()=>{setTab('expense');setView('home');}}><Text style={[s.navTxt,{color:tab==='expense'?'#2E7D32':'#666'}]}>💸{'\n'}खर्च</Text></TouchableOpacity>
+      <TouchableOpacity style={s.navBtn} onPress={()=>{setTab('due');setView('home');}}><Text style={[s.navTxt,{color:tab==='due'?'#2E7D32':'#666'}]}>📒{'\n'}देय राशि</Text></TouchableOpacity>
+      <TouchableOpacity style={s.navBtn} onPress={()=>{setTab('setting');setView('home');}}><Text style={[s.navTxt,{color:tab==='setting'?'#2E7D32':'#666'}]}>⚙️{'\n'}सेटिंग</Text></TouchableOpacity>
+    </View>
+  );
+
   if(splash){ return(<View style={s.splash}><Image source={require('./assets/splash.png')} style={s.splashImage} resizeMode="cover" /><View style={s.loadBox}><Text style={s.loadText}>लोड हो रहा है... {progress}%</Text><View style={s.barBg}><View style={[s.barFill,{width:progress+'%'}]} /></View><Text style={s.loadSub}>{progress} / 100</Text></View></View>); }
   if(!isLogin){ return(<SafeAreaView style={s.loginSafe}><ScrollView contentContainerStyle={s.loginScroll} showsVerticalScrollIndicator={false}><View style={s.welcomeHeader}><Text style={s.welcomeTitle}>महानदी हार्वेस्टर मालिक कल्याण संघ{'\n'}जिला कांकेर (छत्तीसगढ़) में आपका स्वागत है</Text><Text style={s.welcomeSub}>हार्वेस्टर मालिकों का विश्वसनीय सहकारी मंच,{'\n'}शासकीय मान्यता प्राप्त सहकारी संस्था</Text></View><View style={s.loginBox}><Image source={require('./assets/login_logo.png')} style={s.loginLogo} resizeMode="contain" /><Text style={s.sloganText}>एकता हमारी-शक्ति हमारी-विकास हमारा</Text><TextInput style={s.loginInput} value={pass} onChangeText={setPass} placeholder="पासवर्ड" secureTextEntry={true} keyboardType="number-pad" /><TouchableOpacity style={s.loginBtn} onPress={doLogin}><Text style={s.loginBtnT}>लॉगिन करें</Text></TouchableOpacity></View><View style={s.addressBox}><Text style={s.addressTitle}>जिला कार्यालय</Text><Text style={s.addressText}>पता- लखनपुरी, मेन रोड़, N.H.30,{'\n'}जिला सहकारी बैंक के सामने,{'\n'}ब्लॉक-चारामा, जिला-कांकेर (छत्तीसगढ़)</Text><Text style={s.phoneText}>फोन नम्बर- 9479025929</Text><Text style={s.emailText} numberOfLines={1} ellipsizeMode="tail">ईमेल- mahanadiharvestar2026@gmail.com</Text></View></ScrollView></SafeAreaView>); }
   const totalCount=getFullList().length;
@@ -398,14 +427,73 @@ export default function App(){
   return(
     <SafeAreaView style={s.safe}>
       <View style={s.headColorful}><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'100%'}}><Text style={{fontSize:32}}>🌾</Text><View style={{flex:1,alignItems:'center',paddingHorizontal:6}}><Text style={s.headTitle1}>महानदी हार्वेस्टर मालिक कल्याण संघ</Text><Text style={s.headTitle2}>जिला कांकेर (छत्तीसगढ़)</Text><View style={s.regBox}><Text style={s.headTitle3}>पंजीयन क्रमांक 122202678489</Text></View></View><Text style={{fontSize:32}}>🚜</Text></View></View>
-      {view==='home' && <ScrollView><View style={{padding:12}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); setSearch(''); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
-      {view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({filteredList.length})</Text><Text></Text></View>
+
+      {tab==='expense' && (
+        <View style={{flex:1}}>
+          <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
+            <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#B71C1C'}}>💸 खर्च का हिसाब</Text>
+            <View style={[s.inp,{backgroundColor:'#FFEBEE',marginTop:10}]}><Text style={{fontWeight:'900',fontSize:16,textAlign:'center',color:'#B71C1C'}}>कुल खर्च: ₹ {totalExpense}</Text></View>
+            <Text style={{fontWeight:'bold',marginTop:12}}>विवरण</Text><TextInput style={s.inp} value={expVivaran} onChangeText={setExpVivaran} placeholder="खर्च का विवरण लिखें" />
+            <Text style={{fontWeight:'bold',marginTop:8}}>राशि</Text><TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="राशि ₹" keyboardType="numeric" />
+            <Text style={{fontWeight:'bold',marginTop:8}}>तारीख</Text><TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="तारीख जैसे 09/09/2026" />
+            <TouchableOpacity style={{backgroundColor:'#D32F2F',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ खर्च जोड़ें</Text></TouchableOpacity>
+            {expenses.map(e=>(
+              <View key={e.id} style={s.card}><Text style={{fontWeight:'bold'}}>{e.vivaran}</Text><Text>₹{e.rashi} | {e.tarikh}</Text>
+              <TouchableOpacity onPress={()=>setExpenses(p=>p.filter(x=>x.id!==e.id))}><Text style={{color:'red',fontWeight:'bold',marginTop:6}}>हटाएं</Text></TouchableOpacity></View>
+            ))}
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      )}
+
+      {tab==='due' && (
+        <View style={{flex:1}}>
+          <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
+            <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#E65100'}}>📒 देय राशि (बचत बाकी)</Text>
+            <View style={[s.inp,{backgroundColor:'#FFF3E0',marginTop:10}]}><Text style={{fontWeight:'900',fontSize:16,textAlign:'center',color:'#E65100'}}>कुल देय: ₹ {totalDue}</Text></View>
+            {getDueList().map((d,i)=>(
+              <View key={i} style={s.card}><Text style={{fontWeight:'bold'}}>{d.cat} - {d.name}</Text><Text>मोबाइल: {d.mobile||'-'}</Text><Text style={{fontWeight:'900',color:'#D32F2F'}}>बाकी: ₹{d.amt}</Text></View>
+            ))}
+            {getDueList().length===0 && <Text style={{textAlign:'center',marginTop:20,color:'#888'}}>कोई देय राशि नहीं है</Text>}
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      )}
+
+      {tab==='setting' && (
+        <View style={{flex:1}}>
+          <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
+            <Text style={{fontWeight:'900',fontSize:18,textAlign:'center'}}>⚙️ सेटिंग</Text>
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15}}>🔑 पासवर्ड बदलें</Text>
+              <TextInput style={s.inp} value={newPass} onChangeText={setNewPass} placeholder="नया पासवर्ड लिखें" secureTextEntry={true} keyboardType="number-pad" />
+              <TouchableOpacity style={{backgroundColor:'#2E7D32',padding:12,borderRadius:8,marginTop:10,alignItems:'center'}} onPress={changePassword}><Text style={{color:'#fff',fontWeight:'900'}}>पासवर्ड सुरक्षित करें</Text></TouchableOpacity>
+            </View>
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15}}>📊 कुल डाटा</Text>
+              <Text style={{marginTop:6}}>सदस्य: {members.length} | किसान: {kisans.length} | एजेंट: {agents.length}</Text>
+              <Text>ऑपरेटर: {operators.length} | हेल्पर: {helpers.length} | डीलर: {dealers.length}</Text>
+              <Text>पार्ट्स: {parts.length} | मैकेनिक: {mechanics.length} | नोटिस: {notices.length}</Text>
+            </View>
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15}}>🏢 संस्था जानकारी</Text>
+              <Text style={{marginTop:6}}>महानदी हार्वेस्टर मालिक कल्याण संघ, जिला कांकेर</Text>
+              <Text>पंजीयन क्रमांक 122202678489</Text>
+              <Text>फोन: 9479025929</Text>
+            </View>
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      )}
+
+      {tab==='home' && view==='home' && <ScrollView><View style={{padding:12,paddingBottom:90}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); setSearch(''); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
+      {tab==='home' && view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({filteredList.length})</Text><Text></Text></View>
       <View style={{backgroundColor:'#E8F5E9',marginHorizontal:8,marginTop:8,padding:10,borderRadius:8,borderWidth:1,borderColor:'#2E7D32'}}>
         <Text style={{fontWeight:'900',fontSize:15,color:'#1B5E20',textAlign:'center'}}>कुल {MENU.find(m=>m.key===type)?.title}: {totalCount}{search.trim()!==''? ` | सर्च में मिले: ${filteredList.length}` : ''}</Text>
       </View>
       <View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder='सर्च करें (नाम / मोनो नं. / हार्वेस्टर नं.)' /></View>
       {type==='members' && (<TouchableOpacity style={{backgroundColor:'#1B5E20',margin:8,padding:14,borderRadius:10,alignItems:'center'}} onPress={importMasterData}><Text style={{color:'#fff',fontWeight:'900'}}>📥 मास्टर डेटा से सदस्य जोड़ें</Text></TouchableOpacity>)}
-      <ScrollView>{filteredList.map(it=>{ const dts=getUpasthitiDates(it); const advT=getAdvanceTotal(it,type); const fList=getFasalList(it); const kList=getKaryaList(it); return (
+      <ScrollView contentContainerStyle={{paddingBottom:90}}>{filteredList.map(it=>{ const dts=getUpasthitiDates(it); const advT=getAdvanceTotal(it,type); const fList=getFasalList(it); const kList=getKaryaList(it); return (
       <TouchableOpacity key={it.id} activeOpacity={0.8} onPress={()=>setDetailItem(it)}>
       <View style={s.card}><Text style={{fontWeight:'bold',fontSize:16,color:'#0D47A1'}}>{it.name||it.vishay} 👁️</Text><Text>{it.mobile||''} {it.pata||''}</Text>
       {type==='members' && it.harvesterNumber? <Text style={{fontSize:13,fontWeight:'bold',color:'#4E342E',marginTop:2}}>मोनो/हार्वेस्टर नं.: {it.harvesterNumber}</Text> : null}
@@ -415,8 +503,9 @@ export default function App(){
       <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
       {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
       <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={()=>openForm(type,it)}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={()=>setDeleteItem(it)}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View></View>
-      </TouchableOpacity>);})}</ScrollView><TouchableOpacity style={s.fab} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
-      {view==='logout' && <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}><View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}><TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text></TouchableOpacity></View></ScrollView>}
+      </TouchableOpacity>);})}</ScrollView><TouchableOpacity style={[s.fab,{bottom:90}]} onPress={()=>openForm(type,null)}><Text style={s.fabT}>+</Text></TouchableOpacity></View>}
+      {tab==='home' && view==='logout' && <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}><View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}><TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text></TouchableOpacity><TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={()=>setView('home')}><Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text></TouchableOpacity></View></ScrollView>}
+      {tab==='home' && renderBottomNav()}
       <Modal visible={show} animationType="slide"><View style={s.modal}><ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}><Text style={{fontWeight:'bold',textAlign:'center',fontSize:16}}>{MENU.find(m=>m.key===type)?.title} फॉर्म</Text>
       {getFormKeys().map(k=>(
         <View key={k} style={{marginTop:8}}><Text style={{fontSize:12,fontWeight:'bold'}}>{HINDI[type]?.[k]||k}</Text><TextInput style={s.inp} value={form[k]} onChangeText={t=>setForm({...form,[k]:t})} /></View>
@@ -562,4 +651,7 @@ const s=StyleSheet.create({
   addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
   phoneText:{fontSize:13,color:'#000',textAlign:'center',fontWeight:'900',marginTop:6,lineHeight:20},
   emailText:{fontSize:11,color:'#333',textAlign:'center',marginTop:4},
+  navBar:{flexDirection:'row',backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',paddingVertical:8,paddingBottom:18,position:'absolute',bottom:0,left:0,right:0,elevation:10},
+  navBtn:{flex:1,alignItems:'center',justifyContent:'center'},
+  navTxt:{fontSize:12,fontWeight:'bold',textAlign:'center',lineHeight:18},
 });
