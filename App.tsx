@@ -12,6 +12,7 @@ const HOME_MENU = [
   {title:'डीलर',color:'#A07C6D',key:'dealer'},
   {title:'पार्ट्स विक्रेता',color:'#4DB6AC',key:'parts'},
   {title:'मैकेनिक',color:'#795548',key:'mechanic'},
+  {title:'अन्य',color:'#78909C',key:'anya'},
 ];
 
 const MENU = [
@@ -23,6 +24,7 @@ const MENU = [
 const HINDI: any = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
  kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
+ anya: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
  agent: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',agreement:'एग्रीमेंट',check:'चेक',karyadivas:'कार्यदिवस',totalGhanta:'टोटल घंटा/समय',advanceRashi:'एडवांस राशि प्राप्त',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि प्राप्त',anyaJankari:'अन्य जानकारी'},
  operator: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',dailyMajduri:'प्रतिदिन मजदूरी राशि',anyaJankari:'अन्य जानकारी',totalKaryadivas:'टोटल कार्यदिवस',upasthiti:'उपस्थिति तिथियां',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि'},
  helper: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',dailyMajduri:'प्रतिदिन मजदूरी राशि',anyaJankari:'अन्य जानकारी',totalKaryadivas:'टोटल कार्यदिवस',upasthiti:'उपस्थिति तिथियां',bachatRashi:'बचत राशि',totalRashi:'टोटल राशि'},
@@ -34,6 +36,7 @@ const HINDI: any = {
 const FULL: any = {
  members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'सदस्य',harvesterNumber:'',sadasyataShulk:'500',bhugtanTarikh:'',bhugtanMadhyam:'नकद',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
  kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
+ anya: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
  agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:''},
  operator: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advance:'',bachatRashi:'',totalRashi:'',advanceList:[]},
  helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advanceRashi:'',bachatRashi:'',totalRashi:'',advanceList:[]},
@@ -108,7 +111,7 @@ const MECHANIC_BOTTOM = ['advanceRashi','bachatRashi','pooraRashi','advanceList'
 export default function App(){
   const [view,setView]=useState('home');
   const [tab,setTab]=useState('home');
-  const [members,setMembers]=useState<any[]>([]); const [kisans,setKisans]=useState<any[]>([]); const [agents,setAgents]=useState<any[]>([]); const [operators,setOperators]=useState<any[]>([]); const [helpers,setHelpers]=useState<any[]>([]); const [dealers,setDealers]=useState<any[]>([]); const [parts,setParts]=useState<any[]>([]); const [mechanics,setMechanics]=useState<any[]>([]); const [notices,setNotices]=useState<any[]>([]);
+  const [members,setMembers]=useState<any[]>([]); const [kisans,setKisans]=useState<any[]>([]); const [anyas,setAnyas]=useState<any[]>([]); const [agents,setAgents]=useState<any[]>([]); const [operators,setOperators]=useState<any[]>([]); const [helpers,setHelpers]=useState<any[]>([]); const [dealers,setDealers]=useState<any[]>([]); const [parts,setParts]=useState<any[]>([]); const [mechanics,setMechanics]=useState<any[]>([]); const [notices,setNotices]=useState<any[]>([]);
   const [expenses,setExpenses]=useState<any[]>([]);
   const [expVivaran,setExpVivaran]=useState(''); const [expRashi,setExpRashi]=useState(''); const [expTarikh,setExpTarikh]=useState('');
   const [newPass,setNewPass]=useState(''); const [storedPass,setStoredPass]=useState('2022');
@@ -146,6 +149,7 @@ export default function App(){
   useEffect(()=>{ (async()=>{ try{
     const m=await AsyncStorage.getItem('members'); if(m) setMembers(JSON.parse(m));
     const k=await AsyncStorage.getItem('kisans'); if(k) setKisans(JSON.parse(k));
+    const an=await AsyncStorage.getItem('anyas'); if(an) setAnyas(JSON.parse(an));
     const a=await AsyncStorage.getItem('agents'); if(a) setAgents(JSON.parse(a));
     const o=await AsyncStorage.getItem('operators'); if(o) setOperators(JSON.parse(o));
     const h=await AsyncStorage.getItem('helpers'); if(h) setHelpers(JSON.parse(h));
@@ -160,6 +164,7 @@ export default function App(){
   useEffect(()=>{ setSplash(true); setProgress(0); let val=0; const interval=setInterval(()=>{ val+=1; if(val>=100){ val=100; clearInterval(interval); setTimeout(()=>setSplash(false),500); } setProgress(val); },100); return ()=>clearInterval(interval); },[restartKey]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('members',JSON.stringify(members)); },[members,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('kisans',JSON.stringify(kisans)); },[kisans,loaded]);
+  useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('anyas',JSON.stringify(anyas)); },[anyas,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('agents',JSON.stringify(agents)); },[agents,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('operators',JSON.stringify(operators)); },[operators,loaded]);
   useEffect(()=>{ if(!loaded) return; AsyncStorage.setItem('helpers',JSON.stringify(helpers)); },[helpers,loaded]);
@@ -172,19 +177,19 @@ export default function App(){
 
   const doLogin=async()=>{ if(pass===storedPass){ setIsLogin(true); await AsyncStorage.setItem('isLogin','yes'); setPass(''); } else alert('गलत पासवर्ड!'); };
   const doLogout=async()=>{ await AsyncStorage.setItem('isLogin','no'); setIsLogin(false); setView('home'); setTab('home'); setRestartKey(k=>k+1); };
-  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; const merged=item?Object.assign({},JSON.parse(JSON.stringify(base)),item):JSON.parse(JSON.stringify(base)); if((t==='operator'||t==='helper')){ merged.upasthitiDates=getUpasthitiDates(merged); merged.advanceList=getAdvanceList(merged); merged.totalRashi=calcTotalRashi(merged,t); merged.totalKaryadivas=String(getUpasthitiDates(merged).length); } if(t==='kisan'){ merged.advanceList=getAdvanceList(merged); merged.fasalList=getFasalList(merged); merged.pooraRashi=calcKisanTotal(merged); } if(t==='mechanic'){ merged.advanceList=getAdvanceList(merged); merged.karyaList=getKaryaList(merged); merged.pooraRashi=calcMechanicTotal(merged); } setForm(merged); setNewDate(''); setAdvDate(''); setAdvAmt(''); setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta(''); setKaryaDate(''); setKaryaWork(''); setKaryaAmt(''); setShow(true); };
-  const updateFormField=(k:string,t:string)=>{ const nf={...form,[k]:t}; if((type==='operator'||type==='helper')&&k==='bachatRashi'){ nf.totalRashi=calcTotalRashi(nf,type); } if(type==='kisan'&&k==='bachatRashi'){ nf.pooraRashi=calcKisanTotal(nf); } if(type==='mechanic'&&k==='bachatRashi'){ nf.pooraRashi=calcMechanicTotal(nf); } setForm(nf); };
+  const openForm=(t:string,item:any)=>{ setType(t); setEditId(item?item.id:null); const base=FULL[t]||{}; const merged=item?Object.assign({},JSON.parse(JSON.stringify(base)),item):JSON.parse(JSON.stringify(base)); if((t==='operator'||t==='helper')){ merged.upasthitiDates=getUpasthitiDates(merged); merged.advanceList=getAdvanceList(merged); merged.totalRashi=calcTotalRashi(merged,t); merged.totalKaryadivas=String(getUpasthitiDates(merged).length); } if(t==='kisan'||t==='anya'){ merged.advanceList=getAdvanceList(merged); merged.fasalList=getFasalList(merged); merged.pooraRashi=calcKisanTotal(merged); } if(t==='mechanic'){ merged.advanceList=getAdvanceList(merged); merged.karyaList=getKaryaList(merged); merged.pooraRashi=calcMechanicTotal(merged); } setForm(merged); setNewDate(''); setAdvDate(''); setAdvAmt(''); setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta(''); setKaryaDate(''); setKaryaWork(''); setKaryaAmt(''); setShow(true); };
+  const updateFormField=(k:string,t:string)=>{ const nf={...form,[k]:t}; if((type==='operator'||type==='helper')&&k==='bachatRashi'){ nf.totalRashi=calcTotalRashi(nf,type); } if((type==='kisan'||type==='anya')&&k==='bachatRashi'){ nf.pooraRashi=calcKisanTotal(nf); } if(type==='mechanic'&&k==='bachatRashi'){ nf.pooraRashi=calcMechanicTotal(nf); } setForm(nf); };
   const addUpasthitiDate=()=>{ const d=newDate.trim(); if(!d){alert('पहले तारीख लिखें');return;} const cur:Array<string>=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[]; if(cur.includes(d)){alert('यह तारीख पहले से जुड़ी है');return;} const updated=[...cur,d]; setForm({...form,upasthitiDates:updated,upasthiti:updated.join(', '),totalKaryadivas:String(updated.length)}); setNewDate(''); };
   const removeUpasthitiDate=(d:string)=>{ const cur:Array<string>=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[]; const updated=cur.filter(x=>x!==d); setForm({...form,upasthitiDates:updated,upasthiti:updated.join(', '),totalKaryadivas:String(updated.length)}); setNewDate(''); };
-  const addAdvanceEntry=()=>{ const d=advDate.trim(); const a=advAmt.trim(); if(!d){alert('एडवांस की तारीख लिखें');return;} if(!a){alert('एडवांस राशि लिखें');return;} const cur=getAdvanceList(form); const updated=[...cur,{date:d,amount:a}]; const nf={...form,advanceList:updated}; if(type==='kisan'){ nf.pooraRashi=calcKisanTotal(nf); } else if(type==='mechanic'){ nf.pooraRashi=calcMechanicTotal(nf); } else { nf.totalRashi=calcTotalRashi(nf,type); } setForm(nf); setAdvDate(''); setAdvAmt(''); };
-  const removeAdvanceEntry=(idx:number)=>{ const cur=getAdvanceList(form); const updated=cur.filter((_:any,i:number)=>i!==idx); const nf={...form,advanceList:updated}; if(type==='kisan'){ nf.pooraRashi=calcKisanTotal(nf); } else if(type==='mechanic'){ nf.pooraRashi=calcMechanicTotal(nf); } else { nf.totalRashi=calcTotalRashi(nf,type); } setForm(nf); };
+  const addAdvanceEntry=()=>{ const d=advDate.trim(); const a=advAmt.trim(); if(!d){alert('एडवांस की तारीख लिखें');return;} if(!a){alert('एडवांस राशि लिखें');return;} const cur=getAdvanceList(form); const updated=[...cur,{date:d,amount:a}]; const nf={...form,advanceList:updated}; if(type==='kisan'||type==='anya'){ nf.pooraRashi=calcKisanTotal(nf); } else if(type==='mechanic'){ nf.pooraRashi=calcMechanicTotal(nf); } else { nf.totalRashi=calcTotalRashi(nf,type); } setForm(nf); setAdvDate(''); setAdvAmt(''); };
+  const removeAdvanceEntry=(idx:number)=>{ const cur=getAdvanceList(form); const updated=cur.filter((_:any,i:number)=>i!==idx); const nf={...form,advanceList:updated}; if(type==='kisan'||type==='anya'){ nf.pooraRashi=calcKisanTotal(nf); } else if(type==='mechanic'){ nf.pooraRashi=calcMechanicTotal(nf); } else { nf.totalRashi=calcTotalRashi(nf,type); } setForm(nf); };
   const addFasalEntry=()=>{ const d=fasalDate.trim(); const sm=fasalSamay.trim(); const ek=fasalEkad.trim(); const gh=fasalGhanta.trim(); if(!d){alert('फसल कटाई की तारीख लिखें');return;} if(!sm){alert('समय लिखें');return;} if(!ek){alert('एकड़ लिखें');return;} if(!gh){alert('घंटा लिखें');return;} const cur=getFasalList(form); const updated=[...cur,{date:d,samay:sm,ekad:ek,ghanta:gh}]; setForm({...form,fasalList:updated}); setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta(''); };
   const removeFasalEntry=(idx:number)=>{ const cur=getFasalList(form); const updated=cur.filter((_:any,i:number)=>i!==idx); setForm({...form,fasalList:updated}); };
   const addKaryaEntry=()=>{ const d=karyaDate.trim(); const w=karyaWork.trim(); const a=karyaAmt.trim(); if(!d){alert('कार्य की तिथि लिखें');return;} if(!w){alert('कार्य लिखें');return;} if(!a){alert('राशि लिखें');return;} const cur=getKaryaList(form); const updated=[...cur,{date:d,work:w,amount:a}]; setForm({...form,karyaList:updated}); setKaryaDate(''); setKaryaWork(''); setKaryaAmt(''); };
   const removeKaryaEntry=(idx:number)=>{ const cur=getKaryaList(form); const updated=cur.filter((_:any,i:number)=>i!==idx); setForm({...form,karyaList:updated}); };
-  const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if((type==='operator'||type==='helper')){ const dates=getUpasthitiDates(data); data.upasthitiDates=dates; data.upasthiti=dates.join(', '); data.totalKaryadivas=String(dates.length); data.advanceList=getAdvanceList(data); data.totalRashi=calcTotalRashi(data,type); } if(type==='kisan'){ data.advanceList=getAdvanceList(data); data.fasalList=getFasalList(data); if(data.fasalList.length>0){ const last=data.fasalList[data.fasalList.length-1]; data.kataiTarikh=last.date||''; data.samay=last.samay||''; data.ekad=last.ekad||''; } data.totalGhanta=getFasalGhantaTotal(data); data.pooraRashi=calcKisanTotal(data); } if(type==='mechanic'){ data.advanceList=getAdvanceList(data); data.karyaList=getKaryaList(data); data.pooraRashi=calcMechanicTotal(data); } if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='mechanic') setMechanics(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
+  const save=()=>{ const id=editId||Date.now().toString(); const data=Object.assign({},form,{id}); if((type==='operator'||type==='helper')){ const dates=getUpasthitiDates(data); data.upasthitiDates=dates; data.upasthiti=dates.join(', '); data.totalKaryadivas=String(dates.length); data.advanceList=getAdvanceList(data); data.totalRashi=calcTotalRashi(data,type); } if(type==='kisan'||type==='anya'){ data.advanceList=getAdvanceList(data); data.fasalList=getFasalList(data); if(data.fasalList.length>0){ const last=data.fasalList[data.fasalList.length-1]; data.kataiTarikh=last.date||''; data.samay=last.samay||''; data.ekad=last.ekad||''; } data.totalGhanta=getFasalGhantaTotal(data); data.pooraRashi=calcKisanTotal(data); } if(type==='mechanic'){ data.advanceList=getAdvanceList(data); data.karyaList=getKaryaList(data); data.pooraRashi=calcMechanicTotal(data); } if(type==='members') setMembers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='kisan') setKisans(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='anya') setAnyas(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='agent') setAgents(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='operator') setOperators(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='helper') setHelpers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='dealer') setDealers(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='parts') setParts(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='mechanic') setMechanics(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); if(type==='notice') setNotices(p=>editId?p.map(x=>x.id===editId?data:x):[data,...p]); setShow(false); };
 
-  const getFullList=()=>{ if(type==='members') return members; else if(type==='kisan') return kisans; else if(type==='agent') return agents; else if(type==='operator') return operators; else if(type==='helper') return helpers; else if(type==='dealer') return dealers; else if(type==='parts') return parts; else if(type==='mechanic') return mechanics; else return notices; };
+  const getFullList=()=>{ if(type==='members') return members; else if(type==='kisan') return kisans; else if(type==='anya') return anyas; else if(type==='agent') return agents; else if(type==='operator') return operators; else if(type==='helper') return helpers; else if(type==='dealer') return dealers; else if(type==='parts') return parts; else if(type==='mechanic') return mechanics; else return notices; };
 
   const getList=()=>{
     const l=getFullList();
@@ -220,6 +225,7 @@ export default function App(){
     const it=deleteItem;
     if(type==='members') setMembers(p=>p.filter(x=>x.id!==it.id));
     if(type==='kisan') setKisans(p=>p.filter(x=>x.id!==it.id));
+    if(type==='anya') setAnyas(p=>p.filter(x=>x.id!==it.id));
     if(type==='agent') setAgents(p=>p.filter(x=>x.id!==it.id));
     if(type==='operator') setOperators(p=>p.filter(x=>x.id!==it.id));
     if(type==='helper') setHelpers(p=>p.filter(x=>x.id!==it.id));
@@ -244,7 +250,7 @@ export default function App(){
   const changePassword=async()=>{ if(newPass.trim().length<4){alert('कम से कम 4 अंक का पासवर्ड रखें');return;} await AsyncStorage.setItem('appPass',newPass.trim()); setStoredPass(newPass.trim()); setNewPass(''); alert('पासवर्ड बदल गया'); };
 
   const renderKisanFasalSection=()=>{
-    if(type!=='kisan') return null;
+    if(type!=='kisan'&&type!=='anya') return null;
     const list=getFasalList(form);
     const ghText=getFasalGhantaTotal(form);
     return (
@@ -296,7 +302,7 @@ export default function App(){
   };
 
   const renderKisanSection=()=>{
-    if(type!=='kisan') return null;
+    if(type!=='kisan'&&type!=='anya') return null;
     const advList=getAdvanceList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#FFF8E1',padding:12,borderRadius:10,borderWidth:2,borderColor:'#FF9800'}}>
@@ -400,8 +406,8 @@ export default function App(){
     return Object.keys(form).filter(k=>{
       if(k==='id') return false;
       if(BOTTOM_KEYS.includes(k)) return false;
-      if(type==='kisan' && KISAN_BOTTOM.includes(k)) return false;
-      if(type==='kisan' && KISAN_FASAL_KEYS.includes(k)) return false;
+      if((type==='kisan'||type==='anya') && KISAN_BOTTOM.includes(k)) return false;
+      if((type==='kisan'||type==='anya') && KISAN_FASAL_KEYS.includes(k)) return false;
       if(type==='mechanic' && MECHANIC_BOTTOM.includes(k)) return false;
       return true;
     });
@@ -410,8 +416,8 @@ export default function App(){
     return Object.keys(FULL[type]||{}).filter(k=>{
       if(k==='id') return false;
       if(BOTTOM_KEYS.includes(k)) return false;
-      if(type==='kisan' && KISAN_BOTTOM.includes(k)) return false;
-      if(type==='kisan' && KISAN_FASAL_KEYS.includes(k)) return false;
+      if((type==='kisan'||type==='anya') && KISAN_BOTTOM.includes(k)) return false;
+      if((type==='kisan'||type==='anya') && KISAN_FASAL_KEYS.includes(k)) return false;
       if(type==='mechanic' && MECHANIC_BOTTOM.includes(k)) return false;
       return true;
     });
@@ -488,7 +494,8 @@ export default function App(){
               <Text style={{fontWeight:'900',fontSize:15}}>📊 कुल डाटा</Text>
               <Text style={{marginTop:6}}>सदस्य: {members.length} | किसान: {kisans.length} | एजेंट: {agents.length}</Text>
               <Text>ऑपरेटर: {operators.length} | हेल्पर: {helpers.length} | डीलर: {dealers.length}</Text>
-              <Text>पार्ट्स: {parts.length} | मैकेनिक: {mechanics.length} | नोटिस: {notices.length}</Text>
+              <Text>पार्ट्स: {parts.length} | मैकेनिक: {mechanics.length} | अन्य: {anyas.length}</Text>
+              <Text>नोटिस: {notices.length}</Text>
             </View>
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15}}>🏢 संस्था जानकारी</Text>
@@ -521,7 +528,7 @@ export default function App(){
       <View style={s.card}><Text style={{fontWeight:'bold',fontSize:16,color:'#0D47A1'}}>{it.name||it.vishay} 👁️</Text><Text>{it.mobile||''} {it.pata||''}</Text>
       {type==='members' && it.harvesterNumber? <Text style={{fontSize:13,fontWeight:'bold',color:'#4E342E',marginTop:2}}>मोनो/हार्वेस्टर नं.: {it.harvesterNumber}</Text> : null}
       {(type==='operator'||type==='helper')? <Text style={{fontSize:13,fontWeight:'bold',color:'#1B5E20',marginTop:4}}>✅ कार्यदिवस: {dts.length} दिन | एडवांस: ₹{advT} | टोटल: ₹{it.totalRashi||calcTotalRashi(it,type)}</Text> : null}
-      {type==='kisan'? <Text style={{fontSize:13,fontWeight:'bold',color:'#2E7D32',marginTop:4}}>🌾 कटाई: {fList.length} प्रविष्टि | टोटल घंटा: {getFasalGhantaTotal(it)} | 💰 एडवांस: ₹{advT} | पूरा: ₹{it.pooraRashi||calcKisanTotal(it)}</Text> : null}
+      {(type==='kisan'||type==='anya')? <Text style={{fontSize:13,fontWeight:'bold',color:'#2E7D32',marginTop:4}}>🌾 कटाई: {fList.length} प्रविष्टि | टोटल घंटा: {getFasalGhantaTotal(it)} | 💰 एडवांस: ₹{advT} | पूरा: ₹{it.pooraRashi||calcKisanTotal(it)}</Text> : null}
       {type==='mechanic'? <Text style={{fontSize:13,fontWeight:'bold',color:'#3E2723',marginTop:4}}>🔧 कार्य: {kList.length} प्रविष्टि | कार्य राशि: ₹{getKaryaTotal(it)} | 💰 एडवांस: ₹{advT} | पूरा: ₹{it.pooraRashi||calcMechanicTotal(it)}</Text> : null}
       <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
       {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${it.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${it.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${it.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
@@ -581,7 +588,7 @@ export default function App(){
                 <Text style={{fontWeight:'900',fontSize:16,color:'#E65100',marginTop:6}}>पूरा राशि जमा: ₹{calcMechanicTotal(detailItem)}</Text>
               </View>
             ):null}
-            {type==='kisan' && detailItem? (
+            {(type==='kisan'||type==='anya') && detailItem? (
               <View style={{backgroundColor:'#E8F5E9',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#2E7D32'}}>
                 <Text style={{fontWeight:'900',fontSize:15,color:'#1B5E20',textAlign:'center'}}>🌾 फसल कटाई - तिथि / समय / एकड़ / घंटा : {getFasalList(detailItem).length} प्रविष्टि</Text>
                 <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
@@ -609,7 +616,7 @@ export default function App(){
                 <Text style={{fontWeight:'900',fontSize:16,color:'#E65100',marginTop:6}}>टोटल राशि: ₹{calcTotalRashi(detailItem,type)}</Text>
               </View>
             ):null}
-            {type==='kisan' && detailItem? (
+            {(type==='kisan'||type==='anya') && detailItem? (
               <View style={{backgroundColor:'#FFF8E1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#FF9800'}}>
                 <Text style={{fontWeight:'900',fontSize:15,color:'#E65100',textAlign:'center'}}>💰 एडवांस व टोटल राशि</Text>
                 <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
