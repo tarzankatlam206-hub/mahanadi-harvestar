@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, Tex
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MASTER_RAW } from './master_data';
 
-const MENU = [
+const HOME_MENU = [
   {title:'सदस्य',color:'#6ABF69',key:'members'},
   {title:'किसान',color:'#F5A623',key:'kisan'},
   {title:'एजेंट',color:'#5AC8FA',key:'agent'},
@@ -12,9 +12,14 @@ const MENU = [
   {title:'डीलर',color:'#A07C6D',key:'dealer'},
   {title:'पार्ट्स विक्रेता',color:'#4DB6AC',key:'parts'},
   {title:'मैकेनिक',color:'#795548',key:'mechanic'},
+];
+
+const MENU = [
+ ...HOME_MENU,
   {title:'सूचना / नोटिस',color:'#B07BE6',key:'notice'},
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
+
 const HINDI: any = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
  kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',ekad:'एकड़',kataiTarikh:'फसल कटाई की तारीख',samay:'समय',totalGhanta:'टोटल घंटा/समय',totalKaryadivas:'टोटल कार्यदिवस',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
@@ -324,7 +329,7 @@ export default function App(){
         <Text style={{fontSize:15,fontWeight:'900',color:'#E65100',textAlign:'center'}}>💰 एडवांस व टोटल राशि</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>एडवांस तिथि व राशि - टोटल एडवांस: ₹{getAdvanceTotal(form,type)}</Text>
         <View style={{flexDirection:'row',marginTop:6}}>
-          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={advDate} onChangeText={setAdvDate} placeholder="तारीख जैसे 09/09/2026" />
+          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={advDate} onChangeText={setAdvDate} placeholder="तारीख जैसे 07/09/2026" />
           <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={advAmt} onChangeText={setAdvAmt} placeholder="राशि ₹" keyboardType="numeric" />
         </View>
         <TouchableOpacity style={{backgroundColor:'#FF9800',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addAdvanceEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ एडवांस जोड़ें</Text></TouchableOpacity>
@@ -464,6 +469,15 @@ export default function App(){
         <View style={{flex:1}}>
           <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
             <Text style={{fontWeight:'900',fontSize:18,textAlign:'center'}}>⚙️ सेटिंग</Text>
+
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15,marginBottom:10}}>📢 सूचना / नोटिस</Text>
+              <TouchableOpacity style={{backgroundColor:'#B07BE6',padding:14,borderRadius:10,alignItems:'center'}} onPress={()=>{ setType('notice'); setView('notice'); setTab('home'); setSearch(''); }}>
+                <Text style={{color:'#fff',fontWeight:'900'}}>📋 सूचना / नोटिस देखें</Text>
+              </TouchableOpacity>
+              <Text style={{fontSize:12,color:'#888',marginTop:6,textAlign:'center'}}>कुल नोटिस: {notices.length}</Text>
+            </View>
+
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15}}>🔑 पासवर्ड बदलें</Text>
               <TextInput style={s.inp} value={newPass} onChangeText={setNewPass} placeholder="नया पासवर्ड लिखें" secureTextEntry={true} keyboardType="number-pad" />
@@ -481,12 +495,20 @@ export default function App(){
               <Text>पंजीयन क्रमांक 122202678489</Text>
               <Text>फोन: 9479025929</Text>
             </View>
+
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15,marginBottom:10,color:'#D32F2F'}}>🚪 लॉग आउट</Text>
+              <TouchableOpacity style={{backgroundColor:'#212121',padding:16,borderRadius:10,alignItems:'center'}} onPress={()=>{ setTab('home'); setView('logout'); }}>
+                <Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>लॉग आउट करें</Text>
+              </TouchableOpacity>
+            </View>
+
           </ScrollView>
           {renderBottomNav()}
         </View>
       )}
 
-      {tab==='home' && view==='home' && <ScrollView><View style={{padding:12,paddingBottom:90}}>{MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ if(i.key==='logout') setView('logout'); else { setType(i.key); setView(i.key); setSearch(''); }}}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
+      {tab==='home' && view==='home' && <ScrollView><View style={{padding:12,paddingBottom:90}}>{HOME_MENU.map(i=><TouchableOpacity key={i.key} style={[s.btn,{backgroundColor:i.color}]} onPress={()=>{ setType(i.key); setView(i.key); setSearch(''); }}><Text style={s.btnTxt}>{i.title}</Text></TouchableOpacity>)}</View></ScrollView>}
       {tab==='home' && view!=='home' && view!=='logout' && <View style={{flex:1}}><View style={s.sub}><TouchableOpacity onPress={()=>setView('home')}><Text>← वापस</Text></TouchableOpacity><Text>{MENU.find(m=>m.key===type)?.title} ({filteredList.length})</Text><Text></Text></View>
       <View style={{backgroundColor:'#E8F5E9',marginHorizontal:8,marginTop:8,padding:10,borderRadius:8,borderWidth:1,borderColor:'#2E7D32'}}>
         <Text style={{fontWeight:'900',fontSize:15,color:'#1B5E20',textAlign:'center'}}>कुल {MENU.find(m=>m.key===type)?.title}: {totalCount}{search.trim()!==''? ` | सर्च में मिले: ${filteredList.length}` : ''}</Text>
