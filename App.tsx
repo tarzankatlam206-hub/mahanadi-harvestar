@@ -275,7 +275,7 @@ export default function App(){
     const cur=getAdvanceList(form);
     const updated=[...cur,{date:d,amount:a}];
     const nf={...form,advanceList:updated};
-    if(type==='kisan'){ nf.bachatRashi=calcKisanBachat(nf); nf.pooraRashi=nf.kulRashi||'0'; }
+    if(type==='kisan'||type==='agent'){ nf.bachatRashi=calcKisanBachat(nf); nf.pooraRashi=nf.kulRashi||'0'; }
     else if(type==='mechanic'){ nf.pooraRashi=calcMechanicTotal(nf); }
     else if(type==='anya'){ nf.pooraRashi=calcAnyaTotal(nf); }
     else { nf.totalRashi=calcTotalRashi(nf,type); }
