@@ -233,6 +233,11 @@ export default function App(){
       merged.bachatRashi=calcKisanBachat(merged);
       merged.pooraRashi=merged.kulRashi||'0';
     }
+    if(t==='agent'){
+      merged.advanceList=getAdvanceList(merged);
+      merged.bachatRashi=calcKisanBachat(merged);
+      merged.pooraRashi=merged.kulRashi||'0';
+    }
     if(isMechanicLike(t)){
       merged.advanceList=getAdvanceList(merged);
       merged.karyaList=getKaryaList(merged);
