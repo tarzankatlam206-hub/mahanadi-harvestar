@@ -248,7 +248,7 @@ export default function App(){
   const updateFormField=(k:string,t:string)=>{
     const nf={...form,[k]:t};
     if((type==='operator'||type==='helper')&&k==='bachatRashi'){ nf.totalRashi=calcTotalRashi(nf,type); }
-    if(type==='kisan'&&k==='kulRashi'){ nf.bachatRashi=calcKisanBachat(nf); nf.pooraRashi=t; }
+    if((type==='kisan'||type==='agent')&&k==='kulRashi'){ nf.bachatRashi=calcKisanBachat(nf); nf.pooraRashi=t; }
     if(type==='mechanic'&&k==='bachatRashi'){ nf.pooraRashi=calcMechanicTotal(nf); }
     if(type==='anya'&&k==='bachatRashi'){ nf.pooraRashi=calcAnyaTotal(nf); }
     setForm(nf);
