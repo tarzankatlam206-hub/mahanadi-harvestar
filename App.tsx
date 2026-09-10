@@ -482,7 +482,7 @@ export default function App(){
   };
 
   const renderKisanSection=()=>{
-    if(type!=='kisan') return null;
+    if(type!=='kisan' && type!=='agent') return null;
     const advList=getAdvanceList(form);
     const advTotal=getAdvanceTotal(form,type);
     return (
