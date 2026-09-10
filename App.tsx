@@ -351,6 +351,11 @@ export default function App(){
       data.bachatRashi=calcKisanBachat(data);
       data.pooraRashi=data.kulRashi||'0';
     }
+    if(type==='agent'){
+        data.advanceList=getAdvanceList(data);
+        data.bachatRashi=calcKisanBachat(data);
+        data.pooraRashi=data.kulRashi||'0';
+    }
     if(isMechanicLike(type)){
       data.advanceList=getAdvanceList(data);
       data.karyaList=getKaryaList(data);
