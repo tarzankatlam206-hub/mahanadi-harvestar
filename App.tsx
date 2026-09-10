@@ -823,6 +823,14 @@ export default function App(){
                 <Text style={{fontSize:14,marginTop:6}}>फसल कटाई प्रविष्टि: {getFasalList(detailItem).length} | टोटल घंटा: {getFasalGhantaTotal(detailItem)}</Text>
               </View>
             ):null}
+          {['agent','operator','helper','dealer','parts','mechanic','anya'].includes(type) && detailItem ? (
+<View style={{backgroundColor:'#FFF8E1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#FF9800'}}>
+<Text style={{fontWeight:'900',fontSize:15,color:'#E65100',textAlign:'center'}}>💰 टोटल / एडवांस / बचत</Text>
+<Text style={{fontSize:14,marginTop:6}}>टोटल राशि: ₹{detailItem.kulRashi||detailItem.totalRashi||'0'}</Text>
+<Text style={{fontSize:14,marginTop:2}}>एडवांस टोटल: ₹{getAdvanceTotal(detailItem,type)}</Text>
+<Text style={{fontWeight:'900',fontSize:16,color:'#1B5E20',marginTop:6}}>बचत राशि (बाकी): ₹{String((parseFloat(detailItem.kulRashi||detailItem.totalRashi||'0')||0) - (parseFloat(String(getAdvanceTotal(detailItem,type)).replace(/[^0-9.]/g,''))||0))}</Text>
+</View>
+):null}
             {detailItem?.mobile? (<View style={{flexDirection:'row',marginTop:14,flexWrap:'wrap',justifyContent:'center'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={()=>Linking.openURL(`tel:${detailItem.mobile}`)}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={()=>Linking.openURL(`https://wa.me/91${detailItem.mobile.toString().replace(/\D/g,'').slice(-10)}`)}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={()=>Linking.openURL(`sms:${detailItem.mobile}`)}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>):null}
           </ScrollView><View style={s.modalBottom}><TouchableOpacity style={[s.mBtn,{backgroundColor:'#FF9800'}]} onPress={()=>{ const it=detailItem; setDetailItem(null); if(it) openForm(type,it); }}><Text style={s.mBtnT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={()=>setDetailItem(null)}><Text style={s.mBtnT}>वापस जाएं</Text></TouchableOpacity></View></SafeAreaView>
       </Modal>
