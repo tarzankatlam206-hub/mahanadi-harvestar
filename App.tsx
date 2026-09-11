@@ -170,6 +170,7 @@ export default function App(){
   var _os = useState(''); var ordSamay=_os[0]; var setOrdSamay=_os[1];
   var _oe = useState(''); var ordEkad=_oe[0]; var setOrdEkad=_oe[1];
   var _oei = useState(null); var ordEditId=_oei[0]; var setOrdEditId=_oei[1];
+  var _odl = useState(null); var orderDel=_odl[0]; var setOrderDel=_odl[1];
   var _ec = useState('डीजल'); var expCat=_ec[0]; var setExpCat=_ec[1];
   var _ev = useState(''); var expVivaran=_ev[0]; var setExpVivaran=_ev[1];
   var _er = useState(''); var expRashi=_er[0]; var setExpRashi=_er[1];
@@ -280,13 +281,13 @@ export default function App(){
     if(pass===storedPass){ setIsLogin(true); AsyncStorage.setItem('isLogin','yes'); setPass(''); }
     else alert('गलत पासवर्ड!');
   }
-  function doLogout(){
-    AsyncStorage.setItem('isLogin','no');
+  async function doLogout(){
+    await AsyncStorage.setItem('isLogin','no');
     setIsLogin(false); setView('home'); setTab('home');
     if(Platform.OS==='android'){ BackHandler.exitApp(); }
   }
   function isMechanicLike(t){ return t==='mechanic'||t==='anya'; }
-  function isMoneyType(t){ return ['kisan','agent','operator','helper','dealer','parts','mechanic','anya'].indexOf(t)!==-1; }
+  function isMoneyType(t){ return ['kisan','agent','operator','helper','dealer','parts','mechanic','anya'].indexOf(t)!== -1; }
   function getSearchPlaceholder(){ return type==='members'? 'सर्च करें (नाम / मोनो नं. / मोबाइल नं.)' : 'सर्च करें (नाम / मोबाइल नं. / पता)'; }
   function sumKul(list){ return list.reduce(function(s,e){ return s + (parseFloat(e.kulRashi||'0')||0); }, 0); }
   function sumAdv(list,t){ return list.reduce(function(s,e){ return s + getAdvanceTotal(e,t); }, 0); }
@@ -335,7 +336,13 @@ export default function App(){
     setOrdEditId(o.id);
     setShowOrderForm(true);
   }
-  function delOrder(id){ setOrders(function(p){return p.filter(function(x){return x.id!==id;});}); if(ordEditId===id) clearOrderForm(); }
+  function delOrder(id){ setOrderDel(id); }
+  function confirmDelOrder(){
+    var id=orderDel;
+    setOrders(function(p){return p.filter(function(x){return x.id!==id;});});
+    if(ordEditId===id) clearOrderForm();
+    setOrderDel(null);
+  }
   function getOrderList(){
     if(!search || search.trim()==='') return orders;
     var q=search.trim().toLowerCase();
@@ -824,6 +831,17 @@ export default function App(){
           <View style={s.modalBottom}>
             <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={function(){setShowOrderForm(false);clearOrderForm();}}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
             <TouchableOpacity style={[s.mBtn,{backgroundColor:'#0D47A1'}]} onPress={saveOrder}><Text style={s.mBtnT}>{ordEditId?'✔️ अपडेट करें':'सुरक्षित करें'}</Text></TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={!!orderDel} transparent={true} animationType="fade" onRequestClose={function(){setOrderDel(null);}}>
+        <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center',alignItems:'center',padding:20}}>
+          <View style={{backgroundColor:'#fff',borderRadius:14,padding:20,width:'90%',alignItems:'center',borderWidth:2,borderColor:'#D32F2F'}}>
+            <Text style={{fontSize:18,fontWeight:'900',color:'#B71C1C',textAlign:'center'}}>क्या आप सच में यह ऑर्डर हटाना चाहते हैं?</Text>
+            <View style={{flexDirection:'row',marginTop:20,width:'100%'}}>
+              <TouchableOpacity style={{flex:1,backgroundColor:'#D32F2F',padding:14,borderRadius:10,alignItems:'center',marginRight:8}} onPress={confirmDelOrder}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>हाँ, हटाएं</Text></TouchableOpacity>
+              <TouchableOpacity style={{flex:1,backgroundColor:'#2E7D32',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setOrderDel(null);}}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>नहीं</Text></TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
