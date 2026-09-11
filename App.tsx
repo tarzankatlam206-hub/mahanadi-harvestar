@@ -21,11 +21,28 @@ const MENU = [
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
 
-const EXPENSE_CATS = ['डीजल','पेट्रोल','पार्ट्स','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','अन्य'];
+const EXPENSE_CATS = ['हार्वेस्टर डीजल','ट्रैक्टर डीजल','पेट्रोल','पार्ट्स','वेल्डिंग','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','रूम किराया','अन्य'];
+
+const EXPENSE_COLORS = {
+  'हार्वेस्टर डीजल':'#1565C0',
+  'ट्रैक्टर डीजल':'#2E7D32',
+  'पेट्रोल':'#EF6C00',
+  'पार्ट्स':'#6A1B9A',
+  'वेल्डिंग':'#455A64',
+  'मैकेनिक':'#795548',
+  'ऑपरेटर':'#9B7ED8',
+  'हेल्पर':'#E94E6B',
+  'एजेंट':'#5AC8FA',
+  'खाना खर्च':'#F5A623',
+  'रूम किराया':'#00897B',
+  'अन्य':'#B71C1C'
+};
+
+function isDieselPetrolCat(c){ return c==='हार्वेस्टर डीजल'||c==='ट्रैक्टर डीजल'||c==='पेट्रोल'; }
 
 const HINDI = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
- kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',fasal:'फसल',kulRashi:'टोटल राशि',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि (बाकी)',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
+ kisan: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',kulRashi:'टोटल राशि',advanceRashi:'एडवांस राशि जमा',bachatRashi:'बचत राशि (बाकी)',pooraRashi:'पूरा राशि जमा',anyaJankari:'अन्य जानकारी'},
  agent: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',agreement:'एग्रीमेंट',check:'चेक',karyadivas:'कार्यदिवस',totalGhanta:'टोटल घंटा/समय',kulRashi:'टोटल राशि',advanceRashi:'एडवांस राशि प्राप्त',bachatRashi:'बचत राशि (बाकी)',pooraRashi:'पूरा राशि प्राप्त',anyaJankari:'अन्य जानकारी'},
  operator: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',dailyMajduri:'प्रतिदिन मजदूरी राशि',kulRashi:'टोटल राशि',advanceRashi:'एडवांस राशि',bachatRashi:'बचत राशि (बाकी)',pooraRashi:'पूरा राशि',totalRashi:'टोटल राशि',anyaJankari:'अन्य जानकारी',totalKaryadivas:'टोटल कार्यदिवस',upasthiti:'उपस्थिति तिथियां'},
  helper: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',karyPrarambhTithi:'कार्य प्रारंभ तिथि',karySamaptiTithi:'कार्य समाप्ति तिथि',dailyMajduri:'प्रतिदिन मजदूरी राशि',kulRashi:'टोटल राशि',advanceRashi:'एडवांस राशि',bachatRashi:'बचत राशि (बाकी)',pooraRashi:'पूरा राशि',totalRashi:'टोटल राशि',anyaJankari:'अन्य जानकारी',totalKaryadivas:'टोटल कार्यदिवस',upasthiti:'उपस्थिति तिथियां'},
@@ -38,7 +55,7 @@ const HINDI = {
 
 const FULL = {
  members: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',pad:'',harvesterNumber:'',sadasyataShulk:'',bhugtanTarikh:'',bhugtanMadhyam:'',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
- kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',fasal:'धान',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
+ kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
  agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
  operator: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advance:'',advanceList:[]},
  helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advanceList:[]},
@@ -95,6 +112,11 @@ function getFasalGhantaTotal(item) {
   list.forEach(function(e){ totalMin+=ghantaToMinute(e.ghanta); });
   return minuteToGhantaText(totalMin);
 }
+function getFasalTroliTotal(item) {
+  var list=getFasalList(item); var total=0;
+  list.forEach(function(e){ total+=(parseFloat(e.troli)||0); });
+  return total;
+}
 function getAdvanceTotal(f, t) {
   var list=getAdvanceList(f);
   var sum=list.reduce(function(s,e){return s+(parseFloat(e.amount)||0);},0);
@@ -132,7 +154,7 @@ var RowItem = memo(function RowItem(props){
         {type==='members' && it.harvesterNumber? <Text style={{fontSize:13,fontWeight:'bold',color:'#4E342E',marginTop:2}}>मोनो/हार्वेस्टर नं.: {it.harvesterNumber}</Text> : null}
         {money? <Text style={{fontSize:13,fontWeight:'bold',color:'#1B5E20',marginTop:4}}>💰 टोटल: ₹{it.kulRashi||'0'} | एडवांस: ₹{advT} | बचत: ₹{bachat}</Text> : null}
         {(type==='operator'||type==='helper')? <Text style={{fontSize:12,color:'#555'}}>📅 उपस्थिति: {getUpasthitiDates(it).length} दिन</Text> : null}
-        {type==='kisan'? <Text style={{fontSize:12,color:'#555'}}>🌾 घंटा: {getFasalGhantaTotal(it)}</Text> : null}
+        {type==='kisan'? <Text style={{fontSize:12,color:'#555'}}>🌾 घंटा: {getFasalGhantaTotal(it)} | ट्रॉली: {getFasalTroliTotal(it)}</Text> : null}
         {mechLike? <Text style={{fontSize:12,color:'#555'}}>🔧 कार्य: {getKaryaList(it).length} | राशि: ₹{getKaryaTotal(it)}</Text> : null}
         <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
         {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+it.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={function(){Linking.openURL('https://wa.me/91'+String(it.mobile).replace(/\D/g,'').slice(-10));}}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={function(){Linking.openURL('sms:'+it.mobile);}}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
@@ -166,12 +188,13 @@ export default function App(){
   var _or = useState('छत्तीसगढ़'); var ordRajya=_or[0]; var setOrdRajya=_or[1];
   var _om = useState(''); var ordMobile=_om[0]; var setOrdMobile=_om[1];
   var _ok = useState(''); var ordKarya=_ok[0]; var setOrdKarya=_ok[1];
+  var _otr = useState(''); var ordTroli=_otr[0]; var setOrdTroli=_otr[1];
   var _od = useState(''); var ordDinank=_od[0]; var setOrdDinank=_od[1];
   var _os = useState(''); var ordSamay=_os[0]; var setOrdSamay=_os[1];
   var _oe = useState(''); var ordEkad=_oe[0]; var setOrdEkad=_oe[1];
   var _oei = useState(null); var ordEditId=_oei[0]; var setOrdEditId=_oei[1];
   var _odl = useState(null); var orderDel=_odl[0]; var setOrderDel=_odl[1];
-  var _ec = useState('डीजल'); var expCat=_ec[0]; var setExpCat=_ec[1];
+  var _ec = useState('हार्वेस्टर डीजल'); var expCat=_ec[0]; var setExpCat=_ec[1];
   var _ev = useState(''); var expVivaran=_ev[0]; var setExpVivaran=_ev[1];
   var _er = useState(''); var expRashi=_er[0]; var setExpRashi=_er[1];
   var _et = useState(''); var expTarikh=_et[0]; var setExpTarikh=_et[1];
@@ -321,11 +344,11 @@ export default function App(){
   var totalAnyaAdvance = sumAdv(anyas,'anya');
   var totalAnyaBachat = sumBachat(anyas,'anya');
 
-  function clearOrderForm(){ setOrdName(''); setOrdPata(''); setOrdBlock(''); setOrdJila('कांकेर'); setOrdRajya('छत्तीसगढ़'); setOrdMobile(''); setOrdKarya(''); setOrdDinank(''); setOrdSamay(''); setOrdEkad(''); setOrdEditId(null); }
+  function clearOrderForm(){ setOrdName(''); setOrdPata(''); setOrdBlock(''); setOrdJila('कांकेर'); setOrdRajya('छत्तीसगढ़'); setOrdMobile(''); setOrdKarya(''); setOrdTroli(''); setOrdDinank(''); setOrdSamay(''); setOrdEkad(''); setOrdEditId(null); }
   function saveOrder(){
     if(!ordName.trim()){alert('किसान का नाम लिखें');return;}
     if(!ordMobile.trim()){alert('मोबाइल नंबर लिखें');return;}
-    var data={id:ordEditId||Date.now().toString(),name:ordName.trim(),pata:ordPata.trim(),block:ordBlock.trim(),jila:ordJila.trim(),rajya:ordRajya.trim(),mobile:ordMobile.trim(),karya:ordKarya.trim(),dinank:ordDinank.trim(),samay:ordSamay.trim(),ekad:ordEkad.trim()};
+    var data={id:ordEditId||Date.now().toString(),name:ordName.trim(),pata:ordPata.trim(),block:ordBlock.trim(),jila:ordJila.trim(),rajya:ordRajya.trim(),mobile:ordMobile.trim(),karya:ordKarya.trim(),troli:ordTroli.trim(),dinank:ordDinank.trim(),samay:ordSamay.trim(),ekad:ordEkad.trim()};
     setOrders(function(p){ return ordEditId? p.map(function(x){return x.id===ordEditId?data:x;}) : [data].concat(p); });
     var wasEdit=!!ordEditId;
     clearOrderForm();
@@ -334,7 +357,7 @@ export default function App(){
   }
   function editOrder(o){
     setOrdName(o.name||''); setOrdPata(o.pata||''); setOrdBlock(o.block||''); setOrdJila(o.jila||'कांकेर'); setOrdRajya(o.rajya||'छत्तीसगढ़');
-    setOrdMobile(o.mobile||''); setOrdKarya(o.karya||''); setOrdDinank(o.dinank||''); setOrdSamay(o.samay||''); setOrdEkad(o.ekad||'');
+    setOrdMobile(o.mobile||''); setOrdKarya(o.karya||''); setOrdTroli(o.troli||''); setOrdDinank(o.dinank||''); setOrdSamay(o.samay||''); setOrdEkad(o.ekad||'');
     setOrdEditId(o.id);
     setShowOrderForm(true);
   }
@@ -349,7 +372,7 @@ export default function App(){
     if(!search || search.trim()==='') return orders;
     var q=search.trim().toLowerCase();
     return orders.filter(function(o){
-      var all=[o.name||'',o.mobile||'',o.pata||'',o.block||'',o.jila||'',o.rajya||'',o.karya||'',o.dinank||'',o.ekad||''].join(' ').toLowerCase();
+      var all=[o.name||'',o.mobile||'',o.pata||'',o.block||'',o.jila||'',o.rajya||'',o.karya||'',o.troli||'',o.dinank||'',o.ekad||''].join(' ').toLowerCase();
       return all.indexOf(q)!==-1;
     });
   }
@@ -367,6 +390,7 @@ export default function App(){
       merged.totalKaryadivas=String(getUpasthitiDates(merged).length);
     }
     if(t==='kisan'){
+      delete merged.fasal;
       merged.advanceList=getAdvanceList(merged);
       merged.fasalList=getFasalList(merged);
       merged.bachatRashi=calcBachat(merged,t);
@@ -443,7 +467,7 @@ export default function App(){
   }
   function addKaryaEntry(){
     var d=karyaDate.trim(); var w=karyaWork.trim(); var a=karyaAmt.trim();
-    if(!d){alert('कार्य की तारीख लिखें');return;}
+    if(!d){alert('तारीख लिखें');return;}
     if(!w){alert('कार्य लिखें');return;}
     if(!a){alert('राशि लिखें');return;}
     var cur=getKaryaList(form);
@@ -577,7 +601,7 @@ export default function App(){
   }
 
   function addExpense(){
-    if(expCat==='डीजल'||expCat==='पेट्रोल'){
+    if(isDieselPetrolCat(expCat)){
       if(!expTarikh.trim()){alert('तिथि लिखें');return;}
       if(!expLiter.trim()){alert('लीटर लिखें');return;}
       if(!expRashi.trim()){alert('राशि लिखें');return;}
@@ -624,8 +648,8 @@ export default function App(){
         <TextInput style={[s.inp,{borderWidth:2,borderColor:'#E65100'}]} value={form.kulRashi} onChangeText={function(t){updateFormField('kulRashi',t);}} keyboardType="numeric" placeholder="" />
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>एडवांस तिथि व राशि - टोटल एडवांस: ₹{advTotal}</Text>
         <View style={{flexDirection:'row',marginTop:6}}>
-          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={advDate} onChangeText={setAdvDate} placeholder="" />
-          <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={advAmt} onChangeText={setAdvAmt} placeholder="" keyboardType="numeric" />
+          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={advDate} onChangeText={setAdvDate} placeholder="दिनांक" />
+          <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={advAmt} onChangeText={setAdvAmt} placeholder="राशि" keyboardType="numeric" />
         </View>
         <TouchableOpacity style={{backgroundColor:'#FF9800',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addAdvanceEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ एडवांस जोड़ें</Text></TouchableOpacity>
         <ScrollView style={{maxHeight:140,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
@@ -685,11 +709,14 @@ export default function App(){
     var list=getKaryaList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#EFEBE9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#795548'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'#3E2723',textAlign:'center'}}>🔧 कार्य - तिथि / कार्य / राशि</Text>
-        <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>कार्य विवरण - टोटल: {list.length} प्रविष्टि | टोटल राशि: ₹{getKaryaTotal(form)}</Text>
-        <TextInput style={[s.inp,{marginTop:6}]} value={karyaDate} onChangeText={setKaryaDate} placeholder="" />
-        <TextInput style={[s.inp,{marginTop:6}]} value={karyaWork} onChangeText={setKaryaWork} placeholder="" />
-        <TextInput style={[s.inp,{marginTop:6}]} value={karyaAmt} onChangeText={setKaryaAmt} placeholder="" keyboardType="numeric" />
+        <Text style={{fontSize:15,fontWeight:'900',color:'#3E2723',textAlign:'center'}}>🔧 कार्य विवरण</Text>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>विवरण - टोटल: {list.length} प्रविष्टि | टोटल राशि: ₹{getKaryaTotal(form)}</Text>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>तिथि</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={karyaDate} onChangeText={setKaryaDate} placeholder="" />
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>कार्य</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={karyaWork} onChangeText={setKaryaWork} placeholder="" />
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>राशि</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={karyaAmt} onChangeText={setKaryaAmt} placeholder="" keyboardType="numeric" />
         <TouchableOpacity style={{backgroundColor:'#795548',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addKaryaEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ कार्य जोड़ें</Text></TouchableOpacity>
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {list.map(function(e,idx){
@@ -794,6 +821,7 @@ export default function App(){
               <Text style={{fontSize:13}}>🏘️ जिला: {o.jila||'-'} | राज्य: {o.rajya||'-'}</Text>
               <Text style={{fontSize:13}}>📞 मोबाइल: {o.mobile||'-'}</Text>
               <Text style={{fontSize:13}}>🔧 कार्य: {o.karya||'-'}</Text>
+              <Text style={{fontSize:13}}>🚜 ट्रॉली: {o.troli||'-'}</Text>
               <Text style={{fontSize:13}}>📅 दिनांक: {o.dinank||'-'} | ⏰ समय: {o.samay||'-'} | 🌾 एकड़: {o.ekad||'-'}</Text>
               {o.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}>
                 <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+o.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity>
@@ -828,6 +856,8 @@ export default function App(){
             <TextInput style={s.inp} value={ordMobile} onChangeText={setOrdMobile} placeholder="" keyboardType="numeric" />
             <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>कार्य</Text>
             <TextInput style={s.inp} value={ordKarya} onChangeText={setOrdKarya} placeholder="" />
+            <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>ट्रॉली</Text>
+            <TextInput style={s.inp} value={ordTroli} onChangeText={setOrdTroli} placeholder="" />
             <View style={{flexDirection:'row'}}>
               <View style={{flex:1}}><Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>दिनांक</Text><TextInput style={s.inp} value={ordDinank} onChangeText={setOrdDinank} placeholder="" /></View>
               <View style={{flex:1,marginLeft:6}}><Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>समय</Text><TextInput style={s.inp} value={ordSamay} onChangeText={setOrdSamay} placeholder="" /></View>
@@ -858,6 +888,7 @@ export default function App(){
 
   function renderExpenseTab(){
     var catList=getExpCatList();
+    var ecColor=EXPENSE_COLORS[expCat]||'#B71C1C';
     return (
     <View style={{flex:1}}>
       <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
@@ -866,25 +897,26 @@ export default function App(){
         <Text style={{fontWeight:'900',marginTop:14,marginBottom:6}}>खर्च की श्रेणी चुनें:</Text>
         <View style={{flexDirection:'row',flexWrap:'wrap'}}>
           {EXPENSE_CATS.map(function(c){
+            var cc=EXPENSE_COLORS[c]||'#B71C1C';
             return (
-            <TouchableOpacity key={c} onPress={function(){setExpCat(c);}} style={{backgroundColor:expCat===c?'#B71C1C':'#fff',borderWidth:1,borderColor:'#B71C1C',paddingHorizontal:14,paddingVertical:10,borderRadius:20,marginRight:8,marginBottom:8}}>
-              <Text style={{color:expCat===c?'#fff':'#B71C1C',fontWeight:'900'}}>{c}</Text>
+            <TouchableOpacity key={c} onPress={function(){setExpCat(c);}} style={{backgroundColor:expCat===c?cc:'#fff',borderWidth:1,borderColor:cc,paddingHorizontal:14,paddingVertical:10,borderRadius:20,marginRight:8,marginBottom:8}}>
+              <Text style={{color:expCat===c?'#fff':cc,fontWeight:'900'}}>{c}</Text>
             </TouchableOpacity>
             );
           })}
         </View>
-        {expCat==='डीजल'||expCat==='पेट्रोल'? (
-          <View style={{marginTop:12,backgroundColor:'#E3F2FD',padding:12,borderRadius:10,borderWidth:2,borderColor:'#1565C0'}}>
-            <Text style={{fontSize:15,fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>⛽ {expCat} - तिथि / लीटर / राशि</Text>
+        {isDieselPetrolCat(expCat)? (
+          <View style={{marginTop:12,backgroundColor:'#E3F2FD',padding:12,borderRadius:10,borderWidth:2,borderColor:ecColor}}>
+            <Text style={{fontSize:15,fontWeight:'900',color:ecColor,textAlign:'center'}}>⛽ {expCat} - तिथि / लीटर / राशि</Text>
             <Text style={{fontWeight:'bold',marginTop:10}}>तिथि</Text>
             <TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
             <Text style={{fontWeight:'bold',marginTop:8}}>लीटर</Text>
             <TextInput style={s.inp} value={expLiter} onChangeText={setExpLiter} placeholder="" keyboardType="numeric" />
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि ₹</Text>
             <TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
-            <TouchableOpacity style={{backgroundColor:'#1565C0',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ {expCat} खर्च जोड़ें</Text></TouchableOpacity>
-            <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:'#1565C0'}}>
-              <Text style={{fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
+            <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ {expCat} खर्च जोड़ें</Text></TouchableOpacity>
+            <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
+              <Text style={{fontWeight:'900',color:ecColor,textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {catList.map(function(e,idx){
                 return (
@@ -899,17 +931,17 @@ export default function App(){
           </View>
         ) : (
           <View style={{marginTop:8}}>
-            <Text style={{fontWeight:'bold',marginTop:8}}>चुनी हुई श्रेणी: <Text style={{color:'#B71C1C'}}>{expCat}</Text></Text>
+            <Text style={{fontWeight:'bold',marginTop:8}}>चुनी हुई श्रेणी: <Text style={{color:ecColor}}>{expCat}</Text></Text>
             <Text style={{fontWeight:'bold',marginTop:12}}>विवरण</Text><TextInput style={s.inp} value={expVivaran} onChangeText={setExpVivaran} placeholder="" />
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि</Text><TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
             <Text style={{fontWeight:'bold',marginTop:8}}>तारीख</Text><TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
-            <TouchableOpacity style={{backgroundColor:'#D32F2F',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ खर्च जोड़ें ({expCat})</Text></TouchableOpacity>
-            <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:'#D32F2F'}}>
-              <Text style={{fontWeight:'900',color:'#B71C1C',textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | ₹{getExpCatTotal()}</Text>
+            <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ खर्च जोड़ें ({expCat})</Text></TouchableOpacity>
+            <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
+              <Text style={{fontWeight:'900',color:ecColor,textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | ₹{getExpCatTotal()}</Text>
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {catList.map(function(e){
                 return (
-                <View key={e.id} style={s.card}><Text style={{fontWeight:'900',color:'#B71C1C'}}>[{e.cat}] {e.vivaran}</Text><Text>₹{e.rashi} | {e.tarikh}</Text>
+                <View key={e.id} style={s.card}><Text style={{fontWeight:'900',color:ecColor}}>[{e.cat}] {e.vivaran}</Text><Text>₹{e.rashi} | {e.tarikh}</Text>
                 <TouchableOpacity onPress={function(){setExpenses(function(p){return p.filter(function(x){return x.id!==e.id;});});}}><Text style={{color:'red',fontWeight:'bold',marginTop:6}}>हटाएं</Text></TouchableOpacity></View>
                 );
               })}
@@ -1110,9 +1142,9 @@ export default function App(){
               );
             })}
             {renderBottomSection()}
-            {renderMoneySection()}
-            {renderMechanicKaryaSection()}
             {renderKisanFasalSection()}
+            {renderMechanicKaryaSection()}
+            {renderMoneySection()}
           </ScrollView>
           <View style={s.modalBottom}>
             <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={function(){setShow(false);}}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
@@ -1159,7 +1191,7 @@ export default function App(){
                   return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}</Text>;
                 })}
                 {(type==='operator'||type==='helper')? <Text style={{fontSize:13,marginTop:6}}>📅 उपस्थिति: {getUpasthitiDates(detailItem).length} दिन</Text> : null}
-                {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 कार्य प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)}</Text> : null}
+                {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 कार्य प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)} | ट्रॉली: {getFasalTroliTotal(detailItem)}</Text> : null}
                 {isMechanicLike(type)? <Text style={{fontSize:13,marginTop:6}}>🔧 कार्य: {getKaryaList(detailItem).length} | ₹{getKaryaTotal(detailItem)}</Text> : null}
               </View>
             ) : null}
