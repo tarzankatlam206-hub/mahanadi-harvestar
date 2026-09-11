@@ -21,7 +21,7 @@ const MENU = [
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
 
-const EXPENSE_CATS = ['डीजल','पार्ट्स','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','अन्य'];
+const EXPENSE_CATS = ['डीजल','पेट्रोल','पार्ट्स','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','अन्य'];
 
 const HINDI = {
  members: {name:'नाम *',pata:'पता',block:'ब्लॉक',jila:'जिला',rajya:'राज्य',mobile:'मोबाइल नंबर *',pad:'पद',harvesterNumber:'हार्वेस्टर नम्बर',sadasyataShulk:'सदस्यता शुल्क',bhugtanTarikh:'भुगतान की तारीख',bhugtanMadhyam:'भुगतान माध्यम',rashiPraptakarta:'राशि प्राप्तकर्ता',gadiSankhya:'गाड़ी संख्या',company:'कंपनी',model:'मॉडल',anyaJankari:'अन्य जानकारी'},
@@ -194,6 +194,8 @@ export default function App(){
   var _ad = useState(''); var advDate=_ad[0]; var setAdvDate=_ad[1];
   var _aa = useState(''); var advAmt=_aa[0]; var setAdvAmt=_aa[1];
   var _fd = useState(''); var fasalDate=_fd[0]; var setFasalDate=_fd[1];
+  var _fk = useState(''); var fasalKarya=_fk[0]; var setFasalKarya=_fk[1];
+  var _ft = useState(''); var fasalTroli=_ft[0]; var setFasalTroli=_ft[1];
   var _fs = useState(''); var fasalSamay=_fs[0]; var setFasalSamay=_fs[1];
   var _fe = useState(''); var fasalEkad=_fe[0]; var setFasalEkad=_fe[1];
   var _fg = useState(''); var fasalGhanta=_fg[0]; var setFasalGhanta=_fg[1];
@@ -383,7 +385,7 @@ export default function App(){
     }
     setForm(merged);
     setNewDate(''); setAdvDate(''); setAdvAmt('');
-    setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta('');
+    setFasalDate(''); setFasalKarya(''); setFasalTroli(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta('');
     setKaryaDate(''); setKaryaWork(''); setKaryaAmt('');
     setShow(true);
   }
@@ -423,15 +425,16 @@ export default function App(){
     setForm(nf);
   }
   function addFasalEntry(){
-    var d=fasalDate.trim(); var sm=fasalSamay.trim(); var ek=fasalEkad.trim(); var gh=fasalGhanta.trim();
-    if(!d){alert('फसल कटाई की तारीख लिखें');return;}
+    var d=fasalDate.trim(); var ky=fasalKarya.trim(); var tr=fasalTroli.trim(); var sm=fasalSamay.trim(); var ek=fasalEkad.trim(); var gh=fasalGhanta.trim();
+    if(!d){alert('तारीख लिखें');return;}
+    if(!ky){alert('कार्य लिखें');return;}
     if(!sm){alert('समय लिखें');return;}
     if(!ek){alert('एकड़ लिखें');return;}
     if(!gh){alert('घंटा लिखें');return;}
     var cur=getFasalList(form);
-    var updated=cur.concat([{date:d,samay:sm,ekad:ek,ghanta:gh}]);
+    var updated=cur.concat([{date:d,karya:ky,troli:tr,samay:sm,ekad:ek,ghanta:gh}]);
     setForm(Object.assign({},form,{fasalList:updated}));
-    setFasalDate(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta('');
+    setFasalDate(''); setFasalKarya(''); setFasalTroli(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta('');
   }
   function removeFasalEntry(idx){
     var cur=getFasalList(form);
@@ -574,11 +577,11 @@ export default function App(){
   }
 
   function addExpense(){
-    if(expCat==='डीजल'){
+    if(expCat==='डीजल'||expCat==='पेट्रोल'){
       if(!expTarikh.trim()){alert('तिथि लिखें');return;}
       if(!expLiter.trim()){alert('लीटर लिखें');return;}
       if(!expRashi.trim()){alert('राशि लिखें');return;}
-      var e={id:Date.now().toString(),cat:expCat,tarikh:expTarikh,liter:expLiter,rashi:expRashi,vivaran:'डीजल '+expLiter+' लीटर'};
+      var e={id:Date.now().toString(),cat:expCat,tarikh:expTarikh,liter:expLiter,rashi:expRashi,vivaran:expCat+' '+expLiter+' लीटर'};
       setExpenses(function(p){return [e].concat(p);});
       setExpTarikh(''); setExpLiter(''); setExpRashi(''); setExpVivaran('');
     }else{
@@ -649,22 +652,25 @@ export default function App(){
     var ghText=getFasalGhantaTotal(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#E8F5E9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#2E7D32'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'#1B5E20',textAlign:'center'}}>🌾 फसल कटाई - तिथि / समय / एकड़ / घंटा</Text>
-        <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>कटाई विवरण - टोटल: {list.length} प्रविष्टि | टोटल घंटा: {ghText}</Text>
-        <View style={{flexDirection:'row',marginTop:6}}>
-          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={fasalDate} onChangeText={setFasalDate} placeholder="" />
-          <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={fasalSamay} onChangeText={setFasalSamay} placeholder="" />
-        </View>
-        <View style={{flexDirection:'row',marginTop:6}}>
-          <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={fasalEkad} onChangeText={setFasalEkad} placeholder="" keyboardType="numeric" />
-          <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={fasalGhanta} onChangeText={setFasalGhanta} placeholder="" keyboardType="numeric" />
+        <Text style={{fontSize:15,fontWeight:'900',color:'#1B5E20',textAlign:'center'}}>🌾 कार्य विवरण - तिथि / कार्य / ट्रॉली / समय / एकड़ / घंटा</Text>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>विवरण - टोटल: {list.length} प्रविष्टि | टोटल घंटा: {ghText}</Text>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>तिथि</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={fasalDate} onChangeText={setFasalDate} placeholder="" />
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>कार्य</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={fasalKarya} onChangeText={setFasalKarya} placeholder="" />
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>ट्रॉली</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={fasalTroli} onChangeText={setFasalTroli} placeholder="" keyboardType="numeric" />
+        <View style={{flexDirection:'row',marginTop:8}}>
+          <View style={{flex:1}}><Text style={{fontSize:12,fontWeight:'bold'}}>समय</Text><TextInput style={[s.inp,{marginTop:4}]} value={fasalSamay} onChangeText={setFasalSamay} placeholder="" /></View>
+          <View style={{flex:1,marginLeft:6}}><Text style={{fontSize:12,fontWeight:'bold'}}>एकड़</Text><TextInput style={[s.inp,{marginTop:4}]} value={fasalEkad} onChangeText={setFasalEkad} placeholder="" keyboardType="numeric" /></View>
+          <View style={{flex:1,marginLeft:6}}><Text style={{fontSize:12,fontWeight:'bold'}}>घंटा</Text><TextInput style={[s.inp,{marginTop:4}]} value={fasalGhanta} onChangeText={setFasalGhanta} placeholder="" keyboardType="numeric" /></View>
         </View>
         <TouchableOpacity style={{backgroundColor:'#2E7D32',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addFasalEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ जोड़ें</Text></TouchableOpacity>
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {list.map(function(e,idx){
           return (
           <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
-            <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. तिथि: {e.date} | समय: {e.samay} | एकड़: {e.ekad} | घंटा: {e.ghanta}</Text>
+            <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. तिथि: {e.date} | कार्य: {e.karya||'-'} | ट्रॉली: {e.troli||'-'} | समय: {e.samay} | एकड़: {e.ekad} | घंटा: {e.ghanta}</Text>
             <TouchableOpacity onPress={function(){removeFasalEntry(idx);}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
           </View>
           );
@@ -867,18 +873,18 @@ export default function App(){
             );
           })}
         </View>
-        {expCat==='डीजल'? (
+        {expCat==='डीजल'||expCat==='पेट्रोल'? (
           <View style={{marginTop:12,backgroundColor:'#E3F2FD',padding:12,borderRadius:10,borderWidth:2,borderColor:'#1565C0'}}>
-            <Text style={{fontSize:15,fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>⛽ डीजल - तिथि / लीटर / राशि</Text>
+            <Text style={{fontSize:15,fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>⛽ {expCat} - तिथि / लीटर / राशि</Text>
             <Text style={{fontWeight:'bold',marginTop:10}}>तिथि</Text>
             <TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
             <Text style={{fontWeight:'bold',marginTop:8}}>लीटर</Text>
             <TextInput style={s.inp} value={expLiter} onChangeText={setExpLiter} placeholder="" keyboardType="numeric" />
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि ₹</Text>
             <TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
-            <TouchableOpacity style={{backgroundColor:'#1565C0',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ डीजल खर्च जोड़ें</Text></TouchableOpacity>
+            <TouchableOpacity style={{backgroundColor:'#1565C0',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ {expCat} खर्च जोड़ें</Text></TouchableOpacity>
             <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:'#1565C0'}}>
-              <Text style={{fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>डीजल खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
+              <Text style={{fontWeight:'900',color:'#0D47A1',textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {catList.map(function(e,idx){
                 return (
@@ -1153,7 +1159,7 @@ export default function App(){
                   return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}</Text>;
                 })}
                 {(type==='operator'||type==='helper')? <Text style={{fontSize:13,marginTop:6}}>📅 उपस्थिति: {getUpasthitiDates(detailItem).length} दिन</Text> : null}
-                {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 फसल प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)}</Text> : null}
+                {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 कार्य प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)}</Text> : null}
                 {isMechanicLike(type)? <Text style={{fontSize:13,marginTop:6}}>🔧 कार्य: {getKaryaList(detailItem).length} | ₹{getKaryaTotal(detailItem)}</Text> : null}
               </View>
             ) : null}
