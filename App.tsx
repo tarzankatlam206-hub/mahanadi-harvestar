@@ -21,7 +21,7 @@ const MENU = [
   {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
 
-const EXPENSE_CATS = ['हार्वेस्टर डीजल','ट्रैक्टर डीजल','पेट्रोल','पार्ट्स','वेल्डिंग','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','रूम किराया','अन्य'];
+const EXPENSE_CATS = ['हार्वेस्टर डीजल','ट्रैक्टर डीजल','पेट्रोल','पार्ट्स','वेल्डिंग','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','रूम किराया','अल्कोहल','पान मसाला','अन्य'];
 
 const EXPENSE_COLORS = {
   'हार्वेस्टर डीजल':'#1565C0',
@@ -35,6 +35,8 @@ const EXPENSE_COLORS = {
   'एजेंट':'#5AC8FA',
   'खाना खर्च':'#F5A623',
   'रूम किराया':'#00897B',
+  'अल्कोहल':'#880E4F',
+  'पान मसाला':'#33691E',
   'अन्य':'#B71C1C'
 };
 
@@ -54,15 +56,15 @@ const HINDI = {
 };
 
 const FULL = {
- members: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',pad:'',harvesterNumber:'',sadasyataShulk:'',bhugtanTarikh:'',bhugtanMadhyam:'',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
- kisan: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
- agent: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
- operator: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advance:'',advanceList:[]},
- helper: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advanceList:[]},
- dealer: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',company:'',showroomPata:'',serviceCenter:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
- parts: {name:'',dukaanNaam:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',partsPrakar:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
- mechanic: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
- anya: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
+ members: {name:'',pata:'',block:'',jila:'कांकेर',rajya:'छत्तीसगढ़',mobile:'',pad:'',harvesterNumber:'',sadasyataShulk:'',bhugtanTarikh:'',bhugtanMadhyam:'',rashiPraptakarta:'',gadiSankhya:'',company:'',model:'',anyaJankari:''},
+ kisan: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',ekad:'',kataiTarikh:'',samay:'',totalGhanta:'',totalKaryadivas:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],fasalList:[]},
+ agent: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
+ operator: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advance:'',advanceList:[]},
+ helper: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advanceList:[]},
+ dealer: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',company:'',showroomPata:'',serviceCenter:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
+ parts: {name:'',dukaanNaam:'',pata:'',block:'',jila:'',rajya:'',mobile:'',partsPrakar:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],partsList:[]},
+ mechanic: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
+ anya: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
  notice: {vishay:'',tarikh:'',vivaran:'',mobile:'',anyaJankari:''}
 };
 
@@ -70,8 +72,8 @@ function ghantaToMinute(val) {
   if(val===null||val===undefined||val==='') return 0;
   var s=String(val).trim();
   if(s.indexOf('.')===-1){ var h=parseInt(s,10)||0; return h*60; }
-  var parts=s.split('.'); var hh=parseInt(parts[0]||'0',10)||0;
-  var mStr=(parts[1]||'').slice(0,2); var mm=parseInt(mStr||'0',10)||0; return hh*60+mm;
+  var p=s.split('.'); var hh=parseInt(p[0]||'0',10)||0;
+  var mStr=(p[1]||'').slice(0,2); var mm=parseInt(mStr||'0',10)||0; return hh*60+mm;
 }
 function minuteToGhantaText(totalMin) {
   var h=Math.floor(totalMin/60); var m=totalMin%60; return h+' घंटा '+m+' मिनट';
@@ -103,6 +105,15 @@ function getKaryaList(item) {
   if(Array.isArray(item.karyaList)) return item.karyaList;
   return [];
 }
+function getPartsList(item) {
+  if(!item) return [];
+  if(Array.isArray(item.partsList)) return item.partsList;
+  return [];
+}
+function getPartsTotal(item) {
+  var list=getPartsList(item);
+  return list.reduce(function(s,e){return s+(parseFloat(e.amount)||0);},0);
+}
 function getKaryaTotal(item) {
   var list=getKaryaList(item);
   return list.reduce(function(s,e){return s+(parseFloat(e.amount)||0);},0);
@@ -128,13 +139,13 @@ function calcBachat(f, t) {
   var adv=getAdvanceTotal(f,t);
   return String(total-adv);
 }
-var BOTTOM_KEYS = ['totalKaryadivas','upasthiti','upasthitiDates','advance','advanceRashi','bachatRashi','totalRashi','pooraRashi','advanceList','ekad','kataiTarikh','samay','totalGhanta','fasalList','karyaList','kulRashi'];
+var BOTTOM_KEYS = ['totalKaryadivas','upasthiti','upasthitiDates','advance','advanceRashi','bachatRashi','totalRashi','pooraRashi','advanceList','ekad','kataiTarikh','samay','totalGhanta','fasalList','karyaList','kulRashi','partsList'];
 var KISAN_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
 var AGENT_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
 var OPERATOR_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','totalRashi','advanceList'];
 var HELPER_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','totalRashi','advanceList'];
 var DEALER_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
-var PARTS_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
+var PARTS_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','partsList','partsPrakar'];
 var KISAN_FASAL_KEYS = ['ekad','kataiTarikh','samay','totalGhanta','fasalList'];
 var MECHANIC_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','karyaList'];
 var ANYA_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','karyaList'];
@@ -155,7 +166,8 @@ var RowItem = memo(function RowItem(props){
         {money? <Text style={{fontSize:13,fontWeight:'bold',color:'#1B5E20',marginTop:4}}>💰 टोटल: ₹{it.kulRashi||'0'} | एडवांस: ₹{advT} | बचत: ₹{bachat}</Text> : null}
         {(type==='operator'||type==='helper')? <Text style={{fontSize:12,color:'#555'}}>📅 उपस्थिति: {getUpasthitiDates(it).length} दिन</Text> : null}
         {type==='kisan'? <Text style={{fontSize:12,color:'#555'}}>🌾 घंटा: {getFasalGhantaTotal(it)} | ट्रॉली: {getFasalTroliTotal(it)}</Text> : null}
-        {mechLike? <Text style={{fontSize:12,color:'#555'}}>🔧 कार्य: {getKaryaList(it).length} | राशि: ₹{getKaryaTotal(it)}</Text> : null}
+        {type==='parts'? <Text style={{fontSize:12,color:'#555'}}>🔧 पार्ट्स: {getPartsList(it).length} | राशि: ₹{getPartsTotal(it)}</Text> : null}
+        {mechLike? <Text style={{fontSize:12,color:'#555'}}>🔨 कार्य: {getKaryaList(it).length} | राशि: ₹{getKaryaTotal(it)}</Text> : null}
         <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
         {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+it.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={function(){Linking.openURL('https://wa.me/91'+String(it.mobile).replace(/\D/g,'').slice(-10));}}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={function(){Linking.openURL('sms:'+it.mobile);}}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
         <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={function(){props.onEdit(it);}}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={function(){props.onDel(it);}}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View>
@@ -199,6 +211,7 @@ export default function App(){
   var _er = useState(''); var expRashi=_er[0]; var setExpRashi=_er[1];
   var _et = useState(''); var expTarikh=_et[0]; var setExpTarikh=_et[1];
   var _el = useState(''); var expLiter=_el[0]; var setExpLiter=_el[1];
+  var _emd = useState('नगद'); var expMedium=_emd[0]; var setExpMedium=_emd[1];
   var _np = useState(''); var newPass=_np[0]; var setNewPass=_np[1];
   var _sp = useState('2022'); var storedPass=_sp[0]; var setStoredPass=_sp[1];
   var _fm = useState({}); var form=_fm[0]; var setForm=_fm[1];
@@ -216,6 +229,7 @@ export default function App(){
   var _nd = useState(''); var newDate=_nd[0]; var setNewDate=_nd[1];
   var _ad = useState(''); var advDate=_ad[0]; var setAdvDate=_ad[1];
   var _aa = useState(''); var advAmt=_aa[0]; var setAdvAmt=_aa[1];
+  var _am = useState('नगद'); var advMedium=_am[0]; var setAdvMedium=_am[1];
   var _fd = useState(''); var fasalDate=_fd[0]; var setFasalDate=_fd[1];
   var _fk = useState(''); var fasalKarya=_fk[0]; var setFasalKarya=_fk[1];
   var _ft = useState(''); var fasalTroli=_ft[0]; var setFasalTroli=_ft[1];
@@ -225,6 +239,9 @@ export default function App(){
   var _kd = useState(''); var karyaDate=_kd[0]; var setKaryaDate=_kd[1];
   var _kw = useState(''); var karyaWork=_kw[0]; var setKaryaWork=_kw[1];
   var _ka = useState(''); var karyaAmt=_ka[0]; var setKaryaAmt=_ka[1];
+  var _pd = useState(''); var partsDate=_pd[0]; var setPartsDate=_pd[1];
+  var _pp = useState(''); var partsPrakarInp=_pp[0]; var setPartsPrakarInp=_pp[1];
+  var _pa = useState(''); var partsAmt=_pa[0]; var setPartsAmt=_pa[1];
 
   var MASTER_DATA = MASTER_RAW.map(function(r, i){
     return {
@@ -401,6 +418,9 @@ export default function App(){
       merged.bachatRashi=calcBachat(merged,t);
       merged.pooraRashi=merged.kulRashi||'0';
     }
+    if(t==='parts'){
+      merged.partsList=getPartsList(merged);
+    }
     if(isMechanicLike(t)){
       merged.advanceList=getAdvanceList(merged);
       merged.karyaList=getKaryaList(merged);
@@ -408,9 +428,10 @@ export default function App(){
       merged.pooraRashi=merged.kulRashi||'0';
     }
     setForm(merged);
-    setNewDate(''); setAdvDate(''); setAdvAmt('');
+    setNewDate(''); setAdvDate(''); setAdvAmt(''); setAdvMedium('नगद');
     setFasalDate(''); setFasalKarya(''); setFasalTroli(''); setFasalSamay(''); setFasalEkad(''); setFasalGhanta('');
     setKaryaDate(''); setKaryaWork(''); setKaryaAmt('');
+    setPartsDate(''); setPartsPrakarInp(''); setPartsAmt('');
     setShow(true);
   }
   function updateFormField(k,t){
@@ -436,10 +457,11 @@ export default function App(){
     if(!d){alert('एडवांस की तारीख लिखें');return;}
     if(!a){alert('एडवांस राशि लिखें');return;}
     var cur=getAdvanceList(form);
-    var updated=cur.concat([{date:d,amount:a}]);
+    var entry={date:d,amount:a,medium:advMedium};
+    var updated=cur.concat([entry]);
     var nf=Object.assign({},form,{advanceList:updated});
     if(isMoneyType(type)){ nf.bachatRashi=calcBachat(nf,type); nf.pooraRashi=nf.kulRashi||'0'; if(type==='operator'||type==='helper') nf.totalRashi=nf.kulRashi||'0'; }
-    setForm(nf); setAdvDate(''); setAdvAmt('');
+    setForm(nf); setAdvDate(''); setAdvAmt(''); setAdvMedium('नगद');
   }
   function removeAdvanceEntry(idx){
     var cur=getAdvanceList(form);
@@ -480,6 +502,21 @@ export default function App(){
     var updated=cur.filter(function(_,i){return i!==idx;});
     setForm(Object.assign({},form,{karyaList:updated}));
   }
+  function addPartsEntry(){
+    var d=partsDate.trim(); var pp=partsPrakarInp.trim(); var a=partsAmt.trim();
+    if(!pp){alert('पार्ट्स प्रकार लिखें');return;}
+    if(!d){alert('दिनांक लिखें');return;}
+    if(!a){alert('राशि लिखें');return;}
+    var cur=getPartsList(form);
+    var updated=cur.concat([{date:d,prakar:pp,amount:a}]);
+    setForm(Object.assign({},form,{partsList:updated}));
+    setPartsDate(''); setPartsPrakarInp(''); setPartsAmt('');
+  }
+  function removePartsEntry(idx){
+    var cur=getPartsList(form);
+    var updated=cur.filter(function(_,i){return i!==idx;});
+    setForm(Object.assign({},form,{partsList:updated}));
+  }
 
   function save(){
     var id=editId||Date.now().toString();
@@ -508,6 +545,9 @@ export default function App(){
       data.advanceList=getAdvanceList(data);
       data.bachatRashi=calcBachat(data,type);
       data.pooraRashi=data.kulRashi||'0';
+    }
+    if(type==='parts'){
+      data.partsList=getPartsList(data);
     }
     if(isMechanicLike(type)){
       data.advanceList=getAdvanceList(data);
@@ -605,15 +645,25 @@ export default function App(){
       if(!expTarikh.trim()){alert('तिथि लिखें');return;}
       if(!expLiter.trim()){alert('लीटर लिखें');return;}
       if(!expRashi.trim()){alert('राशि लिखें');return;}
-      var e={id:Date.now().toString(),cat:expCat,tarikh:expTarikh,liter:expLiter,rashi:expRashi,vivaran:expCat+' '+expLiter+' लीटर'};
+      var e={id:Date.now().toString(),cat:expCat,tarikh:expTarikh,liter:expLiter,rashi:expRashi,vivaran:expCat+' '+expLiter+' लीटर',medium:expMedium};
       setExpenses(function(p){return [e].concat(p);});
-      setExpTarikh(''); setExpLiter(''); setExpRashi(''); setExpVivaran('');
+      setExpTarikh(''); setExpLiter(''); setExpRashi(''); setExpVivaran(''); setExpMedium('नगद');
     }else{
       if(!expRashi.trim()){alert('राशि लिखें');return;}
-      var e2={id:Date.now().toString(),cat:expCat,vivaran:expVivaran||expCat,tarikh:expTarikh||new Date().toLocaleDateString('hi-IN'),rashi:expRashi,liter:''};
+      var e2={id:Date.now().toString(),cat:expCat,vivaran:expVivaran||expCat,tarikh:expTarikh||new Date().toLocaleDateString('hi-IN'),rashi:expRashi,liter:'',medium:expMedium};
       setExpenses(function(p){return [e2].concat(p);});
-      setExpVivaran(''); setExpRashi(''); setExpTarikh('');
+      setExpVivaran(''); setExpRashi(''); setExpTarikh(''); setExpMedium('नगद');
     }
+  }
+
+  function renderExpMediumSelector(){
+    return (
+      <View style={{flexDirection:'row',marginTop:8,alignItems:'center'}}>
+        <Text style={{fontSize:12,fontWeight:'bold'}}>भुगतान माध्यम:</Text>
+        <TouchableOpacity onPress={function(){setExpMedium('नगद');}} style={{backgroundColor:expMedium==='नगद'?'#2E7D32':'#fff',borderWidth:1,borderColor:'#2E7D32',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:expMedium==='नगद'?'#fff':'#2E7D32',fontWeight:'900'}}>नगद</Text></TouchableOpacity>
+        <TouchableOpacity onPress={function(){setExpMedium('UPI');}} style={{backgroundColor:expMedium==='UPI'?'#0D47A1':'#fff',borderWidth:1,borderColor:'#0D47A1',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:expMedium==='UPI'?'#fff':'#0D47A1',fontWeight:'900'}}>UPI</Text></TouchableOpacity>
+      </View>
+    );
   }
 
   var totalExpense=expenses.reduce(function(s,e){return s+(parseFloat(e.rashi)||0);},0);
@@ -651,12 +701,17 @@ export default function App(){
           <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={advDate} onChangeText={setAdvDate} placeholder="दिनांक" />
           <TextInput style={[s.inp,{flex:1,marginTop:0,marginLeft:6}]} value={advAmt} onChangeText={setAdvAmt} placeholder="राशि" keyboardType="numeric" />
         </View>
+        <View style={{flexDirection:'row',marginTop:8,alignItems:'center'}}>
+          <Text style={{fontSize:12,fontWeight:'bold'}}>भुगतान माध्यम:</Text>
+          <TouchableOpacity onPress={function(){setAdvMedium('नगद');}} style={{backgroundColor:advMedium==='नगद'?'#2E7D32':'#fff',borderWidth:1,borderColor:'#2E7D32',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:advMedium==='नगद'?'#fff':'#2E7D32',fontWeight:'900'}}>नगद</Text></TouchableOpacity>
+          <TouchableOpacity onPress={function(){setAdvMedium('UPI');}} style={{backgroundColor:advMedium==='UPI'?'#0D47A1':'#fff',borderWidth:1,borderColor:'#0D47A1',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:advMedium==='UPI'?'#fff':'#0D47A1',fontWeight:'900'}}>UPI</Text></TouchableOpacity>
+        </View>
         <TouchableOpacity style={{backgroundColor:'#FF9800',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addAdvanceEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ एडवांस जोड़ें</Text></TouchableOpacity>
         <ScrollView style={{maxHeight:140,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {advList.map(function(e,idx){
           return (
           <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
-            <Text style={{fontWeight:'bold'}}>{idx+1}. {e.date} - ₹{e.amount}</Text>
+            <Text style={{fontWeight:'bold'}}>{idx+1}. {e.date} - ₹{e.amount}{e.medium? ' ('+e.medium+')' : ''}</Text>
             <TouchableOpacity onPress={function(){removeAdvanceEntry(idx);}}><Text style={{color:'red',fontWeight:'bold'}}>हटाएं</Text></TouchableOpacity>
           </View>
           );
@@ -666,6 +721,34 @@ export default function App(){
           <Text style={{fontWeight:'900',color:'#1B5E20',fontSize:17,textAlign:'center'}}>बचत राशि (बाकी): ₹ {form.bachatRashi||'0'}</Text>
           <Text style={{fontSize:11,color:'#666',textAlign:'center',marginTop:2}}>टोटल ({form.kulRashi||'0'}) - एडवांस ({advTotal})</Text>
         </View>
+      </View>
+    );
+  }
+
+  function renderPartsSection(){
+    if(type!=='parts') return null;
+    var plist=getPartsList(form);
+    return (
+      <View style={{marginTop:12,backgroundColor:'#E0F2F1',padding:12,borderRadius:10,borderWidth:2,borderColor:'#4DB6AC'}}>
+        <Text style={{fontSize:15,fontWeight:'900',color:'#00695C',textAlign:'center'}}>🔩 पार्ट्स प्रकार / दिनांक / राशि</Text>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>पार्ट्स प्रकार</Text>
+        <TextInput style={[s.inp,{marginTop:4}]} value={partsPrakarInp} onChangeText={setPartsPrakarInp} placeholder="पार्ट्स का नाम लिखें" />
+        <View style={{flexDirection:'row',marginTop:8}}>
+          <View style={{flex:1}}><Text style={{fontSize:12,fontWeight:'bold'}}>दिनांक</Text><TextInput style={[s.inp,{marginTop:4}]} value={partsDate} onChangeText={setPartsDate} placeholder="दिनांक" /></View>
+          <View style={{flex:1,marginLeft:6}}><Text style={{fontSize:12,fontWeight:'bold'}}>राशि</Text><TextInput style={[s.inp,{marginTop:4}]} value={partsAmt} onChangeText={setPartsAmt} placeholder="राशि" keyboardType="numeric" /></View>
+        </View>
+        <TouchableOpacity style={{backgroundColor:'#4DB6AC',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addPartsEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ पार्ट्स जोड़ें</Text></TouchableOpacity>
+        <Text style={{fontSize:12,fontWeight:'bold',marginTop:8,textAlign:'center'}}>टोटल: {plist.length} प्रविष्टि | टोटल राशि: ₹{getPartsTotal(form)}</Text>
+        <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
+        {plist.map(function(e,idx){
+          return (
+          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
+            <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. {e.prakar} | दिनांक: {e.date} | ₹{e.amount}</Text>
+            <TouchableOpacity onPress={function(){removePartsEntry(idx);}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
+          </View>
+          );
+        })}
+        </ScrollView>
       </View>
     );
   }
@@ -709,7 +792,7 @@ export default function App(){
     var list=getKaryaList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#EFEBE9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#795548'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'#3E2723',textAlign:'center'}}>🔧 कार्य विवरण</Text>
+        <Text style={{fontSize:15,fontWeight:'900',color:'#3E2723',textAlign:'center'}}>🔨 कार्य विवरण</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>विवरण - टोटल: {list.length} प्रविष्टि | टोटल राशि: ₹{getKaryaTotal(form)}</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>तिथि</Text>
         <TextInput style={[s.inp,{marginTop:4}]} value={karyaDate} onChangeText={setKaryaDate} placeholder="" />
@@ -818,10 +901,10 @@ export default function App(){
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15,color:'#0D47A1'}}>🌾 {o.name}</Text>
               <Text style={{fontSize:13,marginTop:4}}>📍 पता: {o.pata||'-'} | ब्लॉक: {o.block||'-'}</Text>
-              <Text style={{fontSize:13}}>🏘️ जिला: {o.jila||'-'} | राज्य: {o.rajya||'-'}</Text>
+              <Text style={{fontSize:13}}>🏠️ जिला: {o.jila||'-'} | राज्य: {o.rajya||'-'}</Text>
               <Text style={{fontSize:13}}>📞 मोबाइल: {o.mobile||'-'}</Text>
               <Text style={{fontSize:13}}>🔧 कार्य: {o.karya||'-'}</Text>
-              <Text style={{fontSize:13}}>🚜 ट्रॉली: {o.troli||'-'}</Text>
+              <Text style={{fontSize:13}}>🚠 ट्रॉली: {o.troli||'-'}</Text>
               <Text style={{fontSize:13}}>📅 दिनांक: {o.dinank||'-'} | ⏰ समय: {o.samay||'-'} | 🌾 एकड़: {o.ekad||'-'}</Text>
               {o.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}>
                 <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+o.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity>
@@ -914,6 +997,7 @@ export default function App(){
             <TextInput style={s.inp} value={expLiter} onChangeText={setExpLiter} placeholder="" keyboardType="numeric" />
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि ₹</Text>
             <TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
+            {renderExpMediumSelector()}
             <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ {expCat} खर्च जोड़ें</Text></TouchableOpacity>
             <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
               <Text style={{fontWeight:'900',color:ecColor,textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
@@ -921,7 +1005,7 @@ export default function App(){
               {catList.map(function(e,idx){
                 return (
                 <View key={e.id} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#E3F2FD',padding:8,borderRadius:6,marginTop:6}}>
-                  <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. {e.tarikh} | {e.liter} लीटर | ₹{e.rashi}</Text>
+                  <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. {e.tarikh} | {e.liter} लीटर | ₹{e.rashi}{e.medium? ' ('+e.medium+')' : ''}</Text>
                   <TouchableOpacity onPress={function(){setExpenses(function(p){return p.filter(function(x){return x.id!==e.id;});});}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
                 </View>
                 );
@@ -934,6 +1018,7 @@ export default function App(){
             <Text style={{fontWeight:'bold',marginTop:8}}>चुनी हुई श्रेणी: <Text style={{color:ecColor}}>{expCat}</Text></Text>
             <Text style={{fontWeight:'bold',marginTop:12}}>विवरण</Text><TextInput style={s.inp} value={expVivaran} onChangeText={setExpVivaran} placeholder="" />
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि</Text><TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
+            {renderExpMediumSelector()}
             <Text style={{fontWeight:'bold',marginTop:8}}>तारीख</Text><TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
             <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ खर्च जोड़ें ({expCat})</Text></TouchableOpacity>
             <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
@@ -941,7 +1026,7 @@ export default function App(){
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {catList.map(function(e){
                 return (
-                <View key={e.id} style={s.card}><Text style={{fontWeight:'900',color:ecColor}}>[{e.cat}] {e.vivaran}</Text><Text>₹{e.rashi} | {e.tarikh}</Text>
+                <View key={e.id} style={s.card}><Text style={{fontWeight:'900',color:ecColor}}>[{e.cat}] {e.vivaran}</Text><Text>₹{e.rashi} | {e.tarikh}{e.medium? ' ('+e.medium+')' : ''}</Text>
                 <TouchableOpacity onPress={function(){setExpenses(function(p){return p.filter(function(x){return x.id!==e.id;});});}}><Text style={{color:'red',fontWeight:'bold',marginTop:6}}>हटाएं</Text></TouchableOpacity></View>
                 );
               })}
@@ -1144,6 +1229,7 @@ export default function App(){
             {renderBottomSection()}
             {renderKisanFasalSection()}
             {renderMechanicKaryaSection()}
+            {renderPartsSection()}
             {renderMoneySection()}
           </ScrollView>
           <View style={s.modalBottom}>
@@ -1188,11 +1274,20 @@ export default function App(){
                 <Text style={{fontWeight:'900',fontSize:16,color:'#1B5E20',marginTop:6}}>बचत राशि (बाकी): ₹{calcBachat(detailItem,type)}</Text>
                 <Text style={{fontSize:12,color:'#666',marginTop:4}}>टोटल ({detailItem.kulRashi||'0'}) - एडवांस ({getAdvanceTotal(detailItem,type)})</Text>
                 {getAdvanceList(detailItem).map(function(e,i){
-                  return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}</Text>;
+                  return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}{e.medium? ' ('+e.medium+')' : ''}</Text>;
                 })}
                 {(type==='operator'||type==='helper')? <Text style={{fontSize:13,marginTop:6}}>📅 उपस्थिति: {getUpasthitiDates(detailItem).length} दिन</Text> : null}
                 {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 कार्य प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)} | ट्रॉली: {getFasalTroliTotal(detailItem)}</Text> : null}
-                {isMechanicLike(type)? <Text style={{fontSize:13,marginTop:6}}>🔧 कार्य: {getKaryaList(detailItem).length} | ₹{getKaryaTotal(detailItem)}</Text> : null}
+                {type==='parts'? <Text style={{fontSize:13,marginTop:6}}>🔩 पार्ट्स: {getPartsList(detailItem).length} | ₹{getPartsTotal(detailItem)}</Text> : null}
+                {isMechanicLike(type)? <Text style={{fontSize:13,marginTop:6}}>🔨 कार्य: {getKaryaList(detailItem).length} | ₹{getKaryaTotal(detailItem)}</Text> : null}
+              </View>
+            ) : null}
+            {detailItem && type==='parts' && getPartsList(detailItem).length>0? (
+              <View style={{backgroundColor:'#E0F2F1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#4DB6AC'}}>
+                <Text style={{fontWeight:'900',fontSize:15,color:'#00695C',textAlign:'center'}}>🔩 पार्ट्स विवरण</Text>
+                {getPartsList(detailItem).map(function(e,i){
+                  return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.prakar} | {e.date} - ₹{e.amount}</Text>;
+                })}
               </View>
             ) : null}
             {detailItem && detailItem.mobile? (
