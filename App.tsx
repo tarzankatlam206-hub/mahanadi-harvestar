@@ -330,7 +330,7 @@ export default function App(){
   }
   function isMechanicLike(t){ return t==='mechanic'||t==='anya'; }
   function isMoneyType(t){ return ['kisan','agent','operator','helper','dealer','parts','mechanic','anya'].indexOf(t)!== -1; }
-  function getSearchPlaceholder(){ return type==='members'? 'सर्च करें (नाम / मोनो नं. / मोबाइल नं.)' : 'सर्च करें (नाम / मोबाइल नं. / पता)'; }
+  function getSearchPlaceholder(){ return type==='members'? 'सर्च करें (नाम / मोनो नं. / मोबाइल नं. / पद)' : 'सर्च करें (नाम / मोबाइल नं. / पता)'; }
   function sumKul(list){ return list.reduce(function(s,e){ return s + (parseFloat(e.kulRashi||'0')||0); }, 0); }
   function sumAdv(list,t){ return list.reduce(function(s,e){ return s + getAdvanceTotal(e,t); }, 0); }
   function sumBachat(list,t){ return list.reduce(function(s,e){ return s + (parseFloat(calcBachat(e,t))||0); }, 0); }
@@ -600,7 +600,7 @@ export default function App(){
         }
         var mob=String(it.mobile||'').toLowerCase();
         var nm=String(it.name||'').toLowerCase();
-        var pt=[it.pata||'',it.block||'',it.jila||''].join(' ').toLowerCase();
+        var pt=[it.pata||'',it.block||'',it.jila||'',it.pad||''].join(' ').toLowerCase();
         if(mob.indexOf(q)!==-1) return true;
         if(nm.indexOf(q)!==-1) return true;
         if(pt.indexOf(q)!==-1) return true;
@@ -1331,6 +1331,7 @@ var s=StyleSheet.create({
   modal:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
   splash:{flex:1,backgroundColor:'#000',justifyContent:'flex-end'},
+  splashImage:{position:'absolute',width:'100%',height:'100%'},
   splashImage:{position:'absolute',width:'100%',height:'100%'},
   loadBox:{width:'100%',paddingHorizontal:30,paddingBottom:60,alignItems:'center',backgroundColor:'rgba(0,0,0,0.55)',paddingTop:18},
   loadText:{color:'#fff',fontSize:18,fontWeight:'bold',marginBottom:10},
