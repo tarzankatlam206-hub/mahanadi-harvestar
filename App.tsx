@@ -61,7 +61,7 @@ const FULL = {
  agent: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',agreement:'',check:'',karyadivas:'',totalGhanta:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
  operator: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advance:'',advanceList:[]},
  helper: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',karyPrarambhTithi:'',karySamaptiTithi:'',dailyMajduri:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',totalRashi:'',anyaJankari:'',totalKaryadivas:'',upasthiti:'',upasthitiDates:[],advanceList:[]},
- dealer: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',company:'',showroomPata:'',serviceCenter:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[]},
+ dealer: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',company:'',showroomPata:'',serviceCenter:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
  parts: {name:'',dukaanNaam:'',pata:'',block:'',jila:'',rajya:'',mobile:'',partsPrakar:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],partsList:[]},
  mechanic: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
  anya: {name:'',pata:'',block:'',jila:'',rajya:'',mobile:'',kulRashi:'',advanceRashi:'',bachatRashi:'',pooraRashi:'',anyaJankari:'',advanceList:[],karyaList:[]},
@@ -144,7 +144,7 @@ var KISAN_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanc
 var AGENT_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
 var OPERATOR_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','totalRashi','advanceList'];
 var HELPER_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','totalRashi','advanceList'];
-var DEALER_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList'];
+var DEALER_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','karyaList'];
 var PARTS_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','partsList','partsPrakar'];
 var KISAN_FASAL_KEYS = ['ekad','kataiTarikh','samay','totalGhanta','fasalList'];
 var MECHANIC_BOTTOM = ['kulRashi','advanceRashi','bachatRashi','pooraRashi','advanceList','karyaList'];
@@ -421,7 +421,7 @@ export default function App(){
     if(t==='parts'){
       merged.partsList=getPartsList(merged);
     }
-    if(isMechanicLike(t)){
+    if(isMechanicLike(t)||t==='dealer'){
       merged.advanceList=getAdvanceList(merged);
       merged.karyaList=getKaryaList(merged);
       merged.bachatRashi=calcBachat(merged,t);
@@ -549,7 +549,7 @@ export default function App(){
     if(type==='parts'){
       data.partsList=getPartsList(data);
     }
-    if(isMechanicLike(type)){
+    if(isMechanicLike(type)||type==='dealer'){
       data.advanceList=getAdvanceList(data);
       data.karyaList=getKaryaList(data);
       data.bachatRashi=calcBachat(data,type);
@@ -788,7 +788,7 @@ export default function App(){
   }
 
   function renderMechanicKaryaSection(){
-    if(!isMechanicLike(type)) return null;
+    if(!(isMechanicLike(type)||type==='dealer')) return null;
     var list=getKaryaList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#EFEBE9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#795548'}}>
@@ -1331,7 +1331,6 @@ var s=StyleSheet.create({
   modal:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
   splash:{flex:1,backgroundColor:'#000',justifyContent:'flex-end'},
-  splashImage:{position:'absolute',width:'100%',height:'100%'},
   splashImage:{position:'absolute',width:'100%',height:'100%'},
   loadBox:{width:'100%',paddingHorizontal:30,paddingBottom:60,alignItems:'center',backgroundColor:'rgba(0,0,0,0.55)',paddingTop:18},
   loadText:{color:'#fff',fontSize:18,fontWeight:'bold',marginBottom:10},
