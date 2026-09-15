@@ -4,40 +4,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MASTER_RAW } from './master_data';
 
 const HOME_MENU = [
-  {title:'सदस्य',color:'                        
+  {title:'सदस्य',color:'#6ABF69',key:'members'},
   {title:'किसान',color:'#F5A623',key:'kisan'},
-  {title:'एजेंट',color:'                      
+  {title:'एजेंट',color:'#5AC8FA',key:'agent'},
   {title:'ऑपरेटर',color:'#9B7ED8',key:'operator'},
-  {title:'हेल्पर',color:'                       
+  {title:'हेल्पर',color:'#E94E6B',key:'helper'},
   {title:'डीलर',color:'#A07C6D',key:'dealer'},
-  {title:'पार्ट्स विक्रेता',color:'                      
+  {title:'पार्ट्स विक्रेता',color:'#4DB6AC',key:'parts'},
   {title:'मैकेनिक',color:'#795548',key:'mechanic'},
-  {title:'अन्य',color:'                     
+  {title:'अन्य',color:'#607D8B',key:'anya'},
 ];
 
 const MENU = [
 ...HOME_MENU,
   {title:'सूचना / नोटिस',color:'#B07BE6',key:'notice'},
-  {title:'लॉग आउट',color:'                       
+  {title:'लॉग आउट',color:'#212121',key:'logout'},
 ];
 
 const EXPENSE_CATS = ['हार्वेस्टर डीजल','ट्रैक्टर डीजल','पेट्रोल','पार्ट्स','वेल्डिंग','मैकेनिक','ऑपरेटर','हेल्पर','एजेंट','खाना खर्च','रूम किराया','अल्कोहल','पान मसाला','अन्य'];
 
 const EXPENSE_COLORS = {
   'हार्वेस्टर डीजल':'#1565C0',
-  'ट्रैक्टर डीजल':'         
+  'ट्रैक्टर डीजल':'#2E7D32',
   'पेट्रोल':'#EF6C00',
-  'पार्ट्स':'         
+  'पार्ट्स':'#6A1B9A',
   'वेल्डिंग':'#455A64',
-  'मैकेनिक':'         
+  'मैकेनिक':'#795548',
   'ऑपरेटर':'#9B7ED8',
-  'हेल्पर':'         
+  'हेल्पर':'#E94E6B',
   'एजेंट':'#5AC8FA',
-  'खाना खर्च':'         
+  'खाना खर्च':'#F5A623',
   'रूम किराया':'#00897B',
-  'अल्कोहल':'         
+  'अल्कोहल':'#880E4F',
   'पान मसाला':'#33691E',
-  'अन्य':'        
+  'अन्य':'#B71C1C'
 };
 
 function isDieselPetrolCat(c){ return c==='हार्वेस्टर डीजल'||c==='ट्रैक्टर डीजल'||c==='पेट्रोल'; }
@@ -162,15 +162,15 @@ var RowItem = memo(function RowItem(props){
       <View style={s.card}>
         <Text style={{fontWeight:'bold',fontSize:16,color:'#0D47A1'}}>{it.name||it.vishay} 👁️</Text>
         <Text>{it.mobile||''} {it.pata||''}</Text>
-        {type==='members' && it.harvesterNumber? <Text style={{fontSize:13,fontWeight:'bold',color:'                                                                                                               
+        {type==='members' && it.harvesterNumber? <Text style={{fontSize:13,fontWeight:'bold',color:'#4E342E',marginTop:2}}>मोनो/हार्वेस्टर नं.: {it.harvesterNumber}</Text> : null}
         {money? <Text style={{fontSize:13,fontWeight:'bold',color:'#1B5E20',marginTop:4}}>💰 टोटल: ₹{it.kulRashi||'0'} | एडवांस: ₹{advT} | बचत: ₹{bachat}</Text> : null}
-        {(type==='operator'||type==='helper')? <Text style={{fontSize:12,color:'                                                                                              
+        {(type==='operator'||type==='helper')? <Text style={{fontSize:12,color:'#555'}}>📅 उपस्थिति: {getUpasthitiDates(it).length} दिन</Text> : null}
         {type==='kisan'? <Text style={{fontSize:12,color:'#555'}}>🌾 घंटा: {getFasalGhantaTotal(it)} | ट्रॉली: {getFasalTroliTotal(it)}</Text> : null}
-        {type==='parts'? <Text style={{fontSize:12,color:'                                                                                                                   
+        {type==='parts'? <Text style={{fontSize:12,color:'#555'}}>🔧 पार्ट्स: {getPartsList(it).length} | राशि: ₹{getPartsTotal(it)}</Text> : null}
         {mechLike? <Text style={{fontSize:12,color:'#555'}}>🔨 कार्य: {getKaryaList(it).length} | राशि: ₹{getKaryaTotal(it)}</Text> : null}
-        <Text style={{fontSize:11,color:'                                                                                                                           
+        <Text style={{fontSize:11,color:'#888',marginTop:4}}>पूरी जानकारी देखने के लिए क्लिक करें</Text>
         {it.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+it.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={function(){Linking.openURL('https://wa.me/91'+String(it.mobile).replace(/\D/g,'').slice(-10));}}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={function(){Linking.openURL('sms:'+it.mobile);}}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity></View>) : null}
-        <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'                                                                                                                                                                                                                                                                                                                  
+        <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}><TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={function(){props.onEdit(it);}}><Text style={s.smT}>✏️ एडिट करें</Text></TouchableOpacity><TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={function(){props.onDel(it);}}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity></View>
       </View>
     </TouchableOpacity>
   );
@@ -661,7 +661,7 @@ export default function App(){
       <View style={{flexDirection:'row',marginTop:8,alignItems:'center'}}>
         <Text style={{fontSize:12,fontWeight:'bold'}}>भुगतान माध्यम:</Text>
         <TouchableOpacity onPress={function(){setExpMedium('नगद');}} style={{backgroundColor:expMedium==='नगद'?'#2E7D32':'#fff',borderWidth:1,borderColor:'#2E7D32',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:expMedium==='नगद'?'#fff':'#2E7D32',fontWeight:'900'}}>नगद</Text></TouchableOpacity>
-        <TouchableOpacity onPress={function(){setExpMedium('UPI');}} style={{backgroundColor:expMedium==='UPI'?'                                                                                                                                                                                                                                 
+        <TouchableOpacity onPress={function(){setExpMedium('UPI');}} style={{backgroundColor:expMedium==='UPI'?'#0D47A1':'#fff',borderWidth:1,borderColor:'#0D47A1',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:expMedium==='UPI'?'#fff':'#0D47A1',fontWeight:'900'}}>UPI</Text></TouchableOpacity>
       </View>
     );
   }
@@ -693,7 +693,7 @@ export default function App(){
     var advTotal=getAdvanceTotal(form,type);
     return (
       <View style={{marginTop:12,backgroundColor:'#FFF8E1',padding:12,borderRadius:10,borderWidth:2,borderColor:'#FF9800'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'                                                                                                    
+        <Text style={{fontSize:15,fontWeight:'900',color:'#E65100',textAlign:'center'}}>💰 टोटल राशि / एडवांस / बचत</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>टोटल राशि (आप डालेंगे)</Text>
         <TextInput style={[s.inp,{borderWidth:2,borderColor:'#E65100'}]} value={form.kulRashi} onChangeText={function(t){updateFormField('kulRashi',t);}} keyboardType="numeric" placeholder="" />
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>एडवांस तिथि व राशि - टोटल एडवांस: ₹{advTotal}</Text>
@@ -703,10 +703,10 @@ export default function App(){
         </View>
         <View style={{flexDirection:'row',marginTop:8,alignItems:'center'}}>
           <Text style={{fontSize:12,fontWeight:'bold'}}>भुगतान माध्यम:</Text>
-          <TouchableOpacity onPress={function(){setAdvMedium('नगद');}} style={{backgroundColor:advMedium==='नगद'?'                                                                                                                                                                                                                                             
+          <TouchableOpacity onPress={function(){setAdvMedium('नगद');}} style={{backgroundColor:advMedium==='नगद'?'#2E7D32':'#fff',borderWidth:1,borderColor:'#2E7D32',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:advMedium==='नगद'?'#fff':'#2E7D32',fontWeight:'900'}}>नगद</Text></TouchableOpacity>
           <TouchableOpacity onPress={function(){setAdvMedium('UPI');}} style={{backgroundColor:advMedium==='UPI'?'#0D47A1':'#fff',borderWidth:1,borderColor:'#0D47A1',paddingHorizontal:16,paddingVertical:8,borderRadius:20,marginLeft:8}}><Text style={{color:advMedium==='UPI'?'#fff':'#0D47A1',fontWeight:'900'}}>UPI</Text></TouchableOpacity>
         </View>
-        <TouchableOpacity style={{backgroundColor:'                                                                                                                                                                                                                 
+        <TouchableOpacity style={{backgroundColor:'#FF9800',padding:10,borderRadius:8,marginTop:8,alignItems:'center'}} onPress={addAdvanceEntry}><Text style={{color:'#fff',fontWeight:'bold'}}>➕ एडवांस जोड़ें</Text></TouchableOpacity>
         <ScrollView style={{maxHeight:140,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {advList.map(function(e,idx){
           return (
@@ -717,9 +717,9 @@ export default function App(){
           );
         })}
         </ScrollView>
-        <View style={[s.inp,{backgroundColor:'                                                             
+        <View style={[s.inp,{backgroundColor:'#E8F5E9',marginTop:10,borderWidth:2,borderColor:'#2E7D32'}]}>
           <Text style={{fontWeight:'900',color:'#1B5E20',fontSize:17,textAlign:'center'}}>बचत राशि (बाकी): ₹ {form.bachatRashi||'0'}</Text>
-          <Text style={{fontSize:11,color:'                                                                                                                   
+          <Text style={{fontSize:11,color:'#666',textAlign:'center',marginTop:2}}>टोटल ({form.kulRashi||'0'}) - एडवांस ({advTotal})</Text>
         </View>
       </View>
     );
@@ -730,7 +730,7 @@ export default function App(){
     var plist=getPartsList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#E0F2F1',padding:12,borderRadius:10,borderWidth:2,borderColor:'#4DB6AC'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'                                                                                                                      
+        <Text style={{fontSize:15,fontWeight:'900',color:'#00695C',textAlign:'center'}}>🔩 पार्ट्स प्रकार / दिनांक / राशि</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>पार्ट्स प्रकार</Text>
         <TextInput style={[s.inp,{marginTop:4}]} value={partsPrakarInp} onChangeText={setPartsPrakarInp} placeholder="पार्ट्स का नाम लिखें" />
         <View style={{flexDirection:'row',marginTop:8}}>
@@ -742,7 +742,7 @@ export default function App(){
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {plist.map(function(e,idx){
           return (
-          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'                                             
+          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
             <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. {e.prakar} | दिनांक: {e.date} | ₹{e.amount}</Text>
             <TouchableOpacity onPress={function(){removePartsEntry(idx);}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
           </View>
@@ -759,7 +759,7 @@ export default function App(){
     var ghText=getFasalGhantaTotal(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#E8F5E9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#2E7D32'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'                                                                                                                                                                         
+        <Text style={{fontSize:15,fontWeight:'900',color:'#1B5E20',textAlign:'center'}}>🌾 कार्य विवरण - तिथि / कार्य / ट्रॉली / समय / एकड़ / घंटा</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>विवरण - टोटल: {list.length} प्रविष्टि | टोटल घंटा: {ghText}</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>तिथि</Text>
         <TextInput style={[s.inp,{marginTop:4}]} value={fasalDate} onChangeText={setFasalDate} placeholder="" />
@@ -776,7 +776,7 @@ export default function App(){
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {list.map(function(e,idx){
           return (
-          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'                                             
+          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
             <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. तिथि: {e.date} | कार्य: {e.karya||'-'} | ट्रॉली: {e.troli||'-'} | समय: {e.samay} | एकड़: {e.ekad} | घंटा: {e.ghanta}</Text>
             <TouchableOpacity onPress={function(){removeFasalEntry(idx);}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
           </View>
@@ -792,7 +792,7 @@ export default function App(){
     var list=getKaryaList(form);
     return (
       <View style={{marginTop:12,backgroundColor:'#EFEBE9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#795548'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'                                                                         
+        <Text style={{fontSize:15,fontWeight:'900',color:'#3E2723',textAlign:'center'}}>🔨 कार्य विवरण</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>विवरण - टोटल: {list.length} प्रविष्टि | टोटल राशि: ₹{getKaryaTotal(form)}</Text>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>तिथि</Text>
         <TextInput style={[s.inp,{marginTop:4}]} value={karyaDate} onChangeText={setKaryaDate} placeholder="" />
@@ -804,7 +804,7 @@ export default function App(){
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {list.map(function(e,idx){
           return (
-          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'                                             
+          <View key={idx} style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',backgroundColor:'#fff',padding:8,borderRadius:6,marginTop:6}}>
             <Text style={{fontWeight:'bold',flex:1}}>{idx+1}. तिथि: {e.date} | कार्य: {e.work} | राशि: ₹{e.amount}</Text>
             <TouchableOpacity onPress={function(){removeKaryaEntry(idx);}}><Text style={{color:'red',fontWeight:'bold',marginLeft:6}}>हटाएं</Text></TouchableOpacity>
           </View>
@@ -820,12 +820,12 @@ export default function App(){
     var dates=Array.isArray(form.upasthitiDates)?form.upasthitiDates:[];
     return (
       <View style={{marginTop:16,backgroundColor:'#E8F5E9',padding:12,borderRadius:10,borderWidth:2,borderColor:'#2E7D32'}}>
-        <Text style={{fontSize:15,fontWeight:'900',color:'                                                                                                               
+        <Text style={{fontSize:15,fontWeight:'900',color:'#1B5E20',textAlign:'center'}}>📅 उपस्थिति व टोटल कार्यदिवस</Text>
         <View style={[s.inp,{backgroundColor:'#fff',marginTop:8}]}><Text style={{fontWeight:'900',color:'#1B5E20',fontSize:16,textAlign:'center'}}>{form.totalKaryadivas||'0'} दिन</Text></View>
         <Text style={{fontSize:12,fontWeight:'bold',marginTop:10}}>उपस्थिति तिथियां - टोटल: {dates.length} दिन</Text>
         <View style={{flexDirection:'row',marginTop:6}}>
           <TextInput style={[s.inp,{flex:1,marginTop:0}]} value={newDate} onChangeText={setNewDate} placeholder="" />
-          <TouchableOpacity style={{backgroundColor:'                                                                                                                                                                                                          
+          <TouchableOpacity style={{backgroundColor:'#2E7D32',paddingHorizontal:14,justifyContent:'center',borderRadius:8,marginLeft:6}} onPress={addUpasthitiDate}><Text style={{color:'#fff',fontWeight:'bold'}}>जोड़ें</Text></TouchableOpacity>
         </View>
         <ScrollView style={{maxHeight:180,marginTop:6}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
         {dates.map(function(d,idx){
@@ -875,9 +875,9 @@ export default function App(){
   function renderBottomNav(){
     return (
     <View style={s.navBar}>
-      <TouchableOpacity style={s.navBtn} onPress={function(){setTab('home');setView('home');setSearch('');}}><Text style={[s.navTxt,{color:tab==='home'?'                                                                
+      <TouchableOpacity style={s.navBtn} onPress={function(){setTab('home');setView('home');setSearch('');}}><Text style={[s.navTxt,{color:tab==='home'?'#2E7D32':'#666'}]}>🏠{'\n'}होम</Text></TouchableOpacity>
       <TouchableOpacity style={s.navBtn} onPress={function(){setTab('expense');setView('home');setSearch('');}}><Text style={[s.navTxt,{color:tab==='expense'?'#2E7D32':'#666'}]}>💸{'\n'}खर्च</Text></TouchableOpacity>
-      <TouchableOpacity style={s.navBtn} onPress={function(){setTab('order');setView('home');setSearch('');}}><Text style={[s.navTxt,{color:tab==='order'?'                                                                      
+      <TouchableOpacity style={s.navBtn} onPress={function(){setTab('order');setView('home');setSearch('');}}><Text style={[s.navTxt,{color:tab==='order'?'#2E7D32':'#666'}]}>📝{'\n'}ऑर्डर</Text></TouchableOpacity>
       <TouchableOpacity style={s.navBtn} onPress={function(){setTab('setting');setView('home');}}><Text style={[s.navTxt,{color:tab==='setting'?'#2E7D32':'#666'}]}>⚙️{'\n'}सेटिंग</Text></TouchableOpacity>
     </View>
     );
@@ -887,10 +887,10 @@ export default function App(){
     var olist=getOrderList();
     return (
     <View style={{flex:1}}>
-      <View style={{backgroundColor:'                                                                                                        
+      <View style={{backgroundColor:'#E3F2FD',marginHorizontal:8,marginTop:8,padding:10,borderRadius:8,borderWidth:1,borderColor:'#0D47A1'}}>
         <Text style={{fontWeight:'900',fontSize:15,color:'#0D47A1',textAlign:'center'}}>📝 कुल ऑर्डर: {orders.length}{search.trim()!==''? ' | सर्च में मिले: '+olist.length : ''}</Text>
       </View>
-      <View style={[s.search,{borderColor:'                                                                                                                                                                                                                                   
+      <View style={[s.search,{borderColor:'#0D47A1'}]}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder="सर्च करें (नाम / मोबाइल नं. / पता / कार्य)" /></View>
       <FlatList
         style={{flex:1}}
         data={olist}
@@ -907,13 +907,13 @@ export default function App(){
               <Text style={{fontSize:13}}>🚠 ट्रॉली: {o.troli||'-'}</Text>
               <Text style={{fontSize:13}}>📅 दिनांक: {o.dinank||'-'} | ⏰ समय: {o.samay||'-'} | 🌾 एकड़: {o.ekad||'-'}</Text>
               {o.mobile? (<View style={{flexDirection:'row',marginTop:10,flexWrap:'wrap'}}>
-                <TouchableOpacity style={[s.sm,{backgroundColor:'                                                                                                                                
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#4CAF50'}]} onPress={function(){Linking.openURL('tel:'+o.mobile);}}><Text style={s.smT}>📞 कॉल</Text></TouchableOpacity>
                 <TouchableOpacity style={[s.sm,{backgroundColor:'#128C7E'}]} onPress={function(){Linking.openURL('https://wa.me/91'+String(o.mobile).replace(/\D/g,'').slice(-10));}}><Text style={s.smT}>🟢 व्हाट्सएप</Text></TouchableOpacity>
-                <TouchableOpacity style={[s.sm,{backgroundColor:'                                                                                                                                        
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#2196F3'}]} onPress={function(){Linking.openURL('sms:'+o.mobile);}}><Text style={s.smT}>✉️ मैसेज</Text></TouchableOpacity>
               </View>) : null}
               <View style={{flexDirection:'row',marginTop:8,flexWrap:'wrap'}}>
                 <TouchableOpacity style={[s.sm,{backgroundColor:'#FF9800'}]} onPress={function(){editOrder(o);}}><Text style={s.smT}>✏️ एडिट</Text></TouchableOpacity>
-                <TouchableOpacity style={[s.sm,{backgroundColor:'                                                                                                                       
+                <TouchableOpacity style={[s.sm,{backgroundColor:'#D32F2F'}]} onPress={function(){delOrder(o.id);}}><Text style={s.smT}>🗑️ डिलीट</Text></TouchableOpacity>
               </View>
             </View>
           );
@@ -948,17 +948,17 @@ export default function App(){
             </View>
           </ScrollView>
           <View style={s.modalBottom}>
-            <TouchableOpacity style={[s.mBtn,{backgroundColor:'                                                                                                                                     
+            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={function(){setShowOrderForm(false);clearOrderForm();}}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
             <TouchableOpacity style={[s.mBtn,{backgroundColor:'#0D47A1'}]} onPress={saveOrder}><Text style={s.mBtnT}>{ordEditId?'✔️ अपडेट करें':'सुरक्षित करें'}</Text></TouchableOpacity>
           </View>
         </View>
       </Modal>
       <Modal visible={!!orderDel} transparent={true} animationType="fade" onRequestClose={function(){setOrderDel(null);}}>
         <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center',alignItems:'center',padding:20}}>
-          <View style={{backgroundColor:'                                                                                                       
+          <View style={{backgroundColor:'#fff',borderRadius:14,padding:20,width:'90%',alignItems:'center',borderWidth:2,borderColor:'#D32F2F'}}>
             <Text style={{fontSize:18,fontWeight:'900',color:'#B71C1C',textAlign:'center'}}>क्या आप सच में यह ऑर्डर हटाना चाहते हैं?</Text>
             <View style={{flexDirection:'row',marginTop:20,width:'100%'}}>
-              <TouchableOpacity style={{flex:1,backgroundColor:'                                                                                                                                                                                                                
+              <TouchableOpacity style={{flex:1,backgroundColor:'#D32F2F',padding:14,borderRadius:10,alignItems:'center',marginRight:8}} onPress={confirmDelOrder}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>हाँ, हटाएं</Text></TouchableOpacity>
               <TouchableOpacity style={{flex:1,backgroundColor:'#2E7D32',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setOrderDel(null);}}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>नहीं</Text></TouchableOpacity>
             </View>
           </View>
@@ -971,25 +971,25 @@ export default function App(){
 
   function renderExpenseTab(){
     var catList=getExpCatList();
-    var ecColor=EXPENSE_COLORS[expCat]||'         
+    var ecColor=EXPENSE_COLORS[expCat]||'#B71C1C';
     return (
     <View style={{flex:1}}>
       <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
         <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#B71C1C'}}>💸 खर्च का हिसाब</Text>
-        <View style={[s.inp,{backgroundColor:'                                                                                                                                                                 
+        <View style={[s.inp,{backgroundColor:'#FFEBEE',marginTop:10}]}><Text style={{fontWeight:'900',fontSize:16,textAlign:'center',color:'#B71C1C'}}>कुल खर्च: ₹ {totalExpense}</Text></View>
         <Text style={{fontWeight:'900',marginTop:14,marginBottom:6}}>खर्च की श्रेणी चुनें:</Text>
         <View style={{flexDirection:'row',flexWrap:'wrap'}}>
           {EXPENSE_CATS.map(function(c){
             var cc=EXPENSE_COLORS[c]||'#B71C1C';
             return (
-            <TouchableOpacity key={c} onPress={function(){setExpCat(c);}} style={{backgroundColor:expCat===c?cc:'                                                                                                                          
+            <TouchableOpacity key={c} onPress={function(){setExpCat(c);}} style={{backgroundColor:expCat===c?cc:'#fff',borderWidth:1,borderColor:cc,paddingHorizontal:14,paddingVertical:10,borderRadius:20,marginRight:8,marginBottom:8}}>
               <Text style={{color:expCat===c?'#fff':cc,fontWeight:'900'}}>{c}</Text>
             </TouchableOpacity>
             );
           })}
         </View>
         {isDieselPetrolCat(expCat)? (
-          <View style={{marginTop:12,backgroundColor:'                                                                        
+          <View style={{marginTop:12,backgroundColor:'#E3F2FD',padding:12,borderRadius:10,borderWidth:2,borderColor:ecColor}}>
             <Text style={{fontSize:15,fontWeight:'900',color:ecColor,textAlign:'center'}}>⛽ {expCat} - तिथि / लीटर / राशि</Text>
             <Text style={{fontWeight:'bold',marginTop:10}}>तिथि</Text>
             <TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
@@ -999,7 +999,7 @@ export default function App(){
             <TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
             {renderExpMediumSelector()}
             <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ {expCat} खर्च जोड़ें</Text></TouchableOpacity>
-            <View style={{marginTop:12,backgroundColor:'                                                                     
+            <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
               <Text style={{fontWeight:'900',color:ecColor,textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | {getExpCatLiterTotal()} लीटर | ₹{getExpCatTotal()}</Text>
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {catList.map(function(e,idx){
@@ -1020,7 +1020,7 @@ export default function App(){
             <Text style={{fontWeight:'bold',marginTop:8}}>राशि</Text><TextInput style={s.inp} value={expRashi} onChangeText={setExpRashi} placeholder="" keyboardType="numeric" />
             {renderExpMediumSelector()}
             <Text style={{fontWeight:'bold',marginTop:8}}>तारीख</Text><TextInput style={s.inp} value={expTarikh} onChangeText={setExpTarikh} placeholder="" />
-            <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'                                                                                                 
+            <TouchableOpacity style={{backgroundColor:ecColor,padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={addExpense}><Text style={{color:'#fff',fontWeight:'900'}}>➕ खर्च जोड़ें ({expCat})</Text></TouchableOpacity>
             <View style={{marginTop:12,backgroundColor:'#fff',borderRadius:10,padding:10,borderWidth:1,borderColor:ecColor}}>
               <Text style={{fontWeight:'900',color:ecColor,textAlign:'center'}}>{expCat} खर्च बॉक्स - टोटल: {catList.length} प्रविष्टि | ₹{getExpCatTotal()}</Text>
               <ScrollView style={{maxHeight:200,marginTop:8}} nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
@@ -1108,10 +1108,10 @@ export default function App(){
             <Text style={{fontWeight:'900',fontSize:18,textAlign:'center'}}>⚙️ सेटिंग</Text>
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15,marginBottom:10}}>📢 सूचना / नोटिस</Text>
-              <TouchableOpacity style={{backgroundColor:'                                                                                                                                                       
+              <TouchableOpacity style={{backgroundColor:'#B07BE6',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){ setType('notice'); setView('notice'); setTab('home'); setSearch(''); }}>
                 <Text style={{color:'#fff',fontWeight:'900'}}>📋 सूचना / नोटिस देखें</Text>
               </TouchableOpacity>
-              <Text style={{fontSize:12,color:'                                                                                         
+              <Text style={{fontSize:12,color:'#888',marginTop:6,textAlign:'center'}}>कुल नोटिस: {notices.length}</Text>
             </View>
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15}}>🔑 पासवर्ड बदलें</Text>
@@ -1131,9 +1131,9 @@ export default function App(){
               <Text>फोन: 9479025929</Text>
             </View>
             <View style={s.card}>
-              <Text style={{fontWeight:'900',fontSize:15,marginBottom:10,color:'                                          
+              <Text style={{fontWeight:'900',fontSize:15,marginBottom:10,color:'#D32F2F'}}>🚪 लॉग आउट</Text>
               <TouchableOpacity style={{backgroundColor:'#212121',padding:16,borderRadius:10,alignItems:'center'}} onPress={function(){ setTab('home'); setView('logout'); }}>
-                <Text style={{color:'                                                                            
+                <Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>लॉग आउट करें</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -1163,20 +1163,20 @@ export default function App(){
             <Text></Text>
           </View>
           <View style={{backgroundColor:'#E8F5E9',marginHorizontal:8,marginTop:8,padding:10,borderRadius:8,borderWidth:1,borderColor:'#2E7D32'}}>
-            <Text style={{fontWeight:'900',fontSize:15,color:'                                                                                                                                                                     
+            <Text style={{fontWeight:'900',fontSize:15,color:'#1B5E20',textAlign:'center'}}>कुल {menuTitleText}: {totalCount}{search.trim()!==''? ' | सर्च में मिले: '+filteredList.length : ''}</Text>
             {type==='members'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि (सदस्यता शुल्क): ₹{totalMemberRashi}</Text> : null}
-            {type==='kisan'? <Text style={{fontWeight:'900',fontSize:14,color:'                                                                                                                                                                                          
+            {type==='kisan'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalKisanRashi} | एडवांस: ₹{totalKisanAdvance} | बचत: ₹{totalKisanBachat}</Text> : null}
             {type==='agent'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalAgentRashi} | एडवांस: ₹{totalAgentAdvance} | बचत: ₹{totalAgentBachat}</Text> : null}
-            {type==='operator'? <Text style={{fontWeight:'900',fontSize:14,color:'                                                                                                                                                                                                   
+            {type==='operator'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalOperatorRashi} | एडवांस: ₹{totalOperatorAdvance} | बचत: ₹{totalOperatorBachat}</Text> : null}
             {type==='helper'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalHelperRashi} | एडवांस: ₹{totalHelperAdvance} | बचत: ₹{totalHelperBachat}</Text> : null}
-            {type==='dealer'? <Text style={{fontWeight:'900',fontSize:14,color:'                                                                                                                                                                                             
+            {type==='dealer'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalDealerRashi} | एडवांस: ₹{totalDealerAdvance} | बचत: ₹{totalDealerBachat}</Text> : null}
             {type==='parts'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalPartsRashi} | एडवांस: ₹{totalPartsAdvance} | बचत: ₹{totalPartsBachat}</Text> : null}
-            {type==='mechanic'? <Text style={{fontWeight:'900',fontSize:14,color:'                                                                                                                                                                                                   
+            {type==='mechanic'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalMechanicRashi} | एडवांस: ₹{totalMechanicAdvance} | बचत: ₹{totalMechanicBachat}</Text> : null}
             {type==='anya'? <Text style={{fontWeight:'900',fontSize:14,color:'#0D47A1',textAlign:'center',marginTop:4}}>💰 कुल राशि: ₹{totalAnyaRashi} | एडवांस: ₹{totalAnyaAdvance} | बचत: ₹{totalAnyaBachat}</Text> : null}
           </View>
           <View style={s.search}><Text>🔍</Text><TextInput style={{flex:1,padding:8}} value={search} onChangeText={setSearch} placeholder={getSearchPlaceholder()} /></View>
           {type==='members' &&!masterImported? (
-            <TouchableOpacity style={{backgroundColor:'                                                                                              
+            <TouchableOpacity style={{backgroundColor:'#1B5E20',margin:8,padding:14,borderRadius:10,alignItems:'center'}} onPress={importMasterData}>
               <Text style={{color:'#fff',fontWeight:'900'}}>📥 मास्टर डेटा से सदस्य जोड़ें</Text>
             </TouchableOpacity>
           ) : null}
@@ -1201,10 +1201,10 @@ export default function App(){
       {tab==='home' && view==='logout'? (
         <ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center',padding:15,paddingBottom:80}}>
           <View style={[s.card,{width:'95%',alignItems:'center',padding:20,paddingBottom:30}]}>
-            <TouchableOpacity style={{backgroundColor:'                                                                                                                           
+            <TouchableOpacity style={{backgroundColor:'#212121',width:'100%',marginTop:10,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={doLogout}>
               <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>हाँ, लॉग आउट करें</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{backgroundColor:'                                                                                                                                               
+            <TouchableOpacity style={{backgroundColor:'#2E7D32',width:'100%',marginTop:20,paddingVertical:22,borderRadius:12,alignItems:'center',elevation:5}} onPress={function(){setView('home');}}>
               <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>नहीं, वापस जाएं</Text>
             </TouchableOpacity>
           </View>
@@ -1233,7 +1233,7 @@ export default function App(){
             {renderMoneySection()}
           </ScrollView>
           <View style={s.modalBottom}>
-            <TouchableOpacity style={[s.mBtn,{backgroundColor:'                                                                                                           
+            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={function(){setShow(false);}}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
             <TouchableOpacity style={[s.mBtn,{backgroundColor:'green'}]} onPress={save}><Text style={s.mBtnT}>सुरक्षित करें</Text></TouchableOpacity>
           </View>
         </View>
@@ -1242,10 +1242,10 @@ export default function App(){
       <Modal visible={!!deleteItem} transparent={true} animationType="fade" onRequestClose={function(){setDeleteItem(null);}}>
         <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center',alignItems:'center',padding:20}}>
           <View style={{backgroundColor:'#fff',borderRadius:14,padding:20,width:'90%',alignItems:'center',borderWidth:2,borderColor:'#D32F2F'}}>
-            <Text style={{fontSize:18,fontWeight:'900',color:'                                                                                                                    
+            <Text style={{fontSize:18,fontWeight:'900',color:'#B71C1C',textAlign:'center'}}>क्या आप सच में हटाना चाहते हैं?</Text>
             <Text style={{fontSize:14,color:'#333',textAlign:'center',marginTop:10}}>{deleteItem? (deleteItem.name || deleteItem.vishay || '') : ''}</Text>
             <View style={{flexDirection:'row',marginTop:20,width:'100%'}}>
-              <TouchableOpacity style={{flex:1,backgroundColor:'                                                                                                                                                                                                              
+              <TouchableOpacity style={{flex:1,backgroundColor:'#D32F2F',padding:14,borderRadius:10,alignItems:'center',marginRight:8}} onPress={confirmDelete}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>हाँ, हटाएं</Text></TouchableOpacity>
               <TouchableOpacity style={{flex:1,backgroundColor:'#2E7D32',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setDeleteItem(null);}}><Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>नहीं</Text></TouchableOpacity>
             </View>
           </View>
@@ -1255,7 +1255,7 @@ export default function App(){
       <Modal visible={!!detailItem} animationType="slide" onRequestClose={function(){setDetailItem(null);}}>
         <SafeAreaView style={s.modal}>
           <ScrollView style={{padding:14}} contentContainerStyle={{paddingBottom:120}}>
-            <Text style={{fontWeight:'900',textAlign:'center',fontSize:18,color:'                                                                                     
+            <Text style={{fontWeight:'900',textAlign:'center',fontSize:18,color:'#B71C1C',marginBottom:4}}>{menuTitleText} - पूरी जानकारी</Text>
             <Text style={{textAlign:'center',fontSize:12,color:'#888',marginBottom:12}}>बायोडाटा डिटेल - सिर्फ जानकारी</Text>
             {detailItem? getDetailKeys().map(function(k){
               var lbl=(HINDI[type]&&HINDI[type][k])?HINDI[type][k]:k;
@@ -1267,11 +1267,11 @@ export default function App(){
               );
             }) : null}
             {detailItem && isMoneyType(type)? (
-              <View style={{backgroundColor:'                                                                                          
+              <View style={{backgroundColor:'#FFF8E1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#FF9800'}}>
                 <Text style={{fontWeight:'900',fontSize:15,color:'#E65100',textAlign:'center'}}>💰 टोटल राशि / एडवांस / बचत</Text>
                 <Text style={{fontSize:14,marginTop:6}}>टोटल राशि: ₹{detailItem.kulRashi||'0'}</Text>
                 <Text style={{fontSize:14,marginTop:2}}>एडवांस टोटल: ₹{getAdvanceTotal(detailItem,type)}</Text>
-                <Text style={{fontWeight:'900',fontSize:16,color:'                                                                                                     
+                <Text style={{fontWeight:'900',fontSize:16,color:'#1B5E20',marginTop:6}}>बचत राशि (बाकी): ₹{calcBachat(detailItem,type)}</Text>
                 <Text style={{fontSize:12,color:'#666',marginTop:4}}>टोटल ({detailItem.kulRashi||'0'}) - एडवांस ({getAdvanceTotal(detailItem,type)})</Text>
                 {getAdvanceList(detailItem).map(function(e,i){
                   return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}{e.medium? ' ('+e.medium+')' : ''}</Text>;
@@ -1283,7 +1283,7 @@ export default function App(){
               </View>
             ) : null}
             {detailItem && type==='parts' && getPartsList(detailItem).length>0? (
-              <View style={{backgroundColor:'                                                                                          
+              <View style={{backgroundColor:'#E0F2F1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#4DB6AC'}}>
                 <Text style={{fontWeight:'900',fontSize:15,color:'#00695C',textAlign:'center'}}>🔩 पार्ट्स विवरण</Text>
                 {getPartsList(detailItem).map(function(e,i){
                   return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.prakar} | {e.date} - ₹{e.amount}</Text>;
@@ -1299,54 +1299,53 @@ export default function App(){
 }
 
 var s=StyleSheet.create({
-  safe:{flex:1,backgroundColor:'                        
+  safe:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
   headColorful:{backgroundColor:'#FFF8E1',margin:10,padding:14,borderRadius:16,borderWidth:2,borderColor:'#FFB300',elevation:4},
-  headTitle1:{fontWeight:'900',fontSize:17,color:'                             
+  headTitle1:{fontWeight:'900',fontSize:17,color:'#B71C1C',textAlign:'center'},
   headTitle2:{fontWeight:'800',fontSize:14,color:'#0D47A1',marginTop:5,textAlign:'center',backgroundColor:'#E3F2FD',paddingHorizontal:10,paddingVertical:2,borderRadius:10},
-  regBox:{backgroundColor:'                                                                             
+  regBox:{backgroundColor:'#1B5E20',paddingHorizontal:12,paddingVertical:3,borderRadius:20,marginTop:6},
   headTitle3:{fontWeight:'900',fontSize:11,color:'#FFEB3B',textAlign:'center'},
   btn:{padding:16,borderRadius:12,marginBottom:10,alignItems:'center'},
-  btnTxt:{color:'                         
+  btnTxt:{color:'#fff',fontWeight:'bold'},
   sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff'},
-  search:{flexDirection:'row',backgroundColor:'                                                                                                            
+  search:{flexDirection:'row',backgroundColor:'#fff',margin:8,paddingHorizontal:10,borderRadius:8,alignItems:'center',borderWidth:1,borderColor:'#FF9800'},
   card:{backgroundColor:'#fff',margin:8,padding:12,borderRadius:8},
   sm:{paddingHorizontal:14,paddingVertical:8,borderRadius:8,marginRight:8,marginBottom:6},
-  smT:{color:'                                     
+  smT:{color:'#fff',fontSize:13,fontWeight:'bold'},
   fab:{position:'absolute',right:16,bottom:16,width:56,height:56,borderRadius:28,backgroundColor:'#2E7D32',justifyContent:'center',alignItems:'center'},
-  fabT:{color:'                   
+  fabT:{color:'#fff',fontSize:28},
   inp:{backgroundColor:'#fff',borderWidth:1,borderColor:'#ccc',borderRadius:6,padding:8,marginTop:4},
   mBtn:{flex:1,padding:12,borderRadius:8,alignItems:'center',marginRight:6},
-  mBtnT:{color:'                         
+  mBtnT:{color:'#fff',fontWeight:'bold'},
   modal:{flex:1,backgroundColor:'#EEF2F7',paddingTop:30},
-  modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'                                                        
+  modalBottom:{flexDirection:'row',padding:12,paddingBottom:30,backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',elevation:10},
   splash:{flex:1,backgroundColor:'#000',justifyContent:'flex-end'},
   splashImage:{position:'absolute',width:'100%',height:'100%'},
   loadBox:{width:'100%',paddingHorizontal:30,paddingBottom:60,alignItems:'center',backgroundColor:'rgba(0,0,0,0.55)',paddingTop:18},
-  loadText:{color:'                                                     
+  loadText:{color:'#fff',fontSize:18,fontWeight:'bold',marginBottom:10},
   loadSub:{color:'#FFEB3B',fontSize:14,fontWeight:'bold',marginTop:8},
   barBg:{width:'100%',height:12,backgroundColor:'rgba(255,255,255,0.3)',borderRadius:6,overflow:'hidden'},
-  barFill:{height:'100%',backgroundColor:'                         
+  barFill:{height:'100%',backgroundColor:'#4CAF50',borderRadius:6},
   detailRow:{backgroundColor:'#fff',borderRadius:8,padding:10,marginBottom:8,borderLeftWidth:4,borderLeftColor:'#FF9800'},
-  detailLabel:{fontSize:12,fontWeight:'bold',color:'       
+  detailLabel:{fontSize:12,fontWeight:'bold',color:'#888'},
   detailValue:{fontSize:15,fontWeight:'600',color:'#212121',marginTop:3},
-  loginSafe:{flex:1,backgroundColor:'          
+  loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
   loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
   welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
-  welcomeTitle:{fontWeight:'900',fontSize:15,color:'                                           
+  welcomeTitle:{fontWeight:'900',fontSize:15,color:'#B71C1C',textAlign:'center',lineHeight:22},
   welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
-  loginBox:{width:'90%',backgroundColor:'                                                                                          
+  loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
   loginLogo:{width:120,height:120,marginBottom:10},
   sloganText:{fontWeight:'900',fontSize:14,color:'#1B5E20',textAlign:'center',marginTop:6,marginBottom:4},
-  loginInput:{width:'100%',borderWidth:1,borderColor:'                                                                                
+  loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
   loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
-  loginBtnT:{color:'                                     
+  loginBtnT:{color:'#fff',fontWeight:'bold',fontSize:16},
   addressBox:{width:'92%',marginTop:15,marginBottom:30,backgroundColor:'#fff',borderRadius:12,padding:12,alignItems:'center',borderWidth:1,borderColor:'#FFB300'},
-  addressTitle:{fontWeight:'900',fontSize:14,color:'                         
+  addressTitle:{fontWeight:'900',fontSize:14,color:'#B71C1C',marginBottom:6},
   addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
-  phoneText:{fontSize:13,color:'                                                                     
+  phoneText:{fontSize:13,color:'#000',textAlign:'center',fontWeight:'900',marginTop:6,lineHeight:20},
   emailText:{fontSize:11,color:'#333',textAlign:'center',marginTop:4},
-  navBar:{flexDirection:'row',backgroundColor:'                                                                                                                                       
+  navBar:{flexDirection:'row',backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',paddingVertical:8,paddingBottom:18,position:'absolute',bottom:0,left:0,right:0,elevation:10},
   navBtn:{flex:1,alignItems:'center',justifyContent:'center'},
   navTxt:{fontSize:12,fontWeight:'bold',textAlign:'center',lineHeight:18},
 });
-
