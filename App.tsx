@@ -402,7 +402,7 @@ export default function App(){
     if(!ordName.trim()){alert('किसान का नाम लिखें');return;}
     if(!ordMobile.trim()){alert('मोबाइल नंबर लिखें');return;}
     var data={id:ordEditId||Date.now().toString(),name:ordName.trim(),pata:ordPata.trim(),block:ordBlock.trim(),jila:ordJila.trim(),rajya:ordRajya.trim(),mobile:ordMobile.trim(),karya:ordKarya.trim(),troli:ordTroli.trim(),dinank:ordDinank.trim(),samay:ordSamay.trim(),ekad:ordEkad.trim()};
-    setOrders(function(p){ return ordEditId? p.map(function(x){return x.id===ordEditId?data:[STRIPPED] : [data].concat(p); });
+        setOrders(function(p){ return ordEditId? p.map(function(x){return x.id===ordEditId?data:[STRIPPED] : [data].concat(p); });
     var wasEdit=!!ordEditId;
     clearOrderForm();
     setShowOrderForm(false);
