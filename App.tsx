@@ -567,16 +567,36 @@ export default function App(){
       data.bachatRashi=calcBachat(data,type);
       data.pooraRashi=data.kulRashi||'0';
     }
-    if(type==='members') setMembers(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='kisan') setKisans(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='agent') setAgents(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='operator') setOperators(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='helper') setHelpers(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='dealer') setDealers(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='parts') setParts(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='mechanic') setMechanics(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='anya') setAnyas(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
-    if(type==='notice') setNotices(function(p){return editId?p.map(function(x){return x.id===editId?data:[STRIPPED]
+    if(type==='members') setMembers(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='kisan') setKisans(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='agent') setAgents(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='operator') setOperators(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='helper') setHelpers(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='dealer') setDealers(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='parts') setParts(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='mechanic') setMechanics(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='anya') setAnyas(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
+    if(type==='notice') setNotices(function(p){
+      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
+    });
     setShow(false);
   }
 
@@ -791,7 +811,7 @@ export default function App(){
       </View>
     );
   }
-                                                 function renderMoneySection(){
+    function renderMoneySection(){
     if(!isMoneyType(type)) return null;
     var advList=getAdvanceList(form);
     var advTotal=getAdvanceTotal(form,type);
