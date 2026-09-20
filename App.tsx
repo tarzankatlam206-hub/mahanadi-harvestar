@@ -701,8 +701,11 @@ export default function App(){
     if(!samayStart.trim()||!samayEnd.trim()){alert('दोनों समय लिखें');return;}
     var a=ghantaToMinute(samayStart), b=ghantaToMinute(samayEnd);
     var d=b-a;
-    if(d<0){alert('बंद समय चालू समय से कम है');return;}
-    setSamayResult(minuteToGhantaText(d));
+    if(d<0){ d=d+12*60; }
+    if(d<=0){alert('बंद समय चालू समय से कम है');return;}
+    var h=Math.floor(d/60); var m=d%60;
+    var dotForm=h+'.'+(m<10?'0'+m:m);
+    setSamayResult(h+' घंटा '+m+' मिनट ('+dotForm+')');
   }
   function calcUmr(){
     var b=parseTarikhDDMMYYYY(umrBirth), t=parseTarikhDDMMYYYY(umrToday);
@@ -716,9 +719,7 @@ export default function App(){
     setUmrResult(years+' साल, '+months+' महीने, '+days+' दिन');
   }
 
-  // ==== नया कैलकुलेटर स्क्रीन सिस्टम ====
   function renderCalculatorScreen(){
-    // मेन्यू स्क्रीन - समय और उम्र बटन
     if(calcView==='menu'){
       return (
         <View style={{flex:1}}>
@@ -741,7 +742,6 @@ export default function App(){
         </View>
       );
     }
-    // समय स्क्रीन
     if(calcView==='samay'){
       return (
         <View style={{flex:1}}>
@@ -768,7 +768,6 @@ export default function App(){
         </View>
       );
     }
-    // उम्र स्क्रीन
     if(calcView==='umr'){
       return (
         <View style={{flex:1}}>
@@ -1194,7 +1193,6 @@ export default function App(){
   var menuTitle=MENU.find(function(m){return m.key===type;});
   var menuTitleText=menuTitle?menuTitle.title:'';
 
-  // अगर कैलकुलेटर की नई स्क्रीन खुली है तो वही दिखाओ
   if(tab==='setting' && calcView!=='main'){
     return (<SafeAreaView style={s.safe}>{renderCalculatorScreen()}</SafeAreaView>);
   }
