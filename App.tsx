@@ -333,7 +333,7 @@ export default function App(){
   }
   async function doLogout(){
     await AsyncStorage.setItem('isLogin','no');
-    setIsLogin(false); setView('home'); setTab('home');
+    setIsLogin(false); setView('home'); setTab('home'); setCalcView('main');
     if(Platform.OS==='android'){ BackHandler.exitApp(); }
   }
   function isMechanicLike(t){ return t==='mechanic'||t==='anya'; }
@@ -374,21 +374,14 @@ export default function App(){
     if(!ordName.trim()){alert('किसान का नाम लिखें');return;}
     if(!ordMobile.trim()){alert('मोबाइल नंबर लिखें');return;}
     var data={id:ordEditId||Date.now().toString(),name:ordName.trim(),pata:ordPata.trim(),block:ordBlock.trim(),jila:ordJila.trim(),rajya:ordRajya.trim(),mobile:ordMobile.trim(),karya:ordKarya.trim(),troli:ordTroli.trim(),dinank:ordDinank.trim(),samay:ordSamay.trim(),ekad:ordEkad.trim()};
-    if(ordEditId){
-      setOrders(function(p){ return p.map(function(x){ if(x.id===ordEditId){ return data; } return x; }); });
-    } else {
-      setOrders(function(p){ return [data].concat(p); });
-    }
-    var wasEdit=!!ordEditId;
-    clearOrderForm();
-    setShowOrderForm(false);
-    alert(wasEdit?'ऑर्डर अपडेट हो गया':'ऑर्डर जुड़ गया');
+    if(ordEditId){ setOrders(function(p){ return p.map(function(x){ if(x.id===ordEditId){ return data; } return x; }); }); }
+    else { setOrders(function(p){ return [data].concat(p); }); }
+    var wasEdit=!!ordEditId; clearOrderForm(); setShowOrderForm(false); alert(wasEdit?'ऑर्डर अपडेट हो गया':'ऑर्डर जुड़ गया');
   }
   function editOrder(o){
     setOrdName(o.name||''); setOrdPata(o.pata||''); setOrdBlock(o.block||''); setOrdJila(o.jila||'कांकेर'); setOrdRajya(o.rajya||'छत्तीसगढ़');
     setOrdMobile(o.mobile||''); setOrdKarya(o.karya||''); setOrdTroli(o.troli||''); setOrdDinank(o.dinank||''); setOrdSamay(o.samay||''); setOrdEkad(o.ekad||'');
-    setOrdEditId(o.id);
-    setShowOrderForm(true);
+    setOrdEditId(o.id); setShowOrderForm(true);
   }
   function delOrder(id){ setOrderDel(id); }
   function confirmDelOrder(){
@@ -430,9 +423,7 @@ export default function App(){
       merged.bachatRashi=calcBachat(merged,t);
       merged.pooraRashi=merged.kulRashi||'0';
     }
-    if(t==='parts'){
-      merged.partsList=getPartsList(merged);
-    }
+    if(t==='parts'){ merged.partsList=getPartsList(merged); }
     if(isMechanicLike(t)||t==='dealer'){
       merged.advanceList=getAdvanceList(merged);
       merged.karyaList=getKaryaList(merged);
@@ -558,45 +549,23 @@ export default function App(){
       data.bachatRashi=calcBachat(data,type);
       data.pooraRashi=data.kulRashi||'0';
     }
-    if(type==='parts'){
-      data.partsList=getPartsList(data);
-    }
+    if(type==='parts'){ data.partsList=getPartsList(data); }
     if(isMechanicLike(type)||type==='dealer'){
       data.advanceList=getAdvanceList(data);
       data.karyaList=getKaryaList(data);
       data.bachatRashi=calcBachat(data,type);
       data.pooraRashi=data.kulRashi||'0';
     }
-    if(type==='members') setMembers(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='kisan') setKisans(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='agent') setAgents(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='operator') setOperators(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='helper') setHelpers(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='dealer') setDealers(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='parts') setParts(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='mechanic') setMechanics(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='anya') setAnyas(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
-    if(type==='notice') setNotices(function(p){
-      return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p);
-    });
+    if(type==='members') setMembers(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='kisan') setKisans(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='agent') setAgents(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='operator') setOperators(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='helper') setHelpers(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='dealer') setDealers(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='parts') setParts(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='mechanic') setMechanics(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='anya') setAnyas(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
+    if(type==='notice') setNotices(function(p){ return editId? p.map(function(x){ return x.id===editId? data : x; }) : [data].concat(p); });
     setShow(false);
   }
 
@@ -746,31 +715,42 @@ export default function App(){
     if(years<0){alert('जन्म तिथि आज की तिथि से बड़ी है');return;}
     setUmrResult(years+' साल, '+months+' महीने, '+days+' दिन');
   }
-  function renderCalculatorCard(){
-    return (
-      <View style={s.card}>
-        <Text style={{fontWeight:'900',fontSize:15,marginBottom:10}}>🧮 कैलकुलेटर</Text>
-        {calcView==='main'? (
-          <TouchableOpacity style={{backgroundColor:'#0D47A1',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setCalcView('menu');}}>
-            <Text style={{color:'#fff',fontWeight:'900'}}>🧮 कैलकुलेटर खोलें</Text>
-          </TouchableOpacity>
-        ) : null}
-        {calcView==='menu'? (
-          <View>
-            <TouchableOpacity style={{backgroundColor:'#2E7D32',padding:14,borderRadius:10,alignItems:'center',marginBottom:10}} onPress={function(){setSamayResult('');setCalcView('samay');}}>
-              <Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>⏰ समय</Text>
+
+  // ==== नया कैलकुलेटर स्क्रीन सिस्टम ====
+  function renderCalculatorScreen(){
+    // मेन्यू स्क्रीन - समय और उम्र बटन
+    if(calcView==='menu'){
+      return (
+        <View style={{flex:1}}>
+          <View style={s.sub}>
+            <TouchableOpacity onPress={function(){setCalcView('main');}}><Text style={{fontWeight:'bold',color:'#0D47A1'}}>← वापस</Text></TouchableOpacity>
+            <Text style={{fontWeight:'900'}}>🧮 कैलकुलेटर</Text>
+            <Text></Text>
+          </View>
+          <View style={{padding:16,paddingTop:40}}>
+            <TouchableOpacity style={{backgroundColor:'#2E7D32',padding:22,borderRadius:14,alignItems:'center',marginBottom:16,elevation:3}} onPress={function(){setSamayResult('');setCalcView('samay');}}>
+              <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>⏰ समय</Text>
+              <Text style={{color:'#fff',fontSize:12,marginTop:4}}>समय का हिसाब निकालें</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{backgroundColor:'#6A1B9A',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setUmrResult('');setCalcView('umr');}}>
-              <Text style={{color:'#fff',fontWeight:'900',fontSize:16}}>🎂 उम्र</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{marginTop:10,alignItems:'center',padding:8}} onPress={function(){setCalcView('main');}}>
-              <Text style={{color:'#0D47A1',fontWeight:'bold'}}>← वापस</Text>
+            <TouchableOpacity style={{backgroundColor:'#6A1B9A',padding:22,borderRadius:14,alignItems:'center',elevation:3}} onPress={function(){setUmrResult('');setCalcView('umr');}}>
+              <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>🎂 उम्र</Text>
+              <Text style={{color:'#fff',fontSize:12,marginTop:4}}>उम्र का हिसाब निकालें</Text>
             </TouchableOpacity>
           </View>
-        ) : null}
-        {calcView==='samay'? (
-          <View>
-            <Text style={{fontWeight:'900',fontSize:16,textAlign:'center',marginBottom:10,color:'#1B5E20'}}>⏰ समय निकालें</Text>
+          {renderBottomNav()}
+        </View>
+      );
+    }
+    // समय स्क्रीन
+    if(calcView==='samay'){
+      return (
+        <View style={{flex:1}}>
+          <View style={s.sub}>
+            <TouchableOpacity onPress={function(){setCalcView('menu');}}><Text style={{fontWeight:'bold',color:'#0D47A1'}}>← वापस</Text></TouchableOpacity>
+            <Text style={{fontWeight:'900'}}>⏰ समय निकालें</Text>
+            <Text></Text>
+          </View>
+          <ScrollView style={{padding:16}} contentContainerStyle={{paddingBottom:120}}>
             <Text style={{fontSize:12,fontWeight:'bold'}}>चालू समय (जैसे 8.20)</Text>
             <TextInput style={s.inp} value={samayStart} onChangeText={setSamayStart} placeholder="8.20" keyboardType="numeric" />
             <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>बंद समय (जैसे 9.25)</Text>
@@ -783,14 +763,21 @@ export default function App(){
                 <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#1B5E20'}}>टोटल: {samayResult}</Text>
               </View>
             ) : null}
-            <TouchableOpacity style={{marginTop:10,alignItems:'center',padding:8}} onPress={function(){setCalcView('menu');}}>
-              <Text style={{color:'#0D47A1',fontWeight:'bold'}}>← वापस</Text>
-            </TouchableOpacity>
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      );
+    }
+    // उम्र स्क्रीन
+    if(calcView==='umr'){
+      return (
+        <View style={{flex:1}}>
+          <View style={s.sub}>
+            <TouchableOpacity onPress={function(){setCalcView('menu');}}><Text style={{fontWeight:'bold',color:'#0D47A1'}}>← वापस</Text></TouchableOpacity>
+            <Text style={{fontWeight:'900'}}>🎂 उम्र निकालें</Text>
+            <Text></Text>
           </View>
-        ) : null}
-        {calcView==='umr'? (
-          <View>
-            <Text style={{fontWeight:'900',fontSize:16,textAlign:'center',marginBottom:10,color:'#6A1B9A'}}>🎂 उम्र निकालें</Text>
+          <ScrollView style={{padding:16}} contentContainerStyle={{paddingBottom:120}}>
             <Text style={{fontSize:12,fontWeight:'bold'}}>जन्म तिथि (जैसे 14.5.1989)</Text>
             <TextInput style={s.inp} value={umrBirth} onChangeText={setUmrBirth} placeholder="14.5.1989" keyboardType="numeric" />
             <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>आज की तिथि (जैसे 19.9.2026)</Text>
@@ -803,15 +790,15 @@ export default function App(){
                 <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#6A1B9A'}}>{umrResult}</Text>
               </View>
             ) : null}
-            <TouchableOpacity style={{marginTop:10,alignItems:'center',padding:8}} onPress={function(){setCalcView('menu');}}>
-              <Text style={{color:'#0D47A1',fontWeight:'bold'}}>← वापस</Text>
-            </TouchableOpacity>
-          </View>
-        ) : null}
-      </View>
-    );
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      );
+    }
+    return null;
   }
-    function renderMoneySection(){
+
+  function renderMoneySection(){
     if(!isMoneyType(type)) return null;
     var advList=getAdvanceList(form);
     var advTotal=getAdvanceTotal(form,type);
@@ -1207,6 +1194,11 @@ export default function App(){
   var menuTitle=MENU.find(function(m){return m.key===type;});
   var menuTitleText=menuTitle?menuTitle.title:'';
 
+  // अगर कैलकुलेटर की नई स्क्रीन खुली है तो वही दिखाओ
+  if(tab==='setting' && calcView!=='main'){
+    return (<SafeAreaView style={s.safe}>{renderCalculatorScreen()}</SafeAreaView>);
+  }
+
   return (
     <SafeAreaView style={s.safe}>
       {tab==='home' && view==='home'? (
@@ -1230,7 +1222,12 @@ export default function App(){
         <View style={{flex:1}}>
           <ScrollView style={{padding:12}} contentContainerStyle={{paddingBottom:120}}>
             <Text style={{fontWeight:'900',fontSize:18,textAlign:'center'}}>⚙️ सेटिंग</Text>
-            {renderCalculatorCard()}
+            <View style={s.card}>
+              <Text style={{fontWeight:'900',fontSize:15,marginBottom:10}}>🧮 कैलकुलेटर</Text>
+              <TouchableOpacity style={{backgroundColor:'#0D47A1',padding:14,borderRadius:10,alignItems:'center'}} onPress={function(){setCalcView('menu');}}>
+                <Text style={{color:'#fff',fontWeight:'900'}}>🧮 कैलकुलेटर खोलें</Text>
+              </TouchableOpacity>
+            </View>
             <View style={s.card}>
               <Text style={{fontWeight:'900',fontSize:15}}>🔑 पासवर्ड बदलें</Text>
               <TextInput style={s.inp} value={newPass} onChangeText={setNewPass} placeholder="नया पासवर्ड लिखें" secureTextEntry={true} keyboardType="number-pad" />
@@ -1394,21 +1391,12 @@ export default function App(){
                 {getAdvanceList(detailItem).map(function(e,i){
                   return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.date} - ₹{e.amount}{e.medium? ' ('+e.medium+')' : ''}</Text>;
                 })}
-                {(type==='operator'||type==='helper')? <Text style={{fontSize:13,marginTop:6}}>📅 उपस्थिति: {getUpasthitiDates(detailItem).length} दिन</Text> : null}
-                {type==='kisan'? <Text style={{fontSize:13,marginTop:6}}>🌾 कार्य प्रविष्टि: {getFasalList(detailItem).length} | {getFasalGhantaTotal(detailItem)} | ट्रॉली: {getFasalTroliTotal(detailItem)}</Text> : null}
-                {type==='parts'? <Text style={{fontSize:13,marginTop:6}}>🔩 पार्ट्स: {getPartsList(detailItem).length} | ₹{getPartsTotal(detailItem)}</Text> : null}
-                {isMechanicLike(type)? <Text style={{fontSize:13,marginTop:6}}>🔨 कार्य: {getKaryaList(detailItem).length} | ₹{getKaryaTotal(detailItem)}</Text> : null}
-              </View>
-            ) : null}
-            {detailItem && type==='parts' && getPartsList(detailItem).length>0? (
-              <View style={{backgroundColor:'#E0F2F1',borderRadius:10,padding:12,marginBottom:10,borderWidth:2,borderColor:'#4DB6AC'}}>
-                <Text style={{fontWeight:'900',fontSize:15,color:'#00695C',textAlign:'center'}}>🔩 पार्ट्स विवरण</Text>
-                {getPartsList(detailItem).map(function(e,i){
-                  return <Text key={i} style={{fontSize:13,marginTop:2}}>{i+1}. {e.prakar} | {e.date} - ₹{e.amount}</Text>;
-                })}
               </View>
             ) : null}
           </ScrollView>
+          <View style={s.modalBottom}>
+            <TouchableOpacity style={[s.mBtn,{backgroundColor:'#888'}]} onPress={function(){setDetailItem(null);}}><Text style={s.mBtnT}>वापस</Text></TouchableOpacity>
+          </View>
         </SafeAreaView>
       </Modal>
 
@@ -1425,7 +1413,7 @@ var s=StyleSheet.create({
   headTitle3:{fontWeight:'900',fontSize:11,color:'#FFEB3B',textAlign:'center'},
   btn:{padding:16,borderRadius:12,marginBottom:10,alignItems:'center'},
   btnTxt:{color:'#fff',fontWeight:'bold'},
-  sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff'},
+  sub:{flexDirection:'row',justifyContent:'space-between',padding:12,backgroundColor:'#fff',alignItems:'center'},
   search:{flexDirection:'row',backgroundColor:'#fff',margin:8,paddingHorizontal:10,borderRadius:8,alignItems:'center',borderWidth:1,borderColor:'#FF9800'},
   card:{backgroundColor:'#fff',margin:8,padding:12,borderRadius:8},
   sm:{paddingHorizontal:14,paddingVertical:8,borderRadius:8,marginRight:8,marginBottom:6},
