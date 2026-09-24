@@ -249,6 +249,9 @@ export default function App(){
   var _ub = useState(''); var umrBirth=_ub[0]; var setUmrBirth=_ub[1];
   var _ut = useState(''); var umrToday=_ut[0]; var setUmrToday=_ut[1];
   var _ur = useState(''); var umrResult=_ur[0]; var setUmrResult=_ur[1];
+  var _rts = useState(''); var rashiSamay=_rts[0]; var setRashiSamay=_rts[1];
+  var _rdt = useState(''); var rashiDar=_rdt[0]; var setRashiDar=_rdt[1];
+  var _rrs = useState(''); var rashiResult=_rrs[0]; var setRashiResult=_rrs[1];
 
   var MASTER_DATA = MASTER_RAW.map(function(r, i){
     return {
@@ -718,6 +721,16 @@ export default function App(){
     if(years<0){alert('जन्म तिथि आज की तिथि से बड़ी है');return;}
     setUmrResult(years+' साल, '+months+' महीने, '+days+' दिन');
   }
+  function calcRashi(){
+    if(!rashiSamay.trim()||!rashiDar.trim()){alert('समय और राशि दोनों लिखें');return;}
+    var mins=ghantaToMinute(rashiSamay);
+    var dar=parseFloat(rashiDar)||0;
+    if(mins<=0){alert('सही समय लिखें (जैसे 1.30)');return;}
+    if(dar<=0){alert('सही राशि लिखें');return;}
+    var total=(mins/60)*dar;
+    var rounded=Math.round(total*100)/100;
+    setRashiResult(String(rounded)+' रुपए');
+  }
 
   function renderCalculatorScreen(){
     if(calcView==='menu'){
@@ -733,9 +746,13 @@ export default function App(){
               <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>⏰ समय</Text>
               <Text style={{color:'#fff',fontSize:12,marginTop:4}}>समय का हिसाब निकालें</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{backgroundColor:'#6A1B9A',padding:22,borderRadius:14,alignItems:'center',elevation:3}} onPress={function(){setUmrResult('');setCalcView('umr');}}>
+            <TouchableOpacity style={{backgroundColor:'#6A1B9A',padding:22,borderRadius:14,alignItems:'center',marginBottom:16,elevation:3}} onPress={function(){setUmrResult('');setCalcView('umr');}}>
               <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>🎂 उम्र</Text>
               <Text style={{color:'#fff',fontSize:12,marginTop:4}}>उम्र का हिसाब निकालें</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{backgroundColor:'#EF6C00',padding:22,borderRadius:14,alignItems:'center',elevation:3}} onPress={function(){setRashiResult('');setCalcView('rashi');}}>
+              <Text style={{color:'#fff',fontWeight:'900',fontSize:20}}>💰 राशि</Text>
+              <Text style={{color:'#fff',fontSize:12,marginTop:4}}>समय x दर से राशि निकालें</Text>
             </TouchableOpacity>
           </View>
           {renderBottomNav()}
@@ -787,6 +804,32 @@ export default function App(){
             {umrResult!==''? (
               <View style={[s.inp,{backgroundColor:'#F3E5F5',marginTop:10,borderWidth:2,borderColor:'#6A1B9A'}]}>
                 <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#6A1B9A'}}>{umrResult}</Text>
+              </View>
+            ) : null}
+          </ScrollView>
+          {renderBottomNav()}
+        </View>
+      );
+    }
+    if(calcView==='rashi'){
+      return (
+        <View style={{flex:1}}>
+          <View style={s.sub}>
+            <TouchableOpacity onPress={function(){setCalcView('menu');}}><Text style={{fontWeight:'bold',color:'#0D47A1'}}>← वापस</Text></TouchableOpacity>
+            <Text style={{fontWeight:'900'}}>💰 राशि निकालें</Text>
+            <Text></Text>
+          </View>
+          <ScrollView style={{padding:16}} contentContainerStyle={{paddingBottom:120}}>
+            <Text style={{fontSize:12,fontWeight:'bold'}}>समय (जैसे 1.30)</Text>
+            <TextInput style={s.inp} value={rashiSamay} onChangeText={setRashiSamay} placeholder="1.30" keyboardType="numeric" />
+            <Text style={{fontSize:12,fontWeight:'bold',marginTop:8}}>राशि (जैसे 3000)</Text>
+            <TextInput style={s.inp} value={rashiDar} onChangeText={setRashiDar} placeholder="3000" keyboardType="numeric" />
+            <TouchableOpacity style={{backgroundColor:'#EF6C00',padding:14,borderRadius:10,marginTop:12,alignItems:'center'}} onPress={calcRashi}>
+              <Text style={{color:'#fff',fontWeight:'900'}}>रिजल्ट निकालें</Text>
+            </TouchableOpacity>
+            {rashiResult!==''? (
+              <View style={[s.inp,{backgroundColor:'#FFF3E0',marginTop:10,borderWidth:2,borderColor:'#EF6C00'}]}>
+                <Text style={{fontWeight:'900',fontSize:18,textAlign:'center',color:'#E65100'}}>{rashiResult}</Text>
               </View>
             ) : null}
           </ScrollView>
@@ -1435,21 +1478,4 @@ var s=StyleSheet.create({
   detailValue:{fontSize:15,fontWeight:'600',color:'#212121',marginTop:3},
   loginSafe:{flex:1,backgroundColor:'#FFF3E0'},
   loginScroll:{flexGrow:1,justifyContent:'flex-start',alignItems:'center',paddingVertical:20,paddingHorizontal:10,paddingBottom:50},
-  welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14,padding:14,alignItems:'center',borderWidth:2,borderColor:'#2E7D32',marginBottom:15},
-  welcomeTitle:{fontWeight:'900',fontSize:15,color:'#B71C1C',textAlign:'center',lineHeight:22},
-  welcomeSub:{fontWeight:'700',fontSize:12,color:'#0D47A1',textAlign:'center',marginTop:8,lineHeight:18,backgroundColor:'#FFF9C4',paddingHorizontal:10,paddingVertical:6,borderRadius:8},
-  loginBox:{width:'90%',backgroundColor:'#fff',padding:25,borderRadius:15,alignItems:'center',borderWidth:2,borderColor:'#FF9800'},
-  loginLogo:{width:120,height:120,marginBottom:10},
-  sloganText:{fontWeight:'900',fontSize:14,color:'#1B5E20',textAlign:'center',marginTop:6,marginBottom:4},
-  loginInput:{width:'100%',borderWidth:1,borderColor:'#FF9800',borderRadius:8,padding:12,marginTop:20,textAlign:'center',fontSize:18},
-  loginBtn:{width:'100%',backgroundColor:'#2E7D32',padding:14,borderRadius:10,marginTop:15,alignItems:'center'},
-  loginBtnT:{color:'#fff',fontWeight:'bold',fontSize:16},
-  addressBox:{width:'92%',marginTop:15,marginBottom:30,backgroundColor:'#fff',borderRadius:12,padding:12,alignItems:'center',borderWidth:1,borderColor:'#FFB300'},
-  addressTitle:{fontWeight:'900',fontSize:14,color:'#B71C1C',marginBottom:6},
-  addressText:{fontSize:12,color:'#333',textAlign:'center',lineHeight:18,marginTop:2},
-  phoneText:{fontSize:13,color:'#000',textAlign:'center',fontWeight:'900',marginTop:6,lineHeight:20},
-  emailText:{fontSize:11,color:'#333',textAlign:'center',marginTop:4},
-  navBar:{flexDirection:'row',backgroundColor:'#fff',borderTopWidth:1,borderColor:'#ddd',paddingVertical:8,paddingBottom:18,position:'absolute',bottom:0,left:0,right:0,elevation:10},
-  navBtn:{flex:1,alignItems:'center',justifyContent:'center'},
-  navTxt:{fontSize:12,fontWeight:'bold',textAlign:'center',lineHeight:18},
-});
+  welcomeHeader:{width:'92%',backgroundColor:'#E8F5E9',borderRadius:14
